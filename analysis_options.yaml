@@ -1,0 +1,81 @@
+# Enable strong linting, formatting and static analysis
+# This file helps enforce clean, consistent, and bug-free Dart/Flutter code
+
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - lib/generated/**
+    - lib/**.freezed.dart
+    - lib/**.g.dart
+
+  errors:
+    # Treat warnings as errors (optional for strict mode)
+    missing_required_param: error
+    missing_return: error
+    unused_import: warning
+    dead_code: warning
+    invalid_assignment: error
+    always_specify_types: warning
+    prefer_const_constructors: warning
+
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    # ---- STYLE & CONSISTENCY ----
+    always_use_package_imports: true
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    sort_constructors_first: true
+    sort_unnamed_constructors_first: true
+    sort_pub_dependencies: false
+    directives_ordering: true
+    require_trailing_commas: true
+    use_key_in_widget_constructors: true
+    avoid_print: true
+    avoid_redundant_argument_values: true
+    use_super_parameters: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_declarations: true
+    unnecessary_const: true
+
+    # ---- SAFETY & RELIABILITY ----
+    use_build_context_synchronously: false   # <-- DISABLED
+    always_declare_return_types: true
+    avoid_empty_else: true
+    avoid_init_to_null: true
+    avoid_null_checks_in_equality_operators: true
+    avoid_shadowing_type_parameters: true
+    avoid_types_as_parameter_names: true
+    cancel_subscriptions: true
+    close_sinks: true
+    no_duplicate_case_values: true
+    avoid_catches_without_on_clauses: true
+    avoid_catching_errors: true
+    avoid_dynamic_calls: false
+    prefer_typing_uninitialized_variables: true
+
+    # ---- PERFORMANCE ----
+    prefer_const_constructors_in_immutables: true
+    avoid_unnecessary_containers: true
+    prefer_relative_imports: false
+
+    # ---- DOCUMENTATION ----
+    public_member_api_docs: false # set to true for libraries
+    comment_references: true
+
+    # ---- NAMING ----
+    camel_case_extensions: true
+    camel_case_types: true
+    file_names: true
+    library_names: true
+    constant_identifier_names: false # allow UPPER_CASE constants
+    non_constant_identifier_names: false # allow variables like 'userId'
+
