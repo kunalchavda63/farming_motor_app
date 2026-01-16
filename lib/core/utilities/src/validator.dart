@@ -27,6 +27,24 @@ class Validators {
     return null;
   }
 
+  static String? validateName(String? value, {String fieldName = 'Name'}) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
+    }
+
+    if (value.trim().length < 2) {
+      return '$fieldName must be at least 2 characters';
+    }
+
+    final nameRegex = RegExp(r"^[a-zA-Z\s]+$");
+    if (!nameRegex.hasMatch(value.trim())) {
+      return '$fieldName can only contain letters';
+    }
+
+    return null;
+  }
+
+
   // Password: min 6 chars, at least 1 uppercase, 1 lowercase, 1 number
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {

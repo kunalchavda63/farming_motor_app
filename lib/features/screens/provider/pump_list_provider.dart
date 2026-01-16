@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
-import 'package:farming_motor_app/core/utilities/src/helper_method.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:workmanager/workmanager.dart';
@@ -145,7 +144,7 @@ class PumpListProvider extends ChangeNotifier {
     notifyListeners();
 
     // ❌ Cancel old OFF task
-    await Workmanager().cancelByUniqueName('pump_off_$pumpId');
+    if(isAndroid || isIos) await Workmanager().cancelByUniqueName('pump_off_$pumpId');
 
     // 🔥 Near time
     if (delay.inSeconds <= 60) {
@@ -156,13 +155,15 @@ class PumpListProvider extends ChangeNotifier {
     }
 
     // 🔥 Background OFF
-    await Workmanager().registerOneOffTask(
+   if(isAndroid || isIos) {
+     await Workmanager().registerOneOffTask(
       'pump_off_$pumpId',
       'pumpOffTask',
       initialDelay: delay,
       inputData: {'pumpId': pumpId},
       existingWorkPolicy: ExistingWorkPolicy.replace,
     );
+   }
   }
 
 

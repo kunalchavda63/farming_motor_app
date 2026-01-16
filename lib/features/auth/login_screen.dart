@@ -67,19 +67,82 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               );
             }
-            else if(constraints.maxWidth > 1200){
+            else if(constraints.maxWidth > 600 ){
               return Stack(
                 children: [
-                  const CustomImageView(path: AssetImages.imgWaterPump),
-                  CustomContainer(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: mCtx.size.width*0.09,
-                      vertical: mCtx.size.width*0.09,
-                    ),
-                    w: mCtx.size.width,
-                    color: AppColors.hexDAdb,
-                    border: Border.all(color: AppColors.black10),
+                  SizedBox(
+                    height: mCtx.size.height,
+                    width: mCtx.size.width,
                   ),
+                  const Positioned.fill(
+                      child: CustomImageView(
+                        path: AssetImages.imgBgBig,fit: BoxFit.cover,)),
+                  Positioned(
+                      left: mCtx.size.width*0.1,
+                      right: mCtx.size.width*0.1,
+                      top: mCtx.size.width*0.1,
+                      bottom: mCtx.size.width*0.1,
+                      child: CustomContainer(
+                        alignment: Alignment.center,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.black10,width: 5),
+                        color: AppColors.white50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: CustomContainer(
+                                borderRadius: BorderRadius.circular(20),
+
+                                alignment: Alignment.center,
+                                foregroundDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  image: const DecorationImage(image: NetworkImage('https://as2.ftcdn.net/jpg/15/87/55/07/1000_F_1587550794_gVN3ZXHUpcqRufElqPVeISDADQX6NuNE.jpg'),fit: BoxFit.cover,filterQuality: FilterQuality.high,opacity: 0.9)
+                                ),
+                                color: AppColors.white,
+                              ),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: CustomContainer(
+                                  borderRadius: BorderRadius.circular(20),
+                                  alignment: Alignment.center,
+                                  color: AppColors.white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _buildBoth().padH(12),
+                                      CustomButton(
+                                        border: Border.all(),
+                                        onTap: () async{
+                                              if(_key.currentState!.validate()) {
+                                                await prefs.setAuth(true);
+                                                logger.d('User Is Authenticated');
+                                                context.pushReplacement(RoutesEnum.onboarding.path);
+                                              }
+
+                                          else{
+                                            logger.e('Please Fill the Valid Form');
+                                          }
+
+                                        },
+
+                                        color: AppColors.black10,
+                                        label: AppStrings.logIn,
+                                      ).padH(30)
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+
+
+
+                          ],
+                        ),
+                      ),
+                  )
                 ],
               );
             }
@@ -89,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
       ),
-      bottomNavigationBar:CustomButton(
+      bottomNavigationBar:(isWindows)? null:CustomButton(
         label: AppStrings.logIn,
         onTap: () async{
           if(_key.currentState!.validate()){
@@ -107,6 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   Widget _buildBoth(){
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         CustomText(
@@ -135,39 +199,39 @@ class _LoginScreenState extends State<LoginScreen> {
           textInputType: TextInputType.visiblePassword,
           isPassword: true,
         ).padBottom(30.r),
-        // Center(
-        //   child: GestureDetector(
-        //     onTap: (){
-        //       context.push(RoutesEnum.forgot.path);
-        //     },
-        //     child: CustomText(
-        //       data: '${AppStrings.forgotPassword} ?',
-        //       style: BaseStyle.s14w400.c(AppColors.black),
-        //     ).padBottom(30.r),
-        //   ),
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     CustomText(
-        //       data: AppStrings.doNotHaveAnAccount,
-        //       style: BaseStyle.s14w400
-        //           .c(AppColors.black)
-        //           .family(FontFamily.montserrat),
-        //     ).padBottom(30.r).padRight(7.r),
-        //     GestureDetector(
-        //       onTap: () {
-        //         logger.d('SignUp Screen : Moving');
-        //         context.push(RoutesEnum.signup.path);
-        //       },
-        //       child: CustomText(
-        //         data: AppStrings.signUp,
-        //         style: BaseStyle.s14w400.c(AppColors.hex2e47),
-        //         softWrap: true,
-        //       ).padBottom(30.r),
-        //     ),
-        //   ],
-        // ),
+        if(isWindows) Center(
+          child: GestureDetector(
+            onTap: (){
+              context.push(RoutesEnum.forgot.path);
+            },
+            child: CustomText(
+              data: '${AppStrings.forgotPassword} ?',
+              style: BaseStyle.s14w400.c(AppColors.black),
+            ).padBottom(30.r),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomText(
+              data: AppStrings.doNotHaveAnAccount,
+              style: BaseStyle.s14w400
+                  .c(AppColors.black)
+                  .family(FontFamily.montserrat),
+            ).padBottom(30.r).padRight(7.r),
+            GestureDetector(
+              onTap: () {
+                logger.d('SignUp Screen : Moving');
+                context.push(RoutesEnum.signup.path);
+              },
+              child: CustomText(
+                data: AppStrings.signUp,
+                style: BaseStyle.s14w400.c(AppColors.hex2e47),
+                softWrap: true,
+              ).padBottom(30.r),
+            ),
+          ],
+        ),
       ],
     ).padH(12);
 

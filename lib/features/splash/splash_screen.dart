@@ -32,10 +32,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return  Scaffold(
       backgroundColor: AppColors.white,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-           const CustomImageView(path: AssetImages.imgSplash).padBottom(50.r).padH(50),
-          CustomText(data: AppStrings.welcome,style: BaseStyle.s18w400.c(AppColors.hex5474),)
+          const Expanded(child: SizedBox()),
+           Expanded(child: const CustomImageView(path: AssetImages.imgSplash).padBottom(50).padH(50)),
+          Expanded(child: CustomText(data: AppStrings.welcome,style: BaseStyle.s18w400.c(AppColors.hex5474),textAlign: TextAlign.center,))
         ],
       ),
     );

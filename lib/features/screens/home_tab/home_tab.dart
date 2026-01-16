@@ -1,5 +1,6 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_switch.dart';
+import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/screens/provider/pump_list_provider.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +14,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -23,22 +25,64 @@ class _HomeTabState extends State<HomeTab> {
       provider.startAutoSync();
     }
   }
-  @override
-  void dispose() {
-    context.read<PumpListProvider>().stopAutoSync();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   context.read<PumpListProvider>().stopAutoSync();
+    // super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
 
     return  Scaffold(
+      key: _key,
       backgroundColor: AppColors.white,
+      drawer: Drawer(
+        elevation: 200,
+        backgroundColor: AppColors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: AppColors.white50
+              ),
+                curve: Curves.ease,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CustomCircleSvgIcon(path: AssetIcons.icUser,iconColor: AppColors.hex2e47,),
+                    CustomText(data: 'User Profile',style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),)
+                  ],
+                )),
+            ListView(
+              shrinkWrap: true,
+              children: [
+                CustomContainer(
+                  onTap: (){
+                    LocalPreferences().setAuth(false);
+                  },
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 10
+                  ),
+                  border: Border.all(color: AppColors.hex5474),
+                  borderRadius: BorderRadius.circular(5),
+                  color: AppColors.black10,
+                  child: CustomText(data: 'Log Out',style: BaseStyle.s14w400.c(AppColors.hex2e47).w(500).family(FontFamily.montserrat),),
+                )
+              ],
+            ).padH(10)
+          ],
+        ),
+      ),
       appBar: CustomAppBar(
         autoImplyLeading: false,
         bgColor: AppColors.white50,
         title: Row(
           children: [
-            const CustomImageView(path: AssetImages.imgLogo,height: 40,width: 50,),
+            GestureDetector(
+              onTap: ()=>_key.currentState?.openDrawer(),
+                child: const CustomImageView(path: AssetImages.imgLogo,height: 40,width: 50,)),
             CustomText(data: AppStrings.home,style: BaseStyle.s14w400,),
             const Spacer(),
             CustomCircleSvgIcon(
@@ -51,6 +95,7 @@ class _HomeTabState extends State<HomeTab> {
         ),
 
       ),
+
       body:  Column(
         children: [
           CustomContainer(

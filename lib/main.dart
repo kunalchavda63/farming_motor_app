@@ -35,8 +35,8 @@ void callbackDispatcher() {
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  if(isAndroid || isIos) {await Workmanager().initialize(callbackDispatcher,isInDebugMode: true);}
-  await windowManager.ensureInitialized();
+  if(isAndroid || isIos) {await Workmanager().initialize(callbackDispatcher);}
+  if(isWindows)await windowManager.ensureInitialized();
   const WindowOptions windowOptions = WindowOptions(
     size: Size(1920,1080),
     minimumSize: Size(420,700),
@@ -45,10 +45,12 @@ void main() async{
     center: true,
     title: 'Farming Motor app'
   );
-  windowManager.waitUntilReadyToShow(windowOptions,() async{
+  if(isWindows) {
+    windowManager.waitUntilReadyToShow(windowOptions,() async{
     await windowManager.show();
     await windowManager.focus();
   });
+  }
 
   await setupServiceLocator();
   await SystemChrome.setPreferredOrientations(

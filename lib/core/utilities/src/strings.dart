@@ -33,6 +33,7 @@ class AppStrings {
   static const String welcome = 'Welcome';
   static const String signIntoContinue = 'Sign in to continue';
   static const String createAccount = 'Create Account';
+  static const String createAnAccount = 'Create An Account';
   static const String pleaseFillTheBelowInformation = 'Please fill the below informations.';
   static const String doNotWorryItHappens =  'Don’t worry! it happens. please enter the mobile number which is associated your account';
   static const String setupUFirstPump = 'First Pump Configuration';
@@ -88,5 +89,11 @@ class AppStrings {
   static const String startTime = 'Start Time';
   static const String endTime = 'End time';
   static const String logs  = 'Logs';
+  static const String welcomeToFarmingMotorApp  = 'Welcome to Farming Motor App';
+  static const String controlAndMonitorYouFarmMotorsAnyTime  = 'Control and monitor your farm motors anytime, anywhere. \n Easy, fast, and reliable.';
+  static const String firstName  = 'First Name';
+  static const String lastName  = 'Last Name';
+  static const String address  = 'Address';
+
 
 }

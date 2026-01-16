@@ -102,7 +102,7 @@ class BuildTextField extends StatelessWidget {
               textInputType: textInputType ?? TextInputType.text,
               textInputAction: textInputAction ?? TextInputAction.next,
               obscureText: isPassword,
-              suffixIcon: isDropdown ? SvgPicture.asset(AssetIcons.icDropdown,colorFilter: ColorFilter.mode(AppColors.black.withOAlpha(0.20), BlendMode.srcIn),).padAll(5):null,
+              suffixIcon: isDropdown ? SvgPicture.asset(AssetIcons.icDropdown,colorFilter: ColorFilter.mode(AppColors.black.withOAlpha(0.20), BlendMode.srcIn),).padAll(14):null,
               validator: validator,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               filled: true,
