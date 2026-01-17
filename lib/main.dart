@@ -1,5 +1,4 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
@@ -77,20 +76,8 @@ class MyApp extends StatelessWidget {
 
             ChangeNotifierProvider(
               create: (_) => PumpListProvider()
-                ..addPump(
-                  PumpDetailModel(
-                    pumpId: 'kc01',
-                    pumpName: 'kc0111',
-                    phaseType: PumpPhaseType.threePhase.toString(),
-                    hp: 200,
-                    voltage: 220,
-                    outletSize: 100,
-                    maxHead: 200,
-                    lpm: 20,
-                    lastRunningTime: DateTime.now(),
-                    logs: [],
-                  ),
-                ),
+
+
             ),
           ],
           child: MaterialApp.router(

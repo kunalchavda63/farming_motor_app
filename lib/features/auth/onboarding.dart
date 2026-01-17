@@ -26,8 +26,8 @@ class _OnboardingState extends State<Onboarding> {
     final bool isAuth = prefs.isAuth;
     final bool isFirstPumpCreated = prefs.isFirstPumpCreated;
 
-    logger.d("Auth: $isAuth");
-    logger.d("Pump Created: $isFirstPumpCreated");
+    logger.d('Auth: $isAuth');
+    logger.d('Pump Created: $isFirstPumpCreated');
 
     if (!mounted) return;
 

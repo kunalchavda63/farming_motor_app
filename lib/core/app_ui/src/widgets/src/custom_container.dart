@@ -24,7 +24,7 @@ class CustomContainer extends StatelessWidget {
     this.constraints,
     this.margin,
     this.gradient,
-    this.foregroundDecoration,
+    this.foregroundDecoration, this.imageOpacity, this.imageFit, this.imageH, this.imageW,
   });
   final double? h;
   final double? w;
@@ -44,6 +44,11 @@ class CustomContainer extends StatelessWidget {
   final String? path;
   final Gradient? gradient;
   final BoxDecoration? foregroundDecoration;
+  final double? imageOpacity;
+  final BoxFit? imageFit;
+  final double? imageH;
+  final double? imageW;
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +70,9 @@ class CustomContainer extends StatelessWidget {
           image:
               path != null
                   ? DecorationImage(
-                    opacity: 0.2,
-                    fit: BoxFit.cover,
+                opacity: imageOpacity ?? 1,
+
+                    fit:imageFit ??  BoxFit.cover,
                     image: AssetImage(path ?? ''),
                   )
                   : null,

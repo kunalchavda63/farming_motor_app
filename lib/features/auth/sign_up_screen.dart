@@ -1,4 +1,5 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/build_text_field.dart';
@@ -24,7 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _addressControllerFocus = FocusNode();
   final FocusNode _mobileNumberControllerFocus = FocusNode();
-
+  LocalPreferences prefs = LocalPreferences();
   @override
   void dispose() {
     logger.d('Disposing Starting');
@@ -59,117 +60,100 @@ class _SignUpScreenState extends State<SignUpScreen> {
         key: _key,
         child: LayoutBuilder(
           builder: (context, constraints) {
-            if (constraints.maxWidth < 600) {
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 180,
-                      width: MediaQuery.of(context).size.width,
-                      child: const ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(24),
-                          bottomRight: Radius.circular(24),
-                        ),
-                        child: Opacity(
-                          opacity: 0.9,
-                          child: CustomImageView(
-                            path: AssetImages.imgWaterPump,
-                            fit: BoxFit
-                                .cover, // optional: make it cover full width
-                          ),
-                        ),
-                      ),
-                    ).padBottom(40.r), // ✅ padding applied outside SizedBox
-                    _buildBoth(),
-                  ],
+            return Stack(
+              children: [
+                SizedBox(height: mCtx.size.height, width: mCtx.size.width),
+                const Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: CustomImageView(
+                    path: AssetImages.imgBgBig,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              );
-            } else if (constraints.maxWidth > 600) {
-              return Stack(
-                children: [
-                  SizedBox(height: mCtx.size.height, width: mCtx.size.width),
-                  const Positioned.fill(
-                    child: CustomImageView(
-                      path: AssetImages.imgBgBig,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    left: mCtx.size.width * 0.1,
-                    right: mCtx.size.width * 0.1,
-                    top: mCtx.size.width * 0.1,
-                    bottom: mCtx.size.width * 0.1,
-                    child: CustomContainer(
-                      alignment: Alignment.center,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.black10, width: 5),
-                      color: AppColors.white50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: CustomContainer(
-                                borderRadius: BorderRadius.circular(20),
-                                alignment: Alignment.center,
-                                color: AppColors.white,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    _buildBoth().padH(12),
-                                    CustomButton(
-                                      border: Border.all(),
-                                      onTap: () async {
-                                        if (_key.currentState!.validate()) {
-                                          // await prefs.setAuth(true);
-                                          logger.d('User Is Authenticated');
-                                          context.pushReplacement(
-                                            RoutesEnum.onboarding.path,
-                                          );
-                                        } else {
-                                          logger.e(
-                                            'Please Fill the Valid Form',
-                                          );
-                                        }
-                                      },
+                Positioned.fill(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final double maxWidth = constraints.maxWidth;
+                      final double maxHeight = constraints.maxHeight;
 
-                                      color: AppColors.black10,
-                                      label: AppStrings.createAccount,
-                                    ).padH(30),
-                                  ],
-                                ),
-                              ),
-                            ),
+                      final bool isTablet = maxWidth > 600;
+
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: isTablet ? 600 : maxWidth * 0.9,
+                            maxHeight: maxHeight * 0.8,
                           ),
-                          const Expanded(
+                          child: CustomContainer(
+                            alignment: Alignment.center,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: AppColors.black10,
+                              width: isTablet ? 4 : 2,
+                            ),
+
+                            color: AppColors.white50,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 5
+                            ),
                             child: CustomContainer(
-                              foregroundDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  bottomLeft: Radius.circular(20),
-                                ),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    'https://plus.unsplash.com/premium_photo-1663945778994-11b3201882a0?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
+
+                              alignment: Alignment.center,
+                              borderRadius: BorderRadius.circular(
+                                  10
+                              ),
+                              color: AppColors.white50,
+
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if(isWindows) const Align(
+                                      alignment: AlignmentDirectional.topStart,
+                                      child: CustomImageView(
+                                        path: AssetImages.imgLogo,
+                                        height: 100,
+                                        width: 100,)).padBottom(10).padLeft(30),
+                                  _buildBoth().padH(isTablet ? 32 : 16),
+
+                                  const SizedBox(height: 20),
+
+                                  CustomButton(
+                                    border: Border.all(),
+                                    onTap: () async {
+                                      if (_key.currentState!.validate()) {
+                                        await prefs.setAuth(true);
+                                        logger.d('User Is Authenticated');
+                                        context.go(
+                                          RoutesEnum.onboarding.path,
+                                        );
+                                      } else {
+                                        logger.e(
+                                          'Please Fill the Valid Form',
+                                        );
+                                      }
+                                    },
+                                    color: AppColors.black10,
+                                    label: AppStrings.logIn,
+                                  ).padH(isTablet ? 48 : 24),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
+                ),
+              ],
+            );
+          }
       ),
+      ),
+
       bottomNavigationBar: (isWindows)
           ? null
           : CustomButton(

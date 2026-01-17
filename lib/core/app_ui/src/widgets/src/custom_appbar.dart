@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-
   const CustomAppBar({
     super.key,
     this.leading,
     this.title,
     this.bgColor,
+    this.gradient, // ✅ NEW
     this.isCenterTitle = true,
     this.bottomOpacity = 1.0,
     this.elevation = 0,
@@ -15,9 +15,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.height,
     this.actions,
   });
+
   final Widget? leading;
   final Widget? title;
   final Color? bgColor;
+  final Gradient? gradient; // ✅
   final bool isCenterTitle;
   final double bottomOpacity;
   final double elevation;
@@ -39,6 +41,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: title,
       automaticallyImplyLeading: autoImplyLeading,
       toolbarHeight: height,
+      flexibleSpace: gradient != null ? CustomContainer(
+        gradient: gradient,
+      ): null
     );
   }
 

@@ -78,7 +78,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(100.r),
-                  child: const CustomImageView(path: AssetImages.imgSplash,height: 48,width: 48,fit: BoxFit.cover,).padTop(40)),
+                  child: const CustomImageView(path: AssetImages.imgLogo,height: 48,width: 48,fit: BoxFit.cover,).padTop(40)),
               CustomText(
                 data: AppStrings.setupUFirstPump,
                 style: BaseStyle.s24800

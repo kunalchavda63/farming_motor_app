@@ -4,11 +4,68 @@ import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:workmanager/workmanager.dart';
 
 class PumpListProvider extends ChangeNotifier {
+
+  PumpListProvider() {
+    _initPumps();
+  }
   List<PumpDetailModel> _pumps = [];
+
+  void _initPumps() {
+    _pumps = [
+      PumpDetailModel(
+        pumpId: 'kc01',
+        pumpName: 'kc0111',
+        phaseType: PumpPhaseType.threePhase.toString(),
+        hp: 200,
+        voltage: 220,
+        outletSize: 100,
+        maxHead: 200,
+        lpm: 20,
+        lastRunningTime: DateTime.now(),
+        logs: [],
+      ),
+      PumpDetailModel(
+        pumpId: 'kc02',
+        pumpName: 'kc0222',
+        phaseType: PumpPhaseType.threePhase.toString(),
+        hp: 200,
+        voltage: 220,
+        outletSize: 100,
+        maxHead: 200,
+        lpm: 20,
+        lastRunningTime: DateTime.now(),
+        logs: [],
+      ),
+      PumpDetailModel(
+        pumpId: 'kc03',
+        pumpName: 'kc033',
+        phaseType: PumpPhaseType.threePhase.toString(),
+        hp: 200,
+        voltage: 220,
+        outletSize: 100,
+        maxHead: 200,
+        lpm: 20,
+        lastRunningTime: DateTime.now(),
+        logs: [],
+      ),
+      PumpDetailModel(
+        pumpId: 'kc04',
+        pumpName: 'kc0444',
+        phaseType: PumpPhaseType.threePhase.toString(),
+        hp: 200,
+        voltage: 220,
+        outletSize: 100,
+        maxHead: 200,
+        lpm: 20,
+        lastRunningTime: DateTime.now(),
+        logs: [],
+      ),
+    ];
+  }
+
   List<PumpDetailModel> get pumps => _pumps;
 
   final LocalPreferences _prefs = LocalPreferences();

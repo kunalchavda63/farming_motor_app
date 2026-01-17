@@ -14,7 +14,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
@@ -45,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         statusBarColor: AppColors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light,
-        systemNavigationBarColor: AppColors.transparent
+        systemNavigationBarColor: AppColors.transparent,
       ),
       child: Scaffold(
         backgroundColor: AppColors.transparent,
@@ -53,14 +52,16 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Form(
           key: _key,
           child: LayoutBuilder(
-            builder: (context,constraints) {
-
-
-              if(constraints.maxWidth < 600){
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 800) {
+                // For Mobile Layout
 
                 return SingleChildScrollView(
                   child: SizedBox(
-                    height: mCtx.size.height + mCtx.viewInsets.bottom + mCtx.viewPadding.bottom,
+                    height:
+                        mCtx.size.height +
+                        mCtx.viewInsets.bottom +
+                        mCtx.viewPadding.bottom,
                     width: mCtx.size.width,
                     child: Stack(
                       children: [
@@ -70,147 +71,163 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
 
                         Opacity(
-                            opacity: 0.85,
-                            child: CustomImageView(path: AssetImages.imgGreenWhite,fit: BoxFit.cover,height: mCtx.size.height,width: mCtx.size.width,)),
+                          opacity: 0.85,
+                          child: CustomImageView(
+                            path: AssetImages.imgGreenWhite,
+                            fit: BoxFit.cover,
+                            height: mCtx.size.height,
+                            width: mCtx.size.width,
+                          ),
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const CustomImageView(path: AssetImages.imgLogo,height: 200,width: 200,), // ✅ padding applied outside SizedBox
+                            const CustomImageView(
+                              path: AssetImages.imgLogo,
+                              height: 200,
+                              width: 200,
+                            ), // ✅ padding applied outside SizedBox
                             _buildBoth(),
                           ],
                         ),
                         Positioned(
-                            bottom:  mCtx.viewPadding.bottom + 35,
-                            right: 20,
-                            left: 20,
-                            child: CustomButton(
-                              border: Border.all(),
-                              onTap: () async{
-                                if(_key.currentState!.validate()) {
-                                  await prefs.setAuth(true);
-                                  logger.d('User Is Authenticated');
-                                  context.push(RoutesEnum.onboarding.path);
-                                }
-
-                                else{
-                                  logger.e('Please Fill the Valid Form');
-                                }
-
-                              },
-                              color: AppColors.black.withOAlpha(0.20),
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(2,2),
-                                  blurRadius: 20,
-                                  color: AppColors.white.withOAlpha(0.1)
-                                )
-                              ],
-                              label: AppStrings.logIn,
-                              textColor: AppColors.white,
-
-                            )),
-
+                          bottom: mCtx.viewPadding.bottom + 35,
+                          right: 20,
+                          left: 20,
+                          child: CustomButton(
+                            border: Border.all(),
+                            onTap: () async {
+                              if (_key.currentState!.validate()) {
+                                await prefs.setAuth(true);
+                                logger.d('User Is Authenticated');
+                                context.push(RoutesEnum.onboarding.path);
+                              } else {
+                                logger.e('Please Fill the Valid Form');
+                              }
+                            },
+                            color: AppColors.black.withOAlpha(0.20),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(2, 2),
+                                blurRadius: 20,
+                                color: AppColors.white.withOAlpha(0.1),
+                              ),
+                            ],
+                            label: AppStrings.logIn,
+                            textColor: AppColors.white,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 );
               }
-
               // For Laptop Layout
-              else if(constraints.maxWidth > 600 ){
+              else if (constraints.maxWidth > 800) {
                 return Stack(
                   children: [
-                    SizedBox(
-                      height: mCtx.size.height,
-                      width: mCtx.size.width,
+                    SizedBox(height: mCtx.size.height, width: mCtx.size.width),
+                    const Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: CustomImageView(
+                        path: AssetImages.imgBgBig,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    const Positioned.fill(
-                        child: CustomImageView(
-                          path: AssetImages.imgBgBig,fit: BoxFit.cover,)),
-                    Positioned(
-                        left: mCtx.size.width*0.1,
-                        right: mCtx.size.width*0.1,
-                        top: mCtx.size.width*0.1,
-                        bottom: mCtx.size.width*0.1,
-                        child: CustomContainer(
-                          alignment: Alignment.center,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppColors.black10,width: 5),
-                          color: AppColors.white50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
+                    Positioned.fill(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final double maxWidth = constraints.maxWidth;
+                          final double maxHeight = constraints.maxHeight;
+
+                          final bool isTablet = maxWidth > 600;
+
+                          return Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: isTablet ? 600 : maxWidth * 0.9,
+                                maxHeight: maxHeight * 0.8,
+                              ),
+                              child: CustomContainer(
+                                alignment: Alignment.center,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: AppColors.black10,
+                                  width: isTablet ? 4 : 2,
+                                ),
+
+                                color: AppColors.white50,
+                                padding:  const EdgeInsets.symmetric(
+                                  vertical: 5,
+                                  horizontal: 5
+                                ),
                                 child: CustomContainer(
-                                  borderRadius: BorderRadius.circular(20),
 
                                   alignment: Alignment.center,
-                                  foregroundDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: const DecorationImage(image: NetworkImage('https://as2.ftcdn.net/jpg/15/87/55/07/1000_F_1587550794_gVN3ZXHUpcqRufElqPVeISDADQX6NuNE.jpg'),fit: BoxFit.cover,filterQuality: FilterQuality.high,opacity: 0.9)
+                                  borderRadius:  BorderRadius.circular(
+                                    10
                                   ),
-                                  color: AppColors.white,
-                                ),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: CustomContainer(
-                                    borderRadius: BorderRadius.circular(20),
-                                    alignment: Alignment.center,
-                                    color: AppColors.white,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        _buildBoth().padH(12),
-                                        CustomButton(
-                                          border: Border.all(),
-                                          onTap: () async{
-                                                if(_key.currentState!.validate()) {
-                                                  await prefs.setAuth(true);
-                                                  logger.d('User Is Authenticated');
-                                                  context.pushReplacement(RoutesEnum.onboarding.path);
-                                                }
+                                  color: AppColors.white50,
 
-                                            else{
-                                              logger.e('Please Fill the Valid Form');
-                                            }
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if(isWindows) const Align(
+                                          alignment: AlignmentDirectional.topStart,
+                                          child: CustomImageView(path: AssetImages.imgLogo,height: 100,width: 100,)).padBottom(10).padLeft(30),
+                                      _buildBoth().padH(isTablet ? 32 : 16),
 
-                                          },
+                                      const SizedBox(height: 20),
 
-                                          color: AppColors.black10,
-                                          label: AppStrings.logIn,
-                                        ).padH(30)
-
-                                      ],
-                                    ),
+                                      CustomButton(
+                                        border: Border.all(),
+                                        onTap: () async {
+                                          if (_key.currentState!.validate()) {
+                                            await prefs.setAuth(true);
+                                            logger.d('User Is Authenticated');
+                                            context.go(
+                                              RoutesEnum.onboarding.path,
+                                            );
+                                          } else {
+                                            logger.e(
+                                              'Please Fill the Valid Form',
+                                            );
+                                          }
+                                        },
+                                        color: AppColors.black10,
+                                        label: AppStrings.logIn,
+                                      ).padH(isTablet ? 48 : 24),
+                                    ],
                                   ),
                                 ),
                               ),
-
-
-
-                            ],
-                          ),
-                        ),
-                    )
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 );
               }
               return const SizedBox.shrink();
-
-
             },
           ),
         ),
-
       ),
     );
   }
-  Widget _buildBoth(){
+
+  Widget _buildBoth() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+
+
+
         CustomText(
           data: AppStrings.welcome,
           style: BaseStyle.s24800
@@ -237,41 +254,42 @@ class _LoginScreenState extends State<LoginScreen> {
           textInputType: TextInputType.visiblePassword,
           isPassword: true,
         ).padBottom(30.r),
-        if(isWindows) Center(
-          child: GestureDetector(
-            onTap: (){
-              context.push(RoutesEnum.forgot.path);
-            },
-            child: CustomText(
-              data: '${AppStrings.forgotPassword} ?',
-              style: BaseStyle.s14w400.c(AppColors.black),
-            ).padBottom(30.r),
-          ),
-        ),
-     if(isWindows || isMacOs )   Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomText(
-              data: AppStrings.doNotHaveAnAccount,
-              style: BaseStyle.s14w400
-                  .c(AppColors.black)
-                  .family(FontFamily.montserrat),
-            ).padBottom(30.r).padRight(7.r),
-            GestureDetector(
+        if (isWindows)
+          Center(
+            child: GestureDetector(
               onTap: () {
-                logger.d('SignUp Screen : Moving');
-                context.push(RoutesEnum.signup.path);
+                context.push(RoutesEnum.forgot.path);
               },
               child: CustomText(
-                data: AppStrings.signUp,
-                style: BaseStyle.s14w400.c(AppColors.hex2e47),
-                softWrap: true,
+                data: '${AppStrings.forgotPassword} ?',
+                style: BaseStyle.s14w400.c(AppColors.black),
               ).padBottom(30.r),
             ),
-          ],
-        ),
+          ),
+        if (isWindows || isMacOs)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText(
+                data: AppStrings.doNotHaveAnAccount,
+                style: BaseStyle.s14w400
+                    .c(AppColors.black)
+                    .family(FontFamily.montserrat),
+              ).padBottom(30.r).padRight(7.r),
+              GestureDetector(
+                onTap: () {
+                  logger.d('SignUp Screen : Moving');
+                  context.push(RoutesEnum.signup.path);
+                },
+                child: CustomText(
+                  data: AppStrings.signUp,
+                  style: BaseStyle.s14w400.c(AppColors.hex2e47),
+                  softWrap: true,
+                ).padBottom(30.r),
+              ),
+            ],
+          ),
       ],
     ).padH(12);
-
   }
 }
