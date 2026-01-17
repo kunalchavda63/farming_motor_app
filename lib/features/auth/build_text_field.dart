@@ -106,7 +106,7 @@ class BuildTextField extends StatelessWidget {
               validator: validator,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               filled: true,
-              fillColor: fillColor ?? AppColors.hex5474.withOAlpha(0.15),
+              fillColor: fillColor ?? AppColors.hex5474.withOAlpha(0.25),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(color: AppColors.transparent),
                 borderRadius: BorderRadius.circular(borderRadius),

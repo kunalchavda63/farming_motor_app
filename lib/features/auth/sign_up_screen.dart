@@ -205,7 +205,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             Expanded(
               child: BuildTextField(
-                label: "${AppStrings.firstName}*",
+                label: '${AppStrings.firstName}*',
                 controller: _firstNameController,
                 focusNode: _firstNameControllerFocus,
                 validator: Validators.validateName,
@@ -217,12 +217,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 label: AppStrings.lastName,
                 controller: _lastNameController,
                 focusNode: _lastNameControllerFocus,
-                validator:(val){
+                validator:(val) {
                   if(val!.isNotEmpty){
                     Validators.validateName;
                   }else{
                     return null;
                   }
+                  return null;
                 },
 
               ),

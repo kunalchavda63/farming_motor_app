@@ -29,7 +29,7 @@ class CustomButton extends StatelessWidget {
       color: color ?? AppColors.black,
       // border: Border.all(color: AppColors.white),
       alignment: Alignment.center,
-      borderRadius: BorderRadius.circular(isSmall==true?48:24),
+      borderRadius: BorderRadius.circular(isSmall==true?10:10),
       // Ensure children are clipped within borderRadius
       child: Align(
         child: Row(
@@ -41,7 +41,7 @@ class CustomButton extends StatelessWidget {
             if(label!=null)
               CustomText(
               data: label ?? 'Lo',
-              style: BaseStyle.s18w400.c(AppColors.black).family(FontFamily.montserrat)
+              style: BaseStyle.s18w400.c(textColor ?? AppColors.black).family(FontFamily.montserrat)
             ),
           ],
         ),

@@ -4,7 +4,7 @@ enum RoutesEnum {
   forgot('/forgot-password'),
   otp('/otp'),
   reset('/reset'),
-  splash('/splash'),
+  splash('/'),
   onboarding('/onboarding'),
   screen('/screen');
   const RoutesEnum(this.path);

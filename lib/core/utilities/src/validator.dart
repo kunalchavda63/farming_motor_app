@@ -36,7 +36,7 @@ class Validators {
       return '$fieldName must be at least 2 characters';
     }
 
-    final nameRegex = RegExp(r"^[a-zA-Z\s]+$");
+    final nameRegex = RegExp(r'^[a-zA-Z\s]+$');
     if (!nameRegex.hasMatch(value.trim())) {
       return '$fieldName can only contain letters';
     }

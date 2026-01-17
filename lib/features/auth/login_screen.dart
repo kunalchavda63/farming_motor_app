@@ -3,6 +3,7 @@ import 'package:farming_motor_app/core/services/local_storage/sharedpreference_s
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/build_text_field.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,150 +23,187 @@ class _LoginScreenState extends State<LoginScreen> {
   LocalPreferences prefs = LocalPreferences();
   late MediaQueryData mCtx;
   @override
+  void dispose() {
+    _emailController.dispose();
+    _emailFocus.dispose();
+    _passwordController.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     mCtx = MediaQuery.of(context);
-    setStatusBarDarkStyle();
+    setStatusBarLightStyle();
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: AppColors.white.withOAlpha(0.90),
-      body: Form(
-        key: _key,
-        child: LayoutBuilder(
-          builder: (context,constraints) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: AppColors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarColor: AppColors.transparent
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.transparent,
+        extendBody: true,
+        body: Form(
+          key: _key,
+          child: LayoutBuilder(
+            builder: (context,constraints) {
 
 
-            if(constraints.maxWidth < 600){
+              if(constraints.maxWidth < 600){
 
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                return SingleChildScrollView(
+                  child: SizedBox(
+                    height: mCtx.size.height + mCtx.viewInsets.bottom + mCtx.viewPadding.bottom,
+                    width: mCtx.size.width,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: mCtx.size.height,
+                          width: mCtx.size.width,
+                        ),
+
+                        Opacity(
+                            opacity: 0.85,
+                            child: CustomImageView(path: AssetImages.imgGreenWhite,fit: BoxFit.cover,height: mCtx.size.height,width: mCtx.size.width,)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const CustomImageView(path: AssetImages.imgLogo,height: 200,width: 200,), // ✅ padding applied outside SizedBox
+                            _buildBoth(),
+                          ],
+                        ),
+                        Positioned(
+                            bottom:  mCtx.viewPadding.bottom + 35,
+                            right: 20,
+                            left: 20,
+                            child: CustomButton(
+                              border: Border.all(),
+                              onTap: () async{
+                                if(_key.currentState!.validate()) {
+                                  await prefs.setAuth(true);
+                                  logger.d('User Is Authenticated');
+                                  context.push(RoutesEnum.onboarding.path);
+                                }
+
+                                else{
+                                  logger.e('Please Fill the Valid Form');
+                                }
+
+                              },
+                              color: AppColors.black.withOAlpha(0.20),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(2,2),
+                                  blurRadius: 20,
+                                  color: AppColors.white.withOAlpha(0.1)
+                                )
+                              ],
+                              label: AppStrings.logIn,
+                              textColor: AppColors.white,
+
+                            )),
+
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              // For Laptop Layout
+              else if(constraints.maxWidth > 600 ){
+                return Stack(
                   children: [
                     SizedBox(
-                      height: 180,
-                      width: MediaQuery.of(context).size.width,
-                      child: const ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(24),
-                          bottomRight: Radius.circular(24),
-                        ),
-                        child: Opacity(
-                          opacity: 0.9,
-                          child: CustomImageView(
-                            path: AssetImages.imgWaterPump,
-                            fit: BoxFit.cover, // optional: make it cover full width
-                          ),
-                        ),
-                      ),
-                    ).padBottom(40.r), // ✅ padding applied outside SizedBox
-                    _buildBoth()
-                  ],
-                ),
-              );
-            }
-            else if(constraints.maxWidth > 600 ){
-              return Stack(
-                children: [
-                  SizedBox(
-                    height: mCtx.size.height,
-                    width: mCtx.size.width,
-                  ),
-                  const Positioned.fill(
-                      child: CustomImageView(
-                        path: AssetImages.imgBgBig,fit: BoxFit.cover,)),
-                  Positioned(
-                      left: mCtx.size.width*0.1,
-                      right: mCtx.size.width*0.1,
-                      top: mCtx.size.width*0.1,
-                      bottom: mCtx.size.width*0.1,
-                      child: CustomContainer(
-                        alignment: Alignment.center,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppColors.black10,width: 5),
-                        color: AppColors.white50,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: CustomContainer(
-                                borderRadius: BorderRadius.circular(20),
-
-                                alignment: Alignment.center,
-                                foregroundDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  image: const DecorationImage(image: NetworkImage('https://as2.ftcdn.net/jpg/15/87/55/07/1000_F_1587550794_gVN3ZXHUpcqRufElqPVeISDADQX6NuNE.jpg'),fit: BoxFit.cover,filterQuality: FilterQuality.high,opacity: 0.9)
-                                ),
-                                color: AppColors.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
+                      height: mCtx.size.height,
+                      width: mCtx.size.width,
+                    ),
+                    const Positioned.fill(
+                        child: CustomImageView(
+                          path: AssetImages.imgBgBig,fit: BoxFit.cover,)),
+                    Positioned(
+                        left: mCtx.size.width*0.1,
+                        right: mCtx.size.width*0.1,
+                        top: mCtx.size.width*0.1,
+                        bottom: mCtx.size.width*0.1,
+                        child: CustomContainer(
+                          alignment: Alignment.center,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppColors.black10,width: 5),
+                          color: AppColors.white50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
                                 child: CustomContainer(
                                   borderRadius: BorderRadius.circular(20),
+
                                   alignment: Alignment.center,
+                                  foregroundDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    image: const DecorationImage(image: NetworkImage('https://as2.ftcdn.net/jpg/15/87/55/07/1000_F_1587550794_gVN3ZXHUpcqRufElqPVeISDADQX6NuNE.jpg'),fit: BoxFit.cover,filterQuality: FilterQuality.high,opacity: 0.9)
+                                  ),
                                   color: AppColors.white,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      _buildBoth().padH(12),
-                                      CustomButton(
-                                        border: Border.all(),
-                                        onTap: () async{
-                                              if(_key.currentState!.validate()) {
-                                                await prefs.setAuth(true);
-                                                logger.d('User Is Authenticated');
-                                                context.pushReplacement(RoutesEnum.onboarding.path);
-                                              }
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: CustomContainer(
+                                    borderRadius: BorderRadius.circular(20),
+                                    alignment: Alignment.center,
+                                    color: AppColors.white,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        _buildBoth().padH(12),
+                                        CustomButton(
+                                          border: Border.all(),
+                                          onTap: () async{
+                                                if(_key.currentState!.validate()) {
+                                                  await prefs.setAuth(true);
+                                                  logger.d('User Is Authenticated');
+                                                  context.pushReplacement(RoutesEnum.onboarding.path);
+                                                }
 
-                                          else{
-                                            logger.e('Please Fill the Valid Form');
-                                          }
+                                            else{
+                                              logger.e('Please Fill the Valid Form');
+                                            }
 
-                                        },
+                                          },
 
-                                        color: AppColors.black10,
-                                        label: AppStrings.logIn,
-                                      ).padH(30)
+                                          color: AppColors.black10,
+                                          label: AppStrings.logIn,
+                                        ).padH(30)
 
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
 
 
 
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                  )
-                ],
-              );
-            }
-            return const SizedBox.shrink();
+                    )
+                  ],
+                );
+              }
+              return const SizedBox.shrink();
 
 
-          },
+            },
+          ),
         ),
+
       ),
-      bottomNavigationBar:(isWindows)? null:CustomButton(
-        label: AppStrings.logIn,
-        onTap: () async{
-          if(_key.currentState!.validate()){
-            await prefs.setAuth(true);
-            logger.d('User Is Authnecated');
-            context.pushReplacement(RoutesEnum.onboarding.path);
-          }
-
-        },
-        color: AppColors.black.withOAlpha(0.18),
-        border: Border.all(color: AppColors.hex2e47),
-      ).padH(12.r).padBottom(MediaQuery.of(context).viewPadding.bottom + 40.r),
-
     );
   }
   Widget _buildBoth(){
@@ -210,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ).padBottom(30.r),
           ),
         ),
-        Row(
+     if(isWindows || isMacOs )   Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomText(

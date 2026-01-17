@@ -1,8 +1,10 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_switch.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
+import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/screens/provider/pump_list_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -58,8 +60,10 @@ class _HomeTabState extends State<HomeTab> {
               shrinkWrap: true,
               children: [
                 CustomContainer(
-                  onTap: (){
-                    LocalPreferences().setAuth(false);
+                  onTap: () async{
+
+                    await LocalPreferences().setAuth(false);
+                    context.go(RoutesEnum.onboarding.path);
                   },
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,

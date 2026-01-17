@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
-import 'package:farming_motor_app/core/utilities/utils.dart';
+import 'package:farming_motor_app/core/utilities/src/helper_method.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,7 +13,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late Size size;
+
+  @override
+  void didChangeDependencies() {
+    size = MediaQuery.of(context).size;
+    setStatusBarLightStyle();
+
+    super.didChangeDependencies();
+  }
+
   Timer? _timer;
+
   @override
   void initState() {
     super.initState();
@@ -22,22 +33,61 @@ class _SplashScreenState extends State<SplashScreen> {
       context.go(RoutesEnum.onboarding.path);
     });
   }
+
+
 @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Expanded(child: SizedBox()),
-           Expanded(child: const CustomImageView(path: AssetImages.imgSplash).padBottom(50).padH(50)),
-          Expanded(child: CustomText(data: AppStrings.welcome,style: BaseStyle.s18w400.c(AppColors.hex5474),textAlign: TextAlign.center,))
-        ],
+
+      backgroundColor: AppColors.transparent,
+      body: CustomContainer(
+        child:Stack(
+          children: [
+            SizedBox(
+              height: size.height,
+              width: size.width,
+            ),
+            const Positioned(
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                child:Opacity(
+                  opacity: 0.8,
+                  child: CustomAnimationWrapper(
+                    duration: Duration(microseconds: 200),
+                    child: CustomImageView(
+                      fit: BoxFit.cover,
+                      path: AssetImages.imgGreenWhite,
+                    ),
+                  ),
+                )),
+             Positioned.fill(
+                top: size.height * 0.01,
+                child: CustomAnimationWrapper(
+                  curve: Curves.easeInBack,
+                  duration: const Duration(seconds: 1),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CustomImageView(path: AssetImages.imgLogo,height: 200,width: 200,fit: BoxFit.cover,),
+                      CustomText(data: 'Smart Pump Control',style: BaseStyle.s19w500.c(AppColors.hex2e47).family(FontFamily.montserrat),)
+                    ],
+                  ),
+                )
+             ),
+
+
+          ],
+        ),
       ),
     );
   }

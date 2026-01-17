@@ -6,6 +6,7 @@ import 'package:farming_motor_app/features/auth/onboarding.dart';
 import 'package:farming_motor_app/features/auth/otp_verification.dart';
 import 'package:farming_motor_app/features/auth/reset_password_screen.dart';
 import 'package:farming_motor_app/features/auth/sign_up_screen.dart';
+import 'package:farming_motor_app/features/screens/screens.dart';
 import 'package:farming_motor_app/features/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -53,6 +54,7 @@ final goRouterConfig = GoRouter(
       goRoute(RoutesEnum.otp.path,const OtpVerification()),
       goRoute(RoutesEnum.reset.path,const ResetPasswordScreen()),
       goRoute(RoutesEnum.onboarding.path,const Onboarding()),
+      goRoute(RoutesEnum.screen.path,const Screens()),
 
 
 

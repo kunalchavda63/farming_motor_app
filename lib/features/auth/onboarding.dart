@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
-import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.dart';
-import 'package:farming_motor_app/features/auth/login_screen.dart';
-import 'package:farming_motor_app/features/screens/screens.dart';
+import 'package:farming_motor_app/core/services/navigation/src/route_constants.dart';
+import 'package:farming_motor_app/core/utilities/utils.dart';
+import 'package:go_router/go_router.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -14,9 +12,6 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
-  bool isLoading = true;
-  bool isAuth = false;
-  bool isFirstPumpCreated = false;
   final LocalPreferences prefs = LocalPreferences();
 
   @override
@@ -25,33 +20,34 @@ class _OnboardingState extends State<Onboarding> {
     _checkAuth();
   }
 
-  void _checkAuth() {
-    Timer(const Duration(seconds: 2), () {
-      // ✅ After 2 seconds, check auth
-      isAuth = prefs.isAuth;
-      isFirstPumpCreated = prefs.isFirstPumpCreated;
+  Future<void> _checkAuth() async {
+    await Future<void>.delayed(const Duration(milliseconds: 400));
 
-      setState(() {
-        isLoading = false;
-      });
-    });
+    final bool isAuth = prefs.isAuth;
+    final bool isFirstPumpCreated = prefs.isFirstPumpCreated;
+
+    logger.d("Auth: $isAuth");
+    logger.d("Pump Created: $isFirstPumpCreated");
+
+    if (!mounted) return;
+
+    if (isAuth) {
+      context.go(RoutesEnum.screen.path);
+    } else {
+      context.go(RoutesEnum.login.path);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    logger.d(isAuth);
-    if (isLoading) {
-      return const Scaffold(
-        backgroundColor: AppColors.white,
-        body: Center(child: CircularProgressIndicator(
+    return const Scaffold(
+      backgroundColor: AppColors.white,
+      body: Center(
+        child: CircularProgressIndicator(
           color: AppColors.hex2e47,
           strokeWidth: 2,
-        )),
-      );
-    }
-
-    return !isAuth
-        ? const LoginScreen()
-        : const Screens();
+        ),
+      ),
+    );
   }
 }
