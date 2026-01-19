@@ -1,4 +1,6 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/utilities/src/extensions/extensions.dart';
+import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void showSuccessToast(String message) {
@@ -14,14 +16,14 @@ void showSuccessToast(String message) {
 }
 
 void showErrorToast(String message) {
-
-  Fluttertoast.showToast(
-    msg: message,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.red,
-    textColor: Colors.white,
-    fontSize: 16.0,
-
-  );
+  if (!isWindows) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+    );
+  } else {
+    logger.w('Toast not supported on Windows: $message');
+  }
 }
+

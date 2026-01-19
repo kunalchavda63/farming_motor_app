@@ -1,8 +1,10 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
-import 'package:farming_motor_app/core/services/navigation/src/route_constants.dart';
+import 'package:farming_motor_app/core/services/navigation/src/app_router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
-import 'package:go_router/go_router.dart';
+import 'package:farming_motor_app/features/admin/admin.dart';
+import 'package:farming_motor_app/features/auth/login_screen.dart';
+import 'package:farming_motor_app/features/screens/screens.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -25,16 +27,28 @@ class _OnboardingState extends State<Onboarding> {
 
     final bool isAuth = prefs.isAuth;
     final bool isFirstPumpCreated = prefs.isFirstPumpCreated;
+    final user = prefs.getUser();
 
     logger.d('Auth: $isAuth');
+    logger.d(prefs.token);
     logger.d('Pump Created: $isFirstPumpCreated');
 
     if (!mounted) return;
 
-    if (isAuth) {
-      context.go(RoutesEnum.screen.path);
+    if (isAuth && user!=null) {
+      if(isWindows){
+        getIt<AppRouter>().push<void>(Admin(userModel: user));
+
+      }
+      else{
+        getIt<AppRouter>().push<void>(const Screens());
+
+      }
+
+
     } else {
-      context.go(RoutesEnum.login.path);
+      getIt<AppRouter>().push<void>(const LoginScreen());
+
     }
   }
 

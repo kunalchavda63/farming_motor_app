@@ -31,6 +31,7 @@ class _ScreensState extends State<Screens> {
       body: pages[currentIndex],
       backgroundColor: AppColors.white,
       bottomNavigationBar: CustomBottomNav(
+
         currentIndex: currentIndex,
         onTap: (v){
           provider.changeIndex(v);

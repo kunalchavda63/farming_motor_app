@@ -1,10 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
+import 'package:farming_motor_app/core/services/repositories/auth_repository.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
+import 'package:farming_motor_app/features/admin/admin.dart';
 import 'package:farming_motor_app/features/auth/build_text_field.dart';
+import 'package:farming_motor_app/features/auth/forgot_password_screen.dart';
+import 'package:farming_motor_app/features/auth/onboarding.dart';
+import 'package:farming_motor_app/features/auth/sign_up_screen.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,17 +19,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final AuthRepository _repo = AuthRepository();
+  final TextEditingController _mobileController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _mobileControllerFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   LocalPreferences prefs = LocalPreferences();
   late MediaQueryData mCtx;
   @override
   void dispose() {
-    _emailController.dispose();
-    _emailFocus.dispose();
+    _mobileController.dispose();
+    _mobileControllerFocus.dispose();
     _passwordController.dispose();
     _passwordFocus.dispose();
     super.dispose();
@@ -39,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: AppColors.transparent,
@@ -47,21 +54,19 @@ class _LoginScreenState extends State<LoginScreen> {
         systemNavigationBarColor: AppColors.transparent,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.transparent,
+        backgroundColor: AppColors.white,
         extendBody: true,
         body: Form(
           key: _key,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              if (constraints.maxWidth < 800) {
+              if (constraints.maxWidth < 600) {
                 // For Mobile Layout
 
                 return SingleChildScrollView(
                   child: SizedBox(
                     height:
-                        mCtx.size.height +
-                        mCtx.viewInsets.bottom +
-                        mCtx.viewPadding.bottom,
+                        mCtx.size.height,
                     width: mCtx.size.width,
                     child: Stack(
                       children: [
@@ -71,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
 
                         Opacity(
-                          opacity: 0.85,
+                          opacity: 0.65,
                           child: CustomImageView(
                             path: AssetImages.imgGreenWhite,
                             fit: BoxFit.cover,
@@ -83,10 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const CustomImageView(
-                              path: AssetImages.imgLogo,
+                              path: AssetImages.imgOfficeLogo,
                               height: 200,
-                              width: 200,
-                            ), // ✅ padding applied outside SizedBox
+                            ).padH(50), // ✅ padding applied outside SizedBox
                             _buildBoth(),
                           ],
                         ),
@@ -96,15 +100,46 @@ class _LoginScreenState extends State<LoginScreen> {
                           left: 20,
                           child: CustomButton(
                             border: Border.all(),
-                            onTap: () async {
-                              if (_key.currentState!.validate()) {
-                                await prefs.setAuth(true);
-                                logger.d('User Is Authenticated');
-                                context.push(RoutesEnum.onboarding.path);
-                              } else {
-                                logger.e('Please Fill the Valid Form');
+                            onTap: () async{
+                              if(!_key.currentState!.validate()){
+                                logger.e('please fill valid form');
+                                return;
+                              }
+                              try {
+                                final response = await _repo.login(
+                                    mobileNumber: _mobileController
+                                        .text.trim(),
+                                    password: _passwordController
+                                        .text.trim());
+                                if (response.success &&
+                                    response.data != null) {
+                                  final loginData = response.data!;
+                                  final user = loginData.user;
+
+                                  await prefs.setToken(
+                                      loginData.token);
+                                  await prefs.setUser(user);
+                                  await prefs.setAuth(true);
+                                  logger.i('Login Success: ${user
+                                      .role}');
+
+                                  if (isWindows) {
+                                    if (!mounted) return;
+                                    getIt<AppRouter>().push<void>(
+                                        Admin(
+                                            userModel: user));
+                                  }
+                                  else {
+                                    getIt<AppRouter>().push<void>(
+                                        const Onboarding());
+                                  }
+                                }
+                              }on DioException catch (e) {
+                                logger.e(e);
+                                showErrorToast('Something Went Wrong');
                               }
                             },
+
                             color: AppColors.black.withOAlpha(0.20),
                             boxShadow: [
                               BoxShadow(
@@ -123,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
               }
               // For Laptop Layout
-              else if (constraints.maxWidth > 800) {
+              else if (constraints.maxWidth > 600) {
                 return Stack(
                   children: [
                     SizedBox(height: mCtx.size.height, width: mCtx.size.width),
@@ -177,27 +212,54 @@ class _LoginScreenState extends State<LoginScreen> {
                                     children: [
                                       if(isWindows) const Align(
                                           alignment: AlignmentDirectional.topStart,
-                                          child: CustomImageView(path: AssetImages.imgLogo,height: 100,width: 100,)).padBottom(10).padLeft(30),
+                                          child: CustomImageView(path: AssetImages.imgOfficeLogo,height: 100,width: 300,)).padBottom(10).padLeft(30),
                                       _buildBoth().padH(isTablet ? 32 : 16),
 
                                       const SizedBox(height: 20),
 
                                       CustomButton(
                                         border: Border.all(),
-                                        onTap: () async {
-                                          if (_key.currentState!.validate()) {
-                                            await prefs.setAuth(true);
-                                            logger.d('User Is Authenticated');
-                                            context.go(
-                                              RoutesEnum.onboarding.path,
-                                            );
-                                          } else {
-                                            logger.e(
-                                              'Please Fill the Valid Form',
-                                            );
+                                        onTap: () async{
+                                          if(!_key.currentState!.validate()){
+                                            logger.e('please fill valid form');
+                                            return;
+                                          }
+                                          try {
+                                            final response = await _repo.login(
+                                                mobileNumber: _mobileController
+                                                    .text.trim(),
+                                                password: _passwordController
+                                                    .text.trim());
+                                            if (response.success &&
+                                                response.data != null) {
+                                              final loginData = response.data!;
+                                              final user = loginData.user;
+
+                                              await prefs.setToken(
+                                                  loginData.token);
+                                              await prefs.setUser(user);
+                                              await prefs.setAuth(true);
+                                              logger.i('Login Success: ${user
+                                                  .role}');
+
+                                              if (isWindows) {
+                                                if (!mounted) return;
+                                                getIt<AppRouter>().push<void>(
+                                                    Admin(
+                                                        userModel: user));
+                                              }
+                                              else {
+                                                getIt<AppRouter>().push<void>(
+                                                    const Onboarding());
+                                              }
+                                            }
+                                          }on DioException catch (e) {
+                                            logger.e(e);
+                                            showErrorToast('Something Went Wrong');
                                           }
                                         },
                                         color: AppColors.black10,
+
                                         label: AppStrings.logIn,
                                       ).padH(isTablet ? 48 : 24),
                                     ],
@@ -225,9 +287,6 @@ class _LoginScreenState extends State<LoginScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-
-
-
         CustomText(
           data: AppStrings.welcome,
           style: BaseStyle.s24800
@@ -240,10 +299,11 @@ class _LoginScreenState extends State<LoginScreen> {
           style: BaseStyle.s14w400.c(AppColors.black),
         ).padBottom(30.r),
         BuildTextField(
-          validator: Validators.validateEmail,
-          label: AppStrings.email,
-          controller: _emailController,
-          focusNode: _emailFocus,
+          validator: Validators.validateMobile,
+          label: AppStrings.mobileNumber,
+          controller: _mobileController,
+          focusNode: _mobileControllerFocus,
+          textInputType: TextInputType.number,
         ).padBottom(30),
         BuildTextField(
           validator: Validators.validatePassword,
@@ -258,7 +318,9 @@ class _LoginScreenState extends State<LoginScreen> {
           Center(
             child: GestureDetector(
               onTap: () {
-                context.push(RoutesEnum.forgot.path);
+
+                getIt<AppRouter>().push<void>(const ForgotScreen());
+
               },
               child: CustomText(
                 data: '${AppStrings.forgotPassword} ?',
@@ -279,7 +341,8 @@ class _LoginScreenState extends State<LoginScreen> {
               GestureDetector(
                 onTap: () {
                   logger.d('SignUp Screen : Moving');
-                  context.push(RoutesEnum.signup.path);
+                  getIt<AppRouter>().push<void>(const SignUpScreen());
+
                 },
                 child: CustomText(
                   data: AppStrings.signUp,

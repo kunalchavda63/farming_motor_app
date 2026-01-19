@@ -1,8 +1,6 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/build_text_field.dart';
-import 'package:go_router/go_router.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -86,7 +84,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             const Spacer(),
             CustomButton(
               onTap: (){
-                context.push(RoutesEnum.onboarding.path);
               },
               label: AppStrings.submit,
               color: AppColors.black.withOAlpha(0.18),

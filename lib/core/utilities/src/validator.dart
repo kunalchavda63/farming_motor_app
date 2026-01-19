@@ -94,4 +94,25 @@ class Validators {
     }
     return null;
   }
+
+  // Address : 5 lengt
+  static String? validateStreetAddress(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Street address is required';
+    }
+
+    if (value.trim().length < 5) {
+      return 'Please enter a valid street address';
+    }
+
+    final RegExp addressRegex =
+    RegExp(r'^[a-zA-Z0-9\s,.\-/#]+$');
+
+    if (!addressRegex.hasMatch(value)) {
+      return 'Invalid characters in address';
+    }
+
+    return null; // ✅ valid
+  }
+
 }

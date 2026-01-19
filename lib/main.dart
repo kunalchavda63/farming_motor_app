@@ -4,6 +4,7 @@ import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/screens/provider/bottom_nav_provider.dart';
 import 'package:farming_motor_app/features/screens/provider/pump_list_provider.dart';
+import 'package:farming_motor_app/features/splash/splash_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context,child) {
+
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => BottomNavProvider()),
@@ -80,9 +82,10 @@ class MyApp extends StatelessWidget {
 
             ),
           ],
-          child: MaterialApp.router(
+          child: MaterialApp(
+            home: const SplashScreen(),
+            navigatorKey: getIt<AppRouter>().navigatorKey,
 
-            routerConfig: goRouterConfig,
             debugShowCheckedModeBanner: false,
           ),
         );

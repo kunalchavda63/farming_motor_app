@@ -1,12 +1,17 @@
+import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/models/src/create_user_model/create_user_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
+import 'package:farming_motor_app/core/services/repositories/auth_repository.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/build_text_field.dart';
+import 'package:farming_motor_app/features/auth/onboarding.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({super.key,this.isLoggerIn = false});
+  final bool? isLoggerIn;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -26,6 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final FocusNode _addressControllerFocus = FocusNode();
   final FocusNode _mobileNumberControllerFocus = FocusNode();
   LocalPreferences prefs = LocalPreferences();
+  final AuthRepository _repo = AuthRepository();
   @override
   void dispose() {
     logger.d('Disposing Starting');
@@ -44,6 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     super.dispose();
   }
+
 
   @override
   void didChangeDependencies() {
@@ -111,34 +118,81 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  if(widget.isLoggerIn==true)Align(
+                                    alignment: AlignmentGeometry.topLeft,
+
+                                    child: CustomCircleSvgIcon(
+                                      onTap: (){
+                                        getIt<AppRouter>().pop<void>();
+                                      },
+                                      iconH: 20,
+                                      iconW: 20,
+
+                                      iconColor: AppColors.hex5474,
+                                      path: AssetIcons.icClose,),
+                                  ).padLeft(60),
                                   if(isWindows) const Align(
                                       alignment: AlignmentDirectional.topStart,
                                       child: CustomImageView(
-                                        path: AssetImages.imgLogo,
+                                        path: AssetImages.imgOfficeLogo,
                                         height: 100,
-                                        width: 100,)).padBottom(10).padLeft(30),
+                                        width: 300,)).padBottom(10).padLeft(30),
                                   _buildBoth().padH(isTablet ? 32 : 16),
 
                                   const SizedBox(height: 20),
 
                                   CustomButton(
-                                    border: Border.all(),
                                     onTap: () async {
-                                      if (_key.currentState!.validate()) {
-                                        await prefs.setAuth(true);
-                                        logger.d('User Is Authenticated');
-                                        context.go(
-                                          RoutesEnum.onboarding.path,
+                                      // 1️⃣ Validate form
+                                      if (!_key.currentState!.validate()) {
+                                        logger.e('Please fill valid form');
+                                        return;
+                                      }
+
+                                      try {
+                                        // 2️⃣ Call API
+                                        final response = await _repo.createUser(
+                                          user: CreateUserModel(
+                                            firstName: _firstNameController.text.trim(),
+                                            lastName: _lastNameController.text.trim(),
+                                            email: _emailController.text.trim(),
+                                            mobileNumber: _mobileNumberController.text.trim(),
+                                            address: _addressController.text.trim(),
+                                            role: 'customer',
+                                          ),
                                         );
-                                      } else {
-                                        logger.e(
-                                          'Please Fill the Valid Form',
-                                        );
+
+                                        // 3️⃣ Handle response
+                                        if (response.success && response.data != null) {
+                                          final createdUser = response.data?['data'];
+
+                                          logger.i('User Created Successfully!');
+                                          logger.d('User ID: ${createdUser["id"]}');
+                                          logger.d('Generated Password: ${createdUser['generatedPassword']}');
+
+                                          // 4️⃣ Show dialog / toast to admin
+                                          showSuccessToast(
+                                            'User Created\nPassword: ${createdUser["generatedPassword"]}',
+                                          );
+
+                                          // 5️⃣ Pop the screen
+                                          if (mounted) {
+                                            getIt<AppRouter>().pop<void>();
+                                          }
+                                        } else {
+                                          logger.e('Failed to create user: ${response.message}');
+                                          showErrorToast('Failed to create user');
+                                        }
+                                      } on DioException catch (e) {
+                                        logger.e('Error while creating user: $e');
+                                        showErrorToast('Something went wrong');
                                       }
                                     },
+                                    border: Border.all(),
                                     color: AppColors.black10,
-                                    label: AppStrings.logIn,
+                                    label: AppStrings.createAccount,
                                   ).padH(isTablet ? 48 : 24),
+
                                 ],
                               ),
                             ),
@@ -157,12 +211,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       bottomNavigationBar: (isWindows)
           ? null
           : CustomButton(
-                  label: AppStrings.logIn,
+                  label: AppStrings.createAccount,
                   onTap: () async {
                     if (_key.currentState!.validate()) {
                       // await prefs.setAuth(true);
                       logger.d('User Is Authenticated');
-                      context.pushReplacement(RoutesEnum.onboarding.path);
+                      getIt<AppRouter>().push<void>(const Onboarding());
+
                     }
                   },
                   color: AppColors.black.withOAlpha(0.18),
@@ -237,14 +292,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             focusNode:_mobileNumberControllerFocus,
         ).padBottom(14),
         BuildTextField(
-          validator: Validators.validateMobile,
+          validator: Validators.validateStreetAddress,
           textInputType: TextInputType.streetAddress,
           label: AppStrings.address,
           controller: _addressController,
           focusNode:_addressControllerFocus,
         ).padBottom(24),
 
-        Row(
+        if(widget.isLoggerIn == false) Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomText(

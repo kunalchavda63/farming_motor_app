@@ -2,7 +2,7 @@ import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/build_text_field.dart';
-import 'package:go_router/go_router.dart';
+import 'package:farming_motor_app/features/auth/otp_verification.dart';
 
 class ForgotScreen extends StatefulWidget {
   const ForgotScreen({super.key});
@@ -90,7 +90,8 @@ class _ForgotScreenState extends State<ForgotScreen> {
             const Spacer(),
             CustomButton(
               onTap: (){
-                context.push(RoutesEnum.otp.path);
+                getIt<AppRouter>().push<void>(const OtpVerification());
+
               },
               label: AppStrings.send,
               color: AppColors.black.withOAlpha(0.18),

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
 import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_model.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,8 +25,13 @@ class LocalPreferences {
     await _prefs?.setBool(PreferenceKey.isAuth, value);
     logger.i('isAuth stored: ${_prefs?.getBool(PreferenceKey.isAuth)}');
   }
+  Future<void> setToken(String value) async {
+    await _prefs?.setString(PreferenceKey.isToken, value);
+    logger.i('Token stored: ${_prefs?.getString(PreferenceKey.isToken)}');
+  }
 
   bool get isAuth => _prefs?.getBool(PreferenceKey.isAuth) ?? false;
+  String? get token => _prefs?.getString(PreferenceKey.isToken);
 
   // ---------------- SETUP ----------------
   Future<void> setSetupCompleted(bool value) async {
@@ -37,12 +45,7 @@ class LocalPreferences {
       _prefs?.getBool(PreferenceKey.isFirstPumpCreated) ?? false;
 
   // ---------------- USER ----------------
-  Future<void> setUserId(int id) async {
-    await _prefs?.setInt(PreferenceKey.userId, id);
-    logger.i('userId stored: ${_prefs?.getInt(PreferenceKey.userId)}');
-  }
 
-  int? get userId => _prefs?.getInt(PreferenceKey.userId);
 
   // =====================================================
   // 🔥🔥 PUMP RELATED (NEW ADDITIONS)
@@ -113,6 +116,35 @@ class LocalPreferences {
 
     await _prefs?.setStringList(key, logs);
   }
+  /// ✅ Get logged-in user info
+  // ---------------- USER ----------------
+
+  /// ✅ Save logged-in user info
+  Future<void> setUser(User user) async {
+    final jsonString = jsonEncode((user.toJson()));
+    await _prefs?.setString(PreferenceKey.user, jsonString);
+
+    logger.i('User stored: $jsonString');
+  }
+
+  User? getUser() {
+    final jsonString = _prefs?.getString(PreferenceKey.user);
+    if (jsonString == null) return null;
+
+    final Map<String, dynamic> json =
+    jsonDecode(jsonString) as Map<String, dynamic>;
+
+    return User.fromJson(json);
+  }
+  /// ✅ Clear user only
+  Future<void> clearUser() async {
+    await _prefs?.remove(PreferenceKey.user);
+    await _prefs?.remove(PreferenceKey.isToken);
+    await _prefs?.remove(PreferenceKey.isAuth);
+
+    logger.i('User cleared');
+  }
+
 
 
   // ---------------- CLEAR ALL ----------------
@@ -126,8 +158,9 @@ class LocalPreferences {
 // =====================================================
 class PreferenceKey {
   static const String isAuth = 'isAuth';
+  static const String isToken = 'isToken';
   static const String isFirstPumpCreated = 'isFirstPumpCreated';
-  static const String userId = 'userId';
+  static const String user = 'user';
 
   // 🔥 Pump base key
   static const String pump = 'pump';

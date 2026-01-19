@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/src/helper_method.dart';
-import 'package:go_router/go_router.dart';
+import 'package:farming_motor_app/features/auth/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -30,7 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _timer = Timer(const Duration(seconds: 2), () {
       if(!mounted) return;
-      context.go(RoutesEnum.onboarding.path);
+      getIt<AppRouter>().push<void>(const Onboarding());
+
     });
   }
 
@@ -47,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
 
-      backgroundColor: AppColors.transparent,
+      backgroundColor: AppColors.white,
       body: CustomContainer(
         child:Stack(
           children: [
@@ -61,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 right: 0,
                 bottom: 0,
                 child:Opacity(
-                  opacity: 0.8,
+                  opacity: 0.65,
                   child: CustomAnimationWrapper(
                     duration: Duration(microseconds: 200),
                     child: CustomImageView(
@@ -71,14 +72,14 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 )),
              Positioned.fill(
-                top: size.height * 0.01,
+                top: size.height * 0.009,
                 child: CustomAnimationWrapper(
                   curve: Curves.easeInBack,
                   duration: const Duration(seconds: 1),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const CustomImageView(path: AssetImages.imgLogo,height: 200,width: 200,fit: BoxFit.cover,),
+                      const CustomImageView(path: AssetImages.imgOfficeLogo,height: 200,width: 200,),
                       CustomText(data: 'Smart Pump Control',style: BaseStyle.s19w500.c(AppColors.hex2e47).family(FontFamily.montserrat),)
                     ],
                   ),
