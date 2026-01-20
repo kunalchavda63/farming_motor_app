@@ -1,41 +1,17 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
+import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
 import 'package:farming_motor_app/features/screens/provider/bottom_nav_provider.dart';
-import 'package:farming_motor_app/features/screens/provider/pump_list_provider.dart';
 import 'package:farming_motor_app/features/splash/splash_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:workmanager/workmanager.dart';
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    final String? pumpId = inputData?['pumpId'] as String?;
-    if (pumpId == null) return Future.value(false);
-
-    final prefs = LocalPreferences();
-    await prefs.init();
-
-    if (task == 'pumpOnTask') {
-      await prefs.setPumpState(pumpId: pumpId, isOn: true);
-      await prefs.addPumpLog(pumpId: pumpId, action: 'ON');
-    }
-
-    if (task == 'pumpOffTask') {
-      await prefs.setPumpState(pumpId: pumpId, isOn: false);
-      await prefs.addPumpLog(pumpId: pumpId, action: 'OFF');
-    }
-
-    return Future.value(true);
-  });
-}
 
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  if(isAndroid || isIos) {await Workmanager().initialize(callbackDispatcher);}
   if(isWindows)await windowManager.ensureInitialized();
   const WindowOptions windowOptions = WindowOptions(
     size: Size(1920,1080),
@@ -75,12 +51,8 @@ class MyApp extends StatelessWidget {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => BottomNavProvider()),
+            ChangeNotifierProvider(create: (_) => AdminProvider(),),
 
-            ChangeNotifierProvider(
-              create: (_) => PumpListProvider()
-
-
-            ),
           ],
           child: MaterialApp(
             home: const SplashScreen(),

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.dart';
 
 class ApiResponse<T> {
 
@@ -23,108 +23,106 @@ class ApiResponse<T> {
   final int? statusCode;
 }
 
-class DioMethod {
-
-  factory DioMethod() => _instance;
-
-  DioMethod._internal();
-  static final DioMethod _instance = DioMethod._internal();
-
-  final String baseUrl = 'https://jsonplaceholder.typicode.com/';
+class HttpMethod {
+  factory HttpMethod() => _instance;
+  HttpMethod._internal();
+  static final HttpMethod _instance = HttpMethod._internal();
 
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'https://jsonplaceholder.typicode.com/',
+      baseUrl: 'https://buildcaresolution.in/waterpump/',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-
     ),
-
   );
 
-  Future<ApiResponse<T>> get<T>(
-      String endpoint,
-      T Function(dynamic json) fromJson,
-      ) async {
-    try {
-      final response = await _dio.get<dynamic>(endpoint);
-      debugPrint(response.data.toString());
-      if (response.statusCode == 200) {
-        return ApiResponse.success(fromJson(response.data));
-      } else {
-        return ApiResponse.error('GET failed: ${response.statusCode}');
-      }
-    } on Exception catch (e) {
-      return ApiResponse.error('GET exception: $e');
-    }
+  Options _options(String? token) {
+    return Options(
+      headers: {
+        if (token != null) 'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+
+      },
+    );
   }
 
-  Future<ApiResponse<T>> post<T>(
-      String endpoint,
-      Map<String, dynamic> body, {
+  /// ---------------- GET ----------------
+  Future<ApiResponse<T>> get<T>(
+      String endpoint, {
         String? token,
         required T Function(dynamic json) fromJson,
       }) async {
     try {
-      final response = await _dio.post<dynamic>(
+      final response = await _dio.get<Map<String,dynamic>>(
         endpoint,
-        data: body,
         options: Options(
           headers: token != null
               ? {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+
           }
-              : {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
+              : null,
         ),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return ApiResponse.success(fromJson(response.data));
-      } else {
-        return ApiResponse.error('POST failed: ${response.statusCode}');
-      }
-    } on DioException catch (e) {
-      return ApiResponse.error('POST exception: $e');
-    }
-  }
+      logger.d(response.data);
 
-  Future<ApiResponse<T>> put<T>(
-      String endpoint,
-      dynamic body,
-      T Function(dynamic json) fromJson,
-      ) async {
-    try {
-      final response = await _dio.put<dynamic>(endpoint, data: body);
       if (response.statusCode == 200) {
         return ApiResponse.success(fromJson(response.data));
       } else {
-        return ApiResponse.error('PUT failed: ${response.statusCode}');
+        return ApiResponse.error('GET failed: ${response.statusCode}');
       }
-    } on Exception catch (e) {
-      return ApiResponse.error('PUT exception: $e');
+    } on DioException catch (e, s) {
+      logger.e(e, stackTrace: s);
+      return ApiResponse.error(e.toString());
     }
   }
 
-  Future<ApiResponse<T>> delete<T>(
+
+  /// ---------------- POST ----------------
+  Future<ApiResponse<T>> post<T>(
       String endpoint,
-      T Function(dynamic json) fromJson,
-      ) async {
+      dynamic body, {
+        String? token,
+        required T Function(dynamic json) fromJson,
+      }) async {
     try {
-      final response = await _dio.delete<dynamic>(endpoint);
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        return ApiResponse.success(fromJson(response.data));
-      } else {
-        return ApiResponse.error('DELETE failed: ${response.statusCode}');
-      }
-    } on Exception catch (e) {
-      return ApiResponse.error('DELETE exception: $e');
+      final response = await _dio.post<T>(
+        endpoint,
+        data: body,
+        options: _options(token),
+      );
+      logger.d(response);
+
+      return ApiResponse.success(fromJson(response.data));
+    } on DioException catch (e) {
+      return ApiResponse.error(e.toString());
+    }
+  }
+
+  /// ---------------- PUT (UPDATE) ----------------
+  Future<ApiResponse<T>> put<T>(
+      String endpoint,
+      dynamic body, {
+        String? token,
+        required T Function(dynamic json) fromJson,
+      }) async {
+    try {
+      final response = await _dio.put<T>(
+        endpoint,
+        data: body,
+        options: _options(token),
+      );
+
+      return ApiResponse.success(fromJson(response.data));
+    }on DioException  catch (e) {
+      return ApiResponse.error(e.toString());
     }
   }
 }
+

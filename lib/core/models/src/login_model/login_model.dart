@@ -6,9 +6,9 @@ part 'login_model.g.dart';
 @freezed
 abstract class LoginModel with _$LoginModel {
   const factory LoginModel({
-    @Default('') String status,
-    @Default('') String token,
-    required User user,
+    String? status,
+    String? token,
+    User? user,
   }) = _LoginModel;
 
   factory LoginModel.fromJson(Map<String, dynamic> json) =>
@@ -18,7 +18,8 @@ abstract class LoginModel with _$LoginModel {
 @freezed
 abstract class User with _$User {
   const factory User({
-    String? userId,
+    @JsonKey(name: '_id') String? id,   // ✅ _id → userId
+    @JsonKey(name: 'userId') String? userId,   // ✅ _id → userId
     String? firstName,
     String? lastName,
     String? email,
@@ -29,7 +30,7 @@ abstract class User with _$User {
     @Default(false) bool isActive,
     String? createdAt,
     String? updatedAt,
-    String? v, // Changed from __v to v for safe JSON parsing
+    @JsonKey(name: '__v') int? v,            // ✅ __v → v
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) =>

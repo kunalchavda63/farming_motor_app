@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/services/repositories/auth_repository.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
-import 'package:farming_motor_app/features/admin/admin.dart';
 import 'package:farming_motor_app/features/auth/build_text_field.dart';
 import 'package:farming_motor_app/features/auth/forgot_password_screen.dart';
 import 'package:farming_motor_app/features/auth/onboarding.dart';
@@ -27,6 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   LocalPreferences prefs = LocalPreferences();
   late MediaQueryData mCtx;
+  bool _isLoading = false;
+
   @override
   void dispose() {
     _mobileController.dispose();
@@ -35,6 +37,46 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordFocus.dispose();
     super.dispose();
   }
+  
+  void _login() async {
+    if (!_key.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await _repo.login(
+        mobileNumber: _mobileController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      if (response.success && response.data != null) {
+        final data = response.data!;
+
+        final token = data['token'];
+        final user = data['user'] as Map<String, dynamic>;
+
+        await prefs.setAdminToken(token.toString());
+        await prefs.setUser(User.fromJson(user)); // 👈 Map store
+        await prefs.setAuth(true);
+
+        logger.i('Login Success Role: ${user['role']}');
+
+        if (!mounted) return;
+
+        getIt<AppRouter>().push<void>(
+          Onboarding(user: User.fromJson(user)), // 👈 pass Map
+        );
+      } else {
+        showErrorToast(response.message ?? 'Login failed');
+      }
+    } on DioException  catch (e) {
+      logger.e(e);
+      showErrorToast('Something went wrong');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
 
   @override
   void didChangeDependencies() {
@@ -45,7 +87,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: AppColors.transparent,
@@ -65,8 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 return SingleChildScrollView(
                   child: SizedBox(
-                    height:
-                        mCtx.size.height,
+                    height: mCtx.size.height,
                     width: mCtx.size.width,
                     child: Stack(
                       children: [
@@ -99,46 +139,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           right: 20,
                           left: 20,
                           child: CustomButton(
+                            isLoading: _isLoading,
                             border: Border.all(),
-                            onTap: () async{
-                              if(!_key.currentState!.validate()){
-                                logger.e('please fill valid form');
-                                return;
-                              }
-                              try {
-                                final response = await _repo.login(
-                                    mobileNumber: _mobileController
-                                        .text.trim(),
-                                    password: _passwordController
-                                        .text.trim());
-                                if (response.success &&
-                                    response.data != null) {
-                                  final loginData = response.data!;
-                                  final user = loginData.user;
-
-                                  await prefs.setToken(
-                                      loginData.token);
-                                  await prefs.setUser(user);
-                                  await prefs.setAuth(true);
-                                  logger.i('Login Success: ${user
-                                      .role}');
-
-                                  if (isWindows) {
-                                    if (!mounted) return;
-                                    getIt<AppRouter>().push<void>(
-                                        Admin(
-                                            userModel: user));
-                                  }
-                                  else {
-                                    getIt<AppRouter>().push<void>(
-                                        const Onboarding());
-                                  }
-                                }
-                              }on DioException catch (e) {
-                                logger.e(e);
-                                showErrorToast('Something Went Wrong');
-                              }
-                            },
+                            onTap: _isLoading ? null : _login,
 
                             color: AppColors.black.withOAlpha(0.20),
                             boxShadow: [
@@ -195,69 +198,35 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
 
                                 color: AppColors.white50,
-                                padding:  const EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   vertical: 5,
-                                  horizontal: 5
+                                  horizontal: 5,
                                 ),
                                 child: CustomContainer(
-
                                   alignment: Alignment.center,
-                                  borderRadius:  BorderRadius.circular(
-                                    10
-                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                   color: AppColors.white50,
 
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      if(isWindows) const Align(
-                                          alignment: AlignmentDirectional.topStart,
-                                          child: CustomImageView(path: AssetImages.imgOfficeLogo,height: 100,width: 300,)).padBottom(10).padLeft(30),
+                                      if (isWindows)
+                                        const Align(
+                                          alignment:
+                                              AlignmentDirectional.topStart,
+                                          child: CustomImageView(
+                                            path: AssetImages.imgOfficeLogo,
+                                            height: 100,
+                                            width: 300,
+                                          ),
+                                        ).padBottom(10).padLeft(30),
                                       _buildBoth().padH(isTablet ? 32 : 16),
 
                                       const SizedBox(height: 20),
 
                                       CustomButton(
                                         border: Border.all(),
-                                        onTap: () async{
-                                          if(!_key.currentState!.validate()){
-                                            logger.e('please fill valid form');
-                                            return;
-                                          }
-                                          try {
-                                            final response = await _repo.login(
-                                                mobileNumber: _mobileController
-                                                    .text.trim(),
-                                                password: _passwordController
-                                                    .text.trim());
-                                            if (response.success &&
-                                                response.data != null) {
-                                              final loginData = response.data!;
-                                              final user = loginData.user;
-
-                                              await prefs.setToken(
-                                                  loginData.token);
-                                              await prefs.setUser(user);
-                                              await prefs.setAuth(true);
-                                              logger.i('Login Success: ${user
-                                                  .role}');
-
-                                              if (isWindows) {
-                                                if (!mounted) return;
-                                                getIt<AppRouter>().push<void>(
-                                                    Admin(
-                                                        userModel: user));
-                                              }
-                                              else {
-                                                getIt<AppRouter>().push<void>(
-                                                    const Onboarding());
-                                              }
-                                            }
-                                          }on DioException catch (e) {
-                                            logger.e(e);
-                                            showErrorToast('Something Went Wrong');
-                                          }
-                                        },
+                                        onTap: _isLoading ? null : _login,
                                         color: AppColors.black10,
 
                                         label: AppStrings.logIn,
@@ -299,6 +268,10 @@ class _LoginScreenState extends State<LoginScreen> {
           style: BaseStyle.s14w400.c(AppColors.black),
         ).padBottom(30.r),
         BuildTextField(
+          inputFormatter: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10)
+          ],
           validator: Validators.validateMobile,
           label: AppStrings.mobileNumber,
           controller: _mobileController,
@@ -318,9 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Center(
             child: GestureDetector(
               onTap: () {
-
                 getIt<AppRouter>().push<void>(const ForgotScreen());
-
               },
               child: CustomText(
                 data: '${AppStrings.forgotPassword} ?',
@@ -342,7 +313,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () {
                   logger.d('SignUp Screen : Moving');
                   getIt<AppRouter>().push<void>(const SignUpScreen());
-
                 },
                 child: CustomText(
                   data: AppStrings.signUp,

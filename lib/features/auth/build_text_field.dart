@@ -2,6 +2,7 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/pop_up_model.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BuildTextField extends StatelessWidget {
@@ -23,7 +24,11 @@ class BuildTextField extends StatelessWidget {
     this.context,
     this.items,
     this.onSelected,
+    this.maxLength,
+    this.inputFormatter
+
   });
+  final List<TextInputFormatter>? inputFormatter;
   final String label;
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -40,6 +45,7 @@ class BuildTextField extends StatelessWidget {
   final List<PopUpModel>? items;
   final void Function(PopUpModel)? onSelected;
   final BuildContext? context;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +101,9 @@ class BuildTextField extends StatelessWidget {
           child: AbsorbPointer(
             absorbing: isDropdown,
             child: CustomTextField(
-
+              inputFormatter: inputFormatter,
+              maxLength: maxLength,
+              readOnly: isDropdown,
               key: anchorKey,
               controller: controller,
               focusNode: focusNode,

@@ -1,5 +1,6 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/bottom_nav_model.dart';
+import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/screens/history_tab/history_tab.dart';
 import 'package:farming_motor_app/features/screens/home_tab/home_tab.dart';
@@ -7,7 +8,8 @@ import 'package:farming_motor_app/features/screens/provider/bottom_nav_provider.
 import 'package:provider/provider.dart';
 
 class Screens extends StatefulWidget {
-  const Screens({super.key});
+  const Screens({super.key,required this.userModel});
+  final User userModel;
 
   @override
   State<Screens> createState() => _ScreensState();

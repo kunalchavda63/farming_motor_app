@@ -216,7 +216,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (_key.currentState!.validate()) {
                       // await prefs.setAuth(true);
                       logger.d('User Is Authenticated');
-                      getIt<AppRouter>().push<void>(const Onboarding());
+                      getIt<AppRouter>().push<void>(Onboarding());
 
                     }
                   },

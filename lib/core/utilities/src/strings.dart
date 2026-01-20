@@ -94,6 +94,22 @@ class AppStrings {
   static const String firstName  = 'First Name';
   static const String lastName  = 'Last Name';
   static const String address  = 'Address';
+  static const String enterASerialNumber  = 'Enter a Serial Number';
+  static const String pumpName  = 'Pump Name';
+  static const String customer  = 'Customer';
+  static const String capacity  = 'Capacity';
+  static const String capacityUnit  = 'Capacity Unit';
+  static const String headRange  = 'Head Range';
+  static const String headUnit  = 'Head Unit';
+  static const String outletSize  = 'Outlet Size';
+  static const String outletUnit = 'Outlet Unit';
+  static const String phase = 'Phase';
+  static const String supplyVoltage = 'Supply Voltage';
+  static const String lph = 'LPH';
+  static const String location = 'Location';
+
+
+
 
 
 }

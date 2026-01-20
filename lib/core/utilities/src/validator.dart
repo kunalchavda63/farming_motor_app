@@ -115,4 +115,23 @@ class Validators {
     return null; // ✅ valid
   }
 
+
+  static String? validateRequire(String? val, String msg) {
+    if (val == null || val.trim().isEmpty) {
+      return msg;
+    }
+    return null;
+  }
+
+  static String? validateNumbers(String? val, String msg) {
+    if (val == null || val.trim().isEmpty) {
+      return msg;
+    }
+    if (int.tryParse(val) == null) {
+      return 'Enter valid number';
+    }
+    return null;
+  }
+
+
 }

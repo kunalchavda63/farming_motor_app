@@ -1,4 +1,5 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/src/app_router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
@@ -7,7 +8,8 @@ import 'package:farming_motor_app/features/auth/login_screen.dart';
 import 'package:farming_motor_app/features/screens/screens.dart';
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({super.key});
+   Onboarding({super.key,this.user});
+  User? user;
 
   @override
   State<Onboarding> createState() => _OnboardingState();
@@ -26,12 +28,13 @@ class _OnboardingState extends State<Onboarding> {
     await Future<void>.delayed(const Duration(milliseconds: 400));
 
     final bool isAuth = prefs.isAuth;
-    final bool isFirstPumpCreated = prefs.isFirstPumpCreated;
+    // final bool isFirstPumpCreated = prefs.isFirstPumpCreated;
     final user = prefs.getUser();
 
     logger.d('Auth: $isAuth');
-    logger.d(prefs.token);
-    logger.d('Pump Created: $isFirstPumpCreated');
+    logger.d('Admin Token ${prefs.isAdminToken}');
+    logger.d('Customer Token ${prefs.isCustomerToken}');
+    // logger.d('Pump Created: $isFirstPumpCreated');
 
     if (!mounted) return;
 
@@ -41,7 +44,7 @@ class _OnboardingState extends State<Onboarding> {
 
       }
       else{
-        getIt<AppRouter>().push<void>(const Screens());
+        getIt<AppRouter>().push<void>( Screens(userModel: user));
 
       }
 
