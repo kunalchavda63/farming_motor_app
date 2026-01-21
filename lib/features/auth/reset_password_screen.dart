@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/services/navigation/src/app_router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
-import 'package:farming_motor_app/features/auth/build_text_field.dart';
+import 'package:farming_motor_app/features/auth/auth.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -14,18 +16,48 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   late MediaQueryData mCtx;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  final TextEditingController _passwordController = TextEditingController();
-  final FocusNode _passwordControllerFocus = FocusNode();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  final FocusNode _confirmPasswordControllerFocus = FocusNode();
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final FocusNode _oldPasswordControllerFocus = FocusNode();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final FocusNode _newPasswordControllerFocus = FocusNode();
+  final AuthRepository _repo = AuthRepository();
+
+  bool? _isLoading = false;
+  void _changePassword(String oldPassword,String newPassword) async {
+
+    setState(() => _isLoading = true);
+    logger.d('Customer Token  : ${prefs.isCustomerToken}');
+
+    try {
+      final response = await _repo.changePassword(
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      );
+logger.d(response.message);
+      if (response.success && response.data!=null ) {
+
+        getIt<AppRouter>().pop<void>();
+        logger.i('User Changed Password Successfully!');
+
+        showSuccessToast('User Changed Password Succesfully');
+
+      }
+    }
+    on DioException  catch (e) {
+      logger.e(e);
+      showErrorToast(e.toString());
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   void dispose() {
     logger.d('Disposing Starting');
-    _passwordController.dispose();
-    _passwordControllerFocus.dispose();
-    _confirmPasswordController.dispose();
-    _confirmPasswordControllerFocus.dispose();
+    _oldPasswordController.dispose();
+    _oldPasswordControllerFocus.dispose();
+    _newPasswordController.dispose();
+    _newPasswordControllerFocus.dispose();
     logger.i('Disposing Completed');
     super.dispose();
   }
@@ -40,58 +72,89 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: AppColors.hexDAdb,
+      backgroundColor: AppColors.white,
       body: Form(
         key: _key,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Align(
-              alignment: AlignmentDirectional.topStart,
-              child: CustomCircleBackButton(
-                color: AppColors.black.withOAlpha(0.18),
-              ),
-            ).padTop(46.r).padBottom(27.r),
-
-            CustomCircleSvgIcon(
-              padding: const EdgeInsets.all(24),
-              boxShadow: [
-                BoxShadow(
-                    offset: const Offset(-2, 0),
-                    blurRadius: 20,
-                    color: AppColors.white.withOAlpha(0.050)
-                ),
-                BoxShadow(
-                    offset: const Offset(-2, -2),
-                    blurRadius: 4,
-                    color: AppColors.black.withOAlpha(0.10)
-                )
-              ],
-              bgColor: AppColors.hex2e47.withOAlpha(0.08),
-              path: AssetIcons.icLock,
-            ).padBottom(30.r),
-
-            CustomText(
-              textAlign: TextAlign.center,
-              data: AppStrings.resetPassword,
-              style: BaseStyle.s24800
-                  .w(400)
-                  .c(AppColors.black)
-                  .family(FontFamily.montserrat),
-            ).padBottom(19),
-            BuildTextField(label: AppStrings.password, controller: _passwordController, focusNode: _passwordControllerFocus,isPassword: true,textInputType: TextInputType.visiblePassword,textInputAction: TextInputAction.next,).padBottom(24.r),
-            BuildTextField(label: AppStrings.confirmPassword, controller: _confirmPasswordController, focusNode: _confirmPasswordControllerFocus,isPassword: true,textInputType: TextInputType.visiblePassword,textInputAction: TextInputAction.done,),
-            const Spacer(),
-            CustomButton(
-              onTap: (){
-              },
-              label: AppStrings.submit,
-              color: AppColors.black.withOAlpha(0.18),
-              border: Border.all(color: AppColors.hex2e47),
-            ).padBottom(51.r),
-          ],
-        ).padH(12),
+        child: SingleChildScrollView(
+      child: SizedBox(
+      height: mCtx.size.height,
+      width: mCtx.size.width,
+      child: Stack(
+      children: [
+      SizedBox(
+      height: mCtx.size.height,
+      width: mCtx.size.width,
       ),
+
+      Opacity(
+        opacity: 0.75,
+        child: CustomImageView(
+          path: AssetImages.imgGreenWhite,
+          fit: BoxFit.cover,
+          height: mCtx.size.height,
+          width: mCtx.size.width,
+        ),
+      ),
+        Positioned(
+            top: 50,
+            left: 20,
+
+            child: CustomContainer(
+                h: 50,
+                w: 50,
+                color: AppColors.black.withOAlpha(0.40),
+                boxShape: BoxShape.circle,
+                alignment: Alignment.center,
+                child: const Icon(Icons.arrow_back,color: AppColors.white,))),
+
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          CustomText(data: AppStrings.changePassword,style: BaseStyle.s20w400.c(AppColors.black).s(30),textAlign: TextAlign.start,).padBottom(20).padH(10),
+          
+          _buildBoth(),
+
+          CustomButton(
+            h: 45,
+            isLoading: _isLoading,
+            color: AppColors.black10,
+            label: AppStrings.submit,
+            onTap: () => _changePassword(_oldPasswordController.text.trim(),_newPasswordController.text.trim())
+          ).padH(10).padV(10)
+        ],
+      ),
+      ],
+    ),
+    ),
+        )
+      )
     );
+
   }
+  Widget _buildBoth() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        BuildTextField(
+          validator: (v) => Validators.validateRequire(v,'Old Password Required'),
+          label: AppStrings.oldPassword,
+          controller: _oldPasswordController,
+          focusNode: _oldPasswordControllerFocus,
+          textInputType: TextInputType.visiblePassword,
+        ).padBottom(30),
+        BuildTextField(
+          validator: (v) => Validators.validateRequire(v,'New Password Required'),
+          label: AppStrings.password,
+          controller: _newPasswordController,
+          focusNode: _newPasswordControllerFocus,
+          textInputAction: TextInputAction.done,
+          textInputType: TextInputType.visiblePassword,
+          isPassword: true,
+        ).padBottom(30.r),
+      ],
+    ).padH(12);
+  }
+
 }

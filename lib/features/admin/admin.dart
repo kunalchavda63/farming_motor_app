@@ -196,7 +196,7 @@ class _AdminState extends State<Admin> {
             bgColor: AppColors.black10,
             path: AssetIcons.icEdit,
           ).padRight(10),
-          CustomText(data: label ?? 'Change Password',style: BaseStyle.s14w400.c(AppColors.black).family(FontFamily.montserrat),),
+          CustomText(data: label ?? AppStrings.changePassword,style: BaseStyle.s14w400.c(AppColors.black).family(FontFamily.montserrat),),
         ],
       ),
       );
@@ -212,13 +212,13 @@ class _AdminState extends State<Admin> {
         Row(
           children: [
             _statCard(
-              title: 'Total Users',
+              title: AppStrings.changePassword,
               value: '${users?.length ?? 0}',
               icon: AssetIcons.icUser,
             ),
             const SizedBox(width: 20),
             _actionCard(
-              title: 'Change Password',
+              title: AppStrings.changePassword,
               icon: AssetIcons.icLock,
               onTap: () {},
             ),
@@ -238,7 +238,7 @@ class _AdminState extends State<Admin> {
                 return Center(child: CustomText(data: error));
               }
               if (users == null || users.isEmpty) {
-                return const Center(child: CustomText(data: 'No users found'));
+                return const Center(child: CustomText(data: AppStrings.noUsersFound));
               }
 
               return ListView.builder(
@@ -279,7 +279,7 @@ class _AdminState extends State<Admin> {
             label: 'Add Pump',
             bgColor: AppColors.hex5474.withOAlpha(0.2),
             onTap: () {
-              getIt<AppRouter>().push<void>(PumpSetupScreen(customerId: user?.id));
+              getIt<AppRouter>().push<void>(PumpSetupScreen(customerId: user?.id ??''));
             },
           ).padRight(20),
           _cardOnTap(),

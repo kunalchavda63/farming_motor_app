@@ -43,7 +43,25 @@ final Dio _dio = Dio();
   }
 
 
-  Future<ApiResponse<Map<String,dynamic>>> createUser({
+
+Future<ApiResponse<Map<String,dynamic>>> changePassword({
+  required String oldPassword,
+  required String newPassword,
+
+}) async {
+  return _api.post<Map<String,dynamic>>(
+      ApiEndPoints.changePassword,
+      {
+        'oldPassword': oldPassword,
+        'newPassword': newPassword
+      },
+      token: _prefs.isCustomerToken,
+      fromJson: (json) => json as Map<String,dynamic>
+  );
+}
+
+
+Future<ApiResponse<Map<String,dynamic>>> createUser({
     required CreateUserModel user,
 
   }) async {

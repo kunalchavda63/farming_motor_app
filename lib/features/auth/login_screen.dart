@@ -3,12 +3,8 @@ import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
-import 'package:farming_motor_app/core/services/repositories/auth_repository.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
-import 'package:farming_motor_app/features/auth/build_text_field.dart';
-import 'package:farming_motor_app/features/auth/forgot_password_screen.dart';
-import 'package:farming_motor_app/features/auth/onboarding.dart';
-import 'package:farming_motor_app/features/auth/sign_up_screen.dart';
+import 'package:farming_motor_app/features/auth/auth.dart';
 import 'package:flutter/services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -54,24 +50,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
         final token = data['token'];
         final user = data['user'] as Map<String, dynamic>;
+        final String role = user['role'] as String;
 
-        await prefs.setAdminToken(token.toString());
-        await prefs.setUser(User.fromJson(user)); // 👈 Map store
-        await prefs.setAuth(true);
 
-        logger.i('Login Success Role: ${user['role']}');
+        if(role.toLowerCase() == 'admin') {
+          await prefs.setAdminToken(token.toString());
+          logger.d('Admin Token Stored');
+        } else{
+          await prefs.setCustomerToken(token.toString());
+          logger.d('Customer token stored');
+        }
 
-        if (!mounted) return;
+          await prefs.setUser(User.fromJson(user)); // 👈 Map store
+          await prefs.setAuth(true);
 
-        getIt<AppRouter>().push<void>(
-          Onboarding(user: User.fromJson(user)), // 👈 pass Map
-        );
-      } else {
+          logger.i('Login Success Role: ${user['role']}');
+
+          if (!mounted) return;
+
+          getIt<AppRouter>().pushReplacement<void>(
+            Onboarding(user: User.fromJson(user)), // 👈 pass Map
+          );
+        }
+       else {
         showErrorToast(response.message ?? 'Login failed');
       }
     } on DioException  catch (e) {
       logger.e(e);
-      showErrorToast('Something went wrong');
+      showErrorToast(AppStrings.someThinkWentWrong);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

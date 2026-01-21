@@ -9,7 +9,7 @@ import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.da
 import 'package:farming_motor_app/features/admin/admin_service/admin_service.dart';
 
 class AdminProvider extends ChangeNotifier {
-  ApiState<List<User>> userListState = ApiState.loading();
+  ApiState<List<User>> userListState = ApiState.initial();
   ApiState<Map<String,dynamic>> addPumpState = ApiState.initial();
 
 
@@ -19,7 +19,7 @@ class AdminProvider extends ChangeNotifier {
 
     try {
       final response = await fetchUserList();
-      await Future.delayed(const Duration(milliseconds: 800));
+      await Future<void>.delayed(const Duration(milliseconds: 800));
 
       if (response.success && response.data != null) {
         userListState = ApiState.success(response.data!);

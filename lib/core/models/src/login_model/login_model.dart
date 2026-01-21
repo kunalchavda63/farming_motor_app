@@ -19,9 +19,10 @@ abstract class LoginModel with _$LoginModel {
 abstract class User with _$User {
   const factory User({
     @JsonKey(name: '_id') String? id,   // ✅ _id → userId
-    @JsonKey(name: 'userId') String? userId,   // ✅ _id → userId
+    String? userId,   // ✅ _id → userId
     String? firstName,
     String? lastName,
+    String? name,
     String? email,
     String? mobileNumber,
     String? address,

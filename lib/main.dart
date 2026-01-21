@@ -2,8 +2,9 @@ import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
+import 'package:farming_motor_app/features/export_screens.dart';
 import 'package:farming_motor_app/features/screens/provider/bottom_nav_provider.dart';
-import 'package:farming_motor_app/features/splash/splash_screen.dart';
+import 'package:farming_motor_app/features/screens/provider/customer_provider/customer_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
@@ -15,11 +16,11 @@ void main() async{
   if(isWindows)await windowManager.ensureInitialized();
   const WindowOptions windowOptions = WindowOptions(
     size: Size(1920,1080),
-    minimumSize: Size(420,700),
+    minimumSize: Size(900,400),
     maximumSize: Size(1920,1080),
 
     center: true,
-    title: 'Farming Motor app'
+    title: AppStrings.farmingMotorApp
   );
   if(isWindows) {
     windowManager.waitUntilReadyToShow(windowOptions,() async{
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
           providers: [
             ChangeNotifierProvider(create: (_) => BottomNavProvider()),
             ChangeNotifierProvider(create: (_) => AdminProvider(),),
+            ChangeNotifierProvider(create: (_) => CustomerProvider(),),
 
           ],
           child: MaterialApp(

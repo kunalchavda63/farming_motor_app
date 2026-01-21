@@ -1,7 +1,7 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
-import 'package:farming_motor_app/features/auth/reset_password_screen.dart';
+import 'package:farming_motor_app/features/auth/auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 

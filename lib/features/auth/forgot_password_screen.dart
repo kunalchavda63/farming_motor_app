@@ -1,8 +1,7 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
-import 'package:farming_motor_app/features/auth/build_text_field.dart';
-import 'package:farming_motor_app/features/auth/otp_verification.dart';
+import 'package:farming_motor_app/features/auth/auth.dart';
 
 class ForgotScreen extends StatefulWidget {
   const ForgotScreen({super.key});

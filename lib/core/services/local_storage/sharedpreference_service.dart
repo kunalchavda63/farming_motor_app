@@ -55,6 +55,7 @@ class LocalPreferences {
 
     final Map<String, dynamic> json =
     jsonDecode(jsonString) as Map<String, dynamic>;
+    logger.d(User.fromJson(json));
 
     return User.fromJson(json);
   }

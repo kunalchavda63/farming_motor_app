@@ -1,36 +1,61 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'pump_detail_model.freezed.dart';
 part 'pump_detail_model.g.dart';
 
 @freezed
 abstract class PumpDetailModel with _$PumpDetailModel {
   const factory PumpDetailModel({
-    // Pump Technical Details
+    @JsonKey(name: '_id') String? id,
+
     String? serialNumber,
+    String? pumpID,
     String? pumpName,
-    String? customer,
-    int? capacity,
-    String? capacityUnit,
-    int? headRange,
-    String? headUnit,
-    int? outletSize,
-    String? outletUnit,
-    int? phaseType,
-    int? supplyVoltage,
-    int? lph,
     String? location,
 
+    int? phase,
+    double? capacitykW,
+    int? lph,
+    double? headRangeMetres,
+    int? outletSizeMM,
+    int? supplyVoltage,
 
+    String? capacityUnit,
+    String? headUnit,
+    String? outletUnit,
+
+    String? currentStatus,
+    String? customer,
+    bool? isActive,
+
+    int? lastSwitchedOnDuration,
+    int? totalLifetimeDuration,
+
+    DateTime? installationDate,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+
+    List<dynamic>? schedules,
+
+    DisplaySpecsModel? displaySpecs,
   }) = _PumpDetailModel;
 
   factory PumpDetailModel.fromJson(Map<String, dynamic> json) =>
       _$PumpDetailModelFromJson(json);
 }
-//
-// @freezed
-// abstract class PumpLogModel with _$PumpLogModel {
-//   const factory PumpLogModel({
-//     required String action,
-//     required DateTime time,
-//   }) = _PumpLogModel;
-//   factory PumpLogModel.fromJson(Map<String, dynamic> json) => _$PumpLogModelFromJson(json); }
+
+
+@freezed
+abstract class DisplaySpecsModel with _$DisplaySpecsModel {
+  const factory DisplaySpecsModel({
+    String? capacity,
+    String? capacityUnit,
+    String? headRange,
+    String? headUnit,
+    int? outletSize,
+    String? outletUnit,
+  }) = _DisplaySpecsModel;
+
+  factory DisplaySpecsModel.fromJson(Map<String, dynamic> json) =>
+      _$DisplaySpecsModelFromJson(json);
+}

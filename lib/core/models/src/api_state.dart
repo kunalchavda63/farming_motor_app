@@ -1,30 +1,35 @@
-
-import 'package:farming_motor_app/core/utilities/utils.dart';
-
 class ApiState<T> {
-
   const ApiState({
-    this.initial = false,
-    this.loading = false,
-    this.status = false,
-
+    required this.loading,
+    required this.initial,
     this.data,
     this.error,
   });
-  factory ApiState.loading() => const ApiState();
-  factory ApiState.initial() => const ApiState();
-  factory ApiState.status() => const ApiState();
-  factory ApiState.success(T data) {
-    logger.d('Data : $data');
-    return ApiState(data: data);
-  }
-  factory ApiState.error(String message) {
-    logger.e('Error : $message');
-    return ApiState(error: message);
-  }
+
+  factory ApiState.initial() => const ApiState(
+    loading: false,
+    initial: true,
+  );
+
+  factory ApiState.loading() => const ApiState(
+    loading: true,
+    initial: false,
+  );
+
+  factory ApiState.success(T data) => ApiState(
+    loading: false,
+    initial: false,
+    data: data,
+  );
+
+  factory ApiState.error(String message) => ApiState(
+    loading: false,
+    initial: false,
+    error: message,
+  );
+
   final bool loading;
   final bool initial;
   final T? data;
   final String? error;
-  final bool? status;
 }

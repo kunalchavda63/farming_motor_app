@@ -15,8 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PumpDetailModel {
 
-// Pump Technical Details
- String? get serialNumber; String? get pumpName; String? get customer; int? get capacity; String? get capacityUnit; int? get headRange; String? get headUnit; int? get outletSize; String? get outletUnit; int? get phaseType; int? get supplyVoltage; int? get lph; String? get location;
+@JsonKey(name: '_id') String? get id; String? get serialNumber; String? get pumpID; String? get pumpName; String? get location; int? get phase; double? get capacitykW; int? get lph; double? get headRangeMetres; int? get outletSizeMM; int? get supplyVoltage; String? get capacityUnit; String? get headUnit; String? get outletUnit; String? get currentStatus; String? get customer; bool? get isActive; int? get lastSwitchedOnDuration; int? get totalLifetimeDuration; DateTime? get installationDate; DateTime? get createdAt; DateTime? get updatedAt; List<dynamic>? get schedules; DisplaySpecsModel? get displaySpecs;
 /// Create a copy of PumpDetailModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +28,16 @@ $PumpDetailModelCopyWith<PumpDetailModel> get copyWith => _$PumpDetailModelCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PumpDetailModel&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headRange, headRange) || other.headRange == headRange)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletSize, outletSize) || other.outletSize == outletSize)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.phaseType, phaseType) || other.phaseType == phaseType)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.location, location) || other.location == location));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PumpDetailModel&&(identical(other.id, id) || other.id == id)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpID, pumpID) || other.pumpID == pumpID)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.location, location) || other.location == location)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.capacitykW, capacitykW) || other.capacitykW == capacitykW)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.headRangeMetres, headRangeMetres) || other.headRangeMetres == headRangeMetres)&&(identical(other.outletSizeMM, outletSizeMM) || other.outletSizeMM == outletSizeMM)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.currentStatus, currentStatus) || other.currentStatus == currentStatus)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.lastSwitchedOnDuration, lastSwitchedOnDuration) || other.lastSwitchedOnDuration == lastSwitchedOnDuration)&&(identical(other.totalLifetimeDuration, totalLifetimeDuration) || other.totalLifetimeDuration == totalLifetimeDuration)&&(identical(other.installationDate, installationDate) || other.installationDate == installationDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.schedules, schedules)&&(identical(other.displaySpecs, displaySpecs) || other.displaySpecs == displaySpecs));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,serialNumber,pumpName,customer,capacity,capacityUnit,headRange,headUnit,outletSize,outletUnit,phaseType,supplyVoltage,lph,location);
+int get hashCode => Object.hashAll([runtimeType,id,serialNumber,pumpID,pumpName,location,phase,capacitykW,lph,headRangeMetres,outletSizeMM,supplyVoltage,capacityUnit,headUnit,outletUnit,currentStatus,customer,isActive,lastSwitchedOnDuration,totalLifetimeDuration,installationDate,createdAt,updatedAt,const DeepCollectionEquality().hash(schedules),displaySpecs]);
 
 @override
 String toString() {
-  return 'PumpDetailModel(serialNumber: $serialNumber, pumpName: $pumpName, customer: $customer, capacity: $capacity, capacityUnit: $capacityUnit, headRange: $headRange, headUnit: $headUnit, outletSize: $outletSize, outletUnit: $outletUnit, phaseType: $phaseType, supplyVoltage: $supplyVoltage, lph: $lph, location: $location)';
+  return 'PumpDetailModel(id: $id, serialNumber: $serialNumber, pumpID: $pumpID, pumpName: $pumpName, location: $location, phase: $phase, capacitykW: $capacitykW, lph: $lph, headRangeMetres: $headRangeMetres, outletSizeMM: $outletSizeMM, supplyVoltage: $supplyVoltage, capacityUnit: $capacityUnit, headUnit: $headUnit, outletUnit: $outletUnit, currentStatus: $currentStatus, customer: $customer, isActive: $isActive, lastSwitchedOnDuration: $lastSwitchedOnDuration, totalLifetimeDuration: $totalLifetimeDuration, installationDate: $installationDate, createdAt: $createdAt, updatedAt: $updatedAt, schedules: $schedules, displaySpecs: $displaySpecs)';
 }
 
 
@@ -49,11 +48,11 @@ abstract mixin class $PumpDetailModelCopyWith<$Res>  {
   factory $PumpDetailModelCopyWith(PumpDetailModel value, $Res Function(PumpDetailModel) _then) = _$PumpDetailModelCopyWithImpl;
 @useResult
 $Res call({
- String? serialNumber, String? pumpName, String? customer, int? capacity, String? capacityUnit, int? headRange, String? headUnit, int? outletSize, String? outletUnit, int? phaseType, int? supplyVoltage, int? lph, String? location
+@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, DisplaySpecsModel? displaySpecs
 });
 
 
-
+$DisplaySpecsModelCopyWith<$Res>? get displaySpecs;
 
 }
 /// @nodoc
@@ -66,25 +65,48 @@ class _$PumpDetailModelCopyWithImpl<$Res>
 
 /// Create a copy of PumpDetailModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? serialNumber = freezed,Object? pumpName = freezed,Object? customer = freezed,Object? capacity = freezed,Object? capacityUnit = freezed,Object? headRange = freezed,Object? headUnit = freezed,Object? outletSize = freezed,Object? outletUnit = freezed,Object? phaseType = freezed,Object? supplyVoltage = freezed,Object? lph = freezed,Object? location = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? serialNumber = freezed,Object? pumpID = freezed,Object? pumpName = freezed,Object? location = freezed,Object? phase = freezed,Object? capacitykW = freezed,Object? lph = freezed,Object? headRangeMetres = freezed,Object? outletSizeMM = freezed,Object? supplyVoltage = freezed,Object? capacityUnit = freezed,Object? headUnit = freezed,Object? outletUnit = freezed,Object? currentStatus = freezed,Object? customer = freezed,Object? isActive = freezed,Object? lastSwitchedOnDuration = freezed,Object? totalLifetimeDuration = freezed,Object? installationDate = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? schedules = freezed,Object? displaySpecs = freezed,}) {
   return _then(_self.copyWith(
-serialNumber: freezed == serialNumber ? _self.serialNumber : serialNumber // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,serialNumber: freezed == serialNumber ? _self.serialNumber : serialNumber // ignore: cast_nullable_to_non_nullable
+as String?,pumpID: freezed == pumpID ? _self.pumpID : pumpID // ignore: cast_nullable_to_non_nullable
 as String?,pumpName: freezed == pumpName ? _self.pumpName : pumpName // ignore: cast_nullable_to_non_nullable
-as String?,customer: freezed == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
-as String?,capacity: freezed == capacity ? _self.capacity : capacity // ignore: cast_nullable_to_non_nullable
-as int?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
-as String?,headRange: freezed == headRange ? _self.headRange : headRange // ignore: cast_nullable_to_non_nullable
-as int?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
-as String?,outletSize: freezed == outletSize ? _self.outletSize : outletSize // ignore: cast_nullable_to_non_nullable
-as int?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
-as String?,phaseType: freezed == phaseType ? _self.phaseType : phaseType // ignore: cast_nullable_to_non_nullable
+as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,phase: freezed == phase ? _self.phase : phase // ignore: cast_nullable_to_non_nullable
+as int?,capacitykW: freezed == capacitykW ? _self.capacitykW : capacitykW // ignore: cast_nullable_to_non_nullable
+as double?,lph: freezed == lph ? _self.lph : lph // ignore: cast_nullable_to_non_nullable
+as int?,headRangeMetres: freezed == headRangeMetres ? _self.headRangeMetres : headRangeMetres // ignore: cast_nullable_to_non_nullable
+as double?,outletSizeMM: freezed == outletSizeMM ? _self.outletSizeMM : outletSizeMM // ignore: cast_nullable_to_non_nullable
 as int?,supplyVoltage: freezed == supplyVoltage ? _self.supplyVoltage : supplyVoltage // ignore: cast_nullable_to_non_nullable
-as int?,lph: freezed == lph ? _self.lph : lph // ignore: cast_nullable_to_non_nullable
-as int?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
-as String?,
+as int?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
+as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
+as String?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
+as String?,currentStatus: freezed == currentStatus ? _self.currentStatus : currentStatus // ignore: cast_nullable_to_non_nullable
+as String?,customer: freezed == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
+as String?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool?,lastSwitchedOnDuration: freezed == lastSwitchedOnDuration ? _self.lastSwitchedOnDuration : lastSwitchedOnDuration // ignore: cast_nullable_to_non_nullable
+as int?,totalLifetimeDuration: freezed == totalLifetimeDuration ? _self.totalLifetimeDuration : totalLifetimeDuration // ignore: cast_nullable_to_non_nullable
+as int?,installationDate: freezed == installationDate ? _self.installationDate : installationDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,schedules: freezed == schedules ? _self.schedules : schedules // ignore: cast_nullable_to_non_nullable
+as List<dynamic>?,displaySpecs: freezed == displaySpecs ? _self.displaySpecs : displaySpecs // ignore: cast_nullable_to_non_nullable
+as DisplaySpecsModel?,
   ));
 }
+/// Create a copy of PumpDetailModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DisplaySpecsModelCopyWith<$Res>? get displaySpecs {
+    if (_self.displaySpecs == null) {
+    return null;
+  }
 
+  return $DisplaySpecsModelCopyWith<$Res>(_self.displaySpecs!, (value) {
+    return _then(_self.copyWith(displaySpecs: value));
+  });
+}
 }
 
 
@@ -166,10 +188,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? serialNumber,  String? pumpName,  String? customer,  int? capacity,  String? capacityUnit,  int? headRange,  String? headUnit,  int? outletSize,  String? outletUnit,  int? phaseType,  int? supplyVoltage,  int? lph,  String? location)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  DisplaySpecsModel? displaySpecs)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PumpDetailModel() when $default != null:
-return $default(_that.serialNumber,_that.pumpName,_that.customer,_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit,_that.phaseType,_that.supplyVoltage,_that.lph,_that.location);case _:
+return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
   return orElse();
 
 }
@@ -187,10 +209,10 @@ return $default(_that.serialNumber,_that.pumpName,_that.customer,_that.capacity,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? serialNumber,  String? pumpName,  String? customer,  int? capacity,  String? capacityUnit,  int? headRange,  String? headUnit,  int? outletSize,  String? outletUnit,  int? phaseType,  int? supplyVoltage,  int? lph,  String? location)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  DisplaySpecsModel? displaySpecs)  $default,) {final _that = this;
 switch (_that) {
 case _PumpDetailModel():
-return $default(_that.serialNumber,_that.pumpName,_that.customer,_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit,_that.phaseType,_that.supplyVoltage,_that.lph,_that.location);case _:
+return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +229,10 @@ return $default(_that.serialNumber,_that.pumpName,_that.customer,_that.capacity,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? serialNumber,  String? pumpName,  String? customer,  int? capacity,  String? capacityUnit,  int? headRange,  String? headUnit,  int? outletSize,  String? outletUnit,  int? phaseType,  int? supplyVoltage,  int? lph,  String? location)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  DisplaySpecsModel? displaySpecs)?  $default,) {final _that = this;
 switch (_that) {
 case _PumpDetailModel() when $default != null:
-return $default(_that.serialNumber,_that.pumpName,_that.customer,_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit,_that.phaseType,_that.supplyVoltage,_that.lph,_that.location);case _:
+return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
   return null;
 
 }
@@ -222,23 +244,41 @@ return $default(_that.serialNumber,_that.pumpName,_that.customer,_that.capacity,
 @JsonSerializable()
 
 class _PumpDetailModel implements PumpDetailModel {
-  const _PumpDetailModel({this.serialNumber, this.pumpName, this.customer, this.capacity, this.capacityUnit, this.headRange, this.headUnit, this.outletSize, this.outletUnit, this.phaseType, this.supplyVoltage, this.lph, this.location});
+  const _PumpDetailModel({@JsonKey(name: '_id') this.id, this.serialNumber, this.pumpID, this.pumpName, this.location, this.phase, this.capacitykW, this.lph, this.headRangeMetres, this.outletSizeMM, this.supplyVoltage, this.capacityUnit, this.headUnit, this.outletUnit, this.currentStatus, this.customer, this.isActive, this.lastSwitchedOnDuration, this.totalLifetimeDuration, this.installationDate, this.createdAt, this.updatedAt, final  List<dynamic>? schedules, this.displaySpecs}): _schedules = schedules;
   factory _PumpDetailModel.fromJson(Map<String, dynamic> json) => _$PumpDetailModelFromJson(json);
 
-// Pump Technical Details
+@override@JsonKey(name: '_id') final  String? id;
 @override final  String? serialNumber;
+@override final  String? pumpID;
 @override final  String? pumpName;
-@override final  String? customer;
-@override final  int? capacity;
-@override final  String? capacityUnit;
-@override final  int? headRange;
-@override final  String? headUnit;
-@override final  int? outletSize;
-@override final  String? outletUnit;
-@override final  int? phaseType;
-@override final  int? supplyVoltage;
-@override final  int? lph;
 @override final  String? location;
+@override final  int? phase;
+@override final  double? capacitykW;
+@override final  int? lph;
+@override final  double? headRangeMetres;
+@override final  int? outletSizeMM;
+@override final  int? supplyVoltage;
+@override final  String? capacityUnit;
+@override final  String? headUnit;
+@override final  String? outletUnit;
+@override final  String? currentStatus;
+@override final  String? customer;
+@override final  bool? isActive;
+@override final  int? lastSwitchedOnDuration;
+@override final  int? totalLifetimeDuration;
+@override final  DateTime? installationDate;
+@override final  DateTime? createdAt;
+@override final  DateTime? updatedAt;
+ final  List<dynamic>? _schedules;
+@override List<dynamic>? get schedules {
+  final value = _schedules;
+  if (value == null) return null;
+  if (_schedules is EqualUnmodifiableListView) return _schedules;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+@override final  DisplaySpecsModel? displaySpecs;
 
 /// Create a copy of PumpDetailModel
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +293,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PumpDetailModel&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headRange, headRange) || other.headRange == headRange)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletSize, outletSize) || other.outletSize == outletSize)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.phaseType, phaseType) || other.phaseType == phaseType)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.location, location) || other.location == location));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PumpDetailModel&&(identical(other.id, id) || other.id == id)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpID, pumpID) || other.pumpID == pumpID)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.location, location) || other.location == location)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.capacitykW, capacitykW) || other.capacitykW == capacitykW)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.headRangeMetres, headRangeMetres) || other.headRangeMetres == headRangeMetres)&&(identical(other.outletSizeMM, outletSizeMM) || other.outletSizeMM == outletSizeMM)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.currentStatus, currentStatus) || other.currentStatus == currentStatus)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.lastSwitchedOnDuration, lastSwitchedOnDuration) || other.lastSwitchedOnDuration == lastSwitchedOnDuration)&&(identical(other.totalLifetimeDuration, totalLifetimeDuration) || other.totalLifetimeDuration == totalLifetimeDuration)&&(identical(other.installationDate, installationDate) || other.installationDate == installationDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other._schedules, _schedules)&&(identical(other.displaySpecs, displaySpecs) || other.displaySpecs == displaySpecs));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,serialNumber,pumpName,customer,capacity,capacityUnit,headRange,headUnit,outletSize,outletUnit,phaseType,supplyVoltage,lph,location);
+int get hashCode => Object.hashAll([runtimeType,id,serialNumber,pumpID,pumpName,location,phase,capacitykW,lph,headRangeMetres,outletSizeMM,supplyVoltage,capacityUnit,headUnit,outletUnit,currentStatus,customer,isActive,lastSwitchedOnDuration,totalLifetimeDuration,installationDate,createdAt,updatedAt,const DeepCollectionEquality().hash(_schedules),displaySpecs]);
 
 @override
 String toString() {
-  return 'PumpDetailModel(serialNumber: $serialNumber, pumpName: $pumpName, customer: $customer, capacity: $capacity, capacityUnit: $capacityUnit, headRange: $headRange, headUnit: $headUnit, outletSize: $outletSize, outletUnit: $outletUnit, phaseType: $phaseType, supplyVoltage: $supplyVoltage, lph: $lph, location: $location)';
+  return 'PumpDetailModel(id: $id, serialNumber: $serialNumber, pumpID: $pumpID, pumpName: $pumpName, location: $location, phase: $phase, capacitykW: $capacitykW, lph: $lph, headRangeMetres: $headRangeMetres, outletSizeMM: $outletSizeMM, supplyVoltage: $supplyVoltage, capacityUnit: $capacityUnit, headUnit: $headUnit, outletUnit: $outletUnit, currentStatus: $currentStatus, customer: $customer, isActive: $isActive, lastSwitchedOnDuration: $lastSwitchedOnDuration, totalLifetimeDuration: $totalLifetimeDuration, installationDate: $installationDate, createdAt: $createdAt, updatedAt: $updatedAt, schedules: $schedules, displaySpecs: $displaySpecs)';
 }
 
 
@@ -273,11 +313,11 @@ abstract mixin class _$PumpDetailModelCopyWith<$Res> implements $PumpDetailModel
   factory _$PumpDetailModelCopyWith(_PumpDetailModel value, $Res Function(_PumpDetailModel) _then) = __$PumpDetailModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? serialNumber, String? pumpName, String? customer, int? capacity, String? capacityUnit, int? headRange, String? headUnit, int? outletSize, String? outletUnit, int? phaseType, int? supplyVoltage, int? lph, String? location
+@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, DisplaySpecsModel? displaySpecs
 });
 
 
-
+@override $DisplaySpecsModelCopyWith<$Res>? get displaySpecs;
 
 }
 /// @nodoc
@@ -290,21 +330,322 @@ class __$PumpDetailModelCopyWithImpl<$Res>
 
 /// Create a copy of PumpDetailModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? serialNumber = freezed,Object? pumpName = freezed,Object? customer = freezed,Object? capacity = freezed,Object? capacityUnit = freezed,Object? headRange = freezed,Object? headUnit = freezed,Object? outletSize = freezed,Object? outletUnit = freezed,Object? phaseType = freezed,Object? supplyVoltage = freezed,Object? lph = freezed,Object? location = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? serialNumber = freezed,Object? pumpID = freezed,Object? pumpName = freezed,Object? location = freezed,Object? phase = freezed,Object? capacitykW = freezed,Object? lph = freezed,Object? headRangeMetres = freezed,Object? outletSizeMM = freezed,Object? supplyVoltage = freezed,Object? capacityUnit = freezed,Object? headUnit = freezed,Object? outletUnit = freezed,Object? currentStatus = freezed,Object? customer = freezed,Object? isActive = freezed,Object? lastSwitchedOnDuration = freezed,Object? totalLifetimeDuration = freezed,Object? installationDate = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? schedules = freezed,Object? displaySpecs = freezed,}) {
   return _then(_PumpDetailModel(
-serialNumber: freezed == serialNumber ? _self.serialNumber : serialNumber // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,serialNumber: freezed == serialNumber ? _self.serialNumber : serialNumber // ignore: cast_nullable_to_non_nullable
+as String?,pumpID: freezed == pumpID ? _self.pumpID : pumpID // ignore: cast_nullable_to_non_nullable
 as String?,pumpName: freezed == pumpName ? _self.pumpName : pumpName // ignore: cast_nullable_to_non_nullable
-as String?,customer: freezed == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
-as String?,capacity: freezed == capacity ? _self.capacity : capacity // ignore: cast_nullable_to_non_nullable
+as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,phase: freezed == phase ? _self.phase : phase // ignore: cast_nullable_to_non_nullable
+as int?,capacitykW: freezed == capacitykW ? _self.capacitykW : capacitykW // ignore: cast_nullable_to_non_nullable
+as double?,lph: freezed == lph ? _self.lph : lph // ignore: cast_nullable_to_non_nullable
+as int?,headRangeMetres: freezed == headRangeMetres ? _self.headRangeMetres : headRangeMetres // ignore: cast_nullable_to_non_nullable
+as double?,outletSizeMM: freezed == outletSizeMM ? _self.outletSizeMM : outletSizeMM // ignore: cast_nullable_to_non_nullable
+as int?,supplyVoltage: freezed == supplyVoltage ? _self.supplyVoltage : supplyVoltage // ignore: cast_nullable_to_non_nullable
 as int?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
+as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
+as String?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
+as String?,currentStatus: freezed == currentStatus ? _self.currentStatus : currentStatus // ignore: cast_nullable_to_non_nullable
+as String?,customer: freezed == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
+as String?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool?,lastSwitchedOnDuration: freezed == lastSwitchedOnDuration ? _self.lastSwitchedOnDuration : lastSwitchedOnDuration // ignore: cast_nullable_to_non_nullable
+as int?,totalLifetimeDuration: freezed == totalLifetimeDuration ? _self.totalLifetimeDuration : totalLifetimeDuration // ignore: cast_nullable_to_non_nullable
+as int?,installationDate: freezed == installationDate ? _self.installationDate : installationDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,schedules: freezed == schedules ? _self._schedules : schedules // ignore: cast_nullable_to_non_nullable
+as List<dynamic>?,displaySpecs: freezed == displaySpecs ? _self.displaySpecs : displaySpecs // ignore: cast_nullable_to_non_nullable
+as DisplaySpecsModel?,
+  ));
+}
+
+/// Create a copy of PumpDetailModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DisplaySpecsModelCopyWith<$Res>? get displaySpecs {
+    if (_self.displaySpecs == null) {
+    return null;
+  }
+
+  return $DisplaySpecsModelCopyWith<$Res>(_self.displaySpecs!, (value) {
+    return _then(_self.copyWith(displaySpecs: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$DisplaySpecsModel {
+
+ String? get capacity; String? get capacityUnit; String? get headRange; String? get headUnit; int? get outletSize; String? get outletUnit;
+/// Create a copy of DisplaySpecsModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DisplaySpecsModelCopyWith<DisplaySpecsModel> get copyWith => _$DisplaySpecsModelCopyWithImpl<DisplaySpecsModel>(this as DisplaySpecsModel, _$identity);
+
+  /// Serializes this DisplaySpecsModel to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DisplaySpecsModel&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headRange, headRange) || other.headRange == headRange)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletSize, outletSize) || other.outletSize == outletSize)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,capacity,capacityUnit,headRange,headUnit,outletSize,outletUnit);
+
+@override
+String toString() {
+  return 'DisplaySpecsModel(capacity: $capacity, capacityUnit: $capacityUnit, headRange: $headRange, headUnit: $headUnit, outletSize: $outletSize, outletUnit: $outletUnit)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DisplaySpecsModelCopyWith<$Res>  {
+  factory $DisplaySpecsModelCopyWith(DisplaySpecsModel value, $Res Function(DisplaySpecsModel) _then) = _$DisplaySpecsModelCopyWithImpl;
+@useResult
+$Res call({
+ String? capacity, String? capacityUnit, String? headRange, String? headUnit, int? outletSize, String? outletUnit
+});
+
+
+
+
+}
+/// @nodoc
+class _$DisplaySpecsModelCopyWithImpl<$Res>
+    implements $DisplaySpecsModelCopyWith<$Res> {
+  _$DisplaySpecsModelCopyWithImpl(this._self, this._then);
+
+  final DisplaySpecsModel _self;
+  final $Res Function(DisplaySpecsModel) _then;
+
+/// Create a copy of DisplaySpecsModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? capacity = freezed,Object? capacityUnit = freezed,Object? headRange = freezed,Object? headUnit = freezed,Object? outletSize = freezed,Object? outletUnit = freezed,}) {
+  return _then(_self.copyWith(
+capacity: freezed == capacity ? _self.capacity : capacity // ignore: cast_nullable_to_non_nullable
+as String?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
 as String?,headRange: freezed == headRange ? _self.headRange : headRange // ignore: cast_nullable_to_non_nullable
-as int?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
+as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
 as String?,outletSize: freezed == outletSize ? _self.outletSize : outletSize // ignore: cast_nullable_to_non_nullable
 as int?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
-as String?,phaseType: freezed == phaseType ? _self.phaseType : phaseType // ignore: cast_nullable_to_non_nullable
-as int?,supplyVoltage: freezed == supplyVoltage ? _self.supplyVoltage : supplyVoltage // ignore: cast_nullable_to_non_nullable
-as int?,lph: freezed == lph ? _self.lph : lph // ignore: cast_nullable_to_non_nullable
-as int?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [DisplaySpecsModel].
+extension DisplaySpecsModelPatterns on DisplaySpecsModel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DisplaySpecsModel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _DisplaySpecsModel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DisplaySpecsModel value)  $default,){
+final _that = this;
+switch (_that) {
+case _DisplaySpecsModel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DisplaySpecsModel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _DisplaySpecsModel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? capacity,  String? capacityUnit,  String? headRange,  String? headUnit,  int? outletSize,  String? outletUnit)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _DisplaySpecsModel() when $default != null:
+return $default(_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? capacity,  String? capacityUnit,  String? headRange,  String? headUnit,  int? outletSize,  String? outletUnit)  $default,) {final _that = this;
+switch (_that) {
+case _DisplaySpecsModel():
+return $default(_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? capacity,  String? capacityUnit,  String? headRange,  String? headUnit,  int? outletSize,  String? outletUnit)?  $default,) {final _that = this;
+switch (_that) {
+case _DisplaySpecsModel() when $default != null:
+return $default(_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _DisplaySpecsModel implements DisplaySpecsModel {
+  const _DisplaySpecsModel({this.capacity, this.capacityUnit, this.headRange, this.headUnit, this.outletSize, this.outletUnit});
+  factory _DisplaySpecsModel.fromJson(Map<String, dynamic> json) => _$DisplaySpecsModelFromJson(json);
+
+@override final  String? capacity;
+@override final  String? capacityUnit;
+@override final  String? headRange;
+@override final  String? headUnit;
+@override final  int? outletSize;
+@override final  String? outletUnit;
+
+/// Create a copy of DisplaySpecsModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DisplaySpecsModelCopyWith<_DisplaySpecsModel> get copyWith => __$DisplaySpecsModelCopyWithImpl<_DisplaySpecsModel>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$DisplaySpecsModelToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DisplaySpecsModel&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headRange, headRange) || other.headRange == headRange)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletSize, outletSize) || other.outletSize == outletSize)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,capacity,capacityUnit,headRange,headUnit,outletSize,outletUnit);
+
+@override
+String toString() {
+  return 'DisplaySpecsModel(capacity: $capacity, capacityUnit: $capacityUnit, headRange: $headRange, headUnit: $headUnit, outletSize: $outletSize, outletUnit: $outletUnit)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DisplaySpecsModelCopyWith<$Res> implements $DisplaySpecsModelCopyWith<$Res> {
+  factory _$DisplaySpecsModelCopyWith(_DisplaySpecsModel value, $Res Function(_DisplaySpecsModel) _then) = __$DisplaySpecsModelCopyWithImpl;
+@override @useResult
+$Res call({
+ String? capacity, String? capacityUnit, String? headRange, String? headUnit, int? outletSize, String? outletUnit
+});
+
+
+
+
+}
+/// @nodoc
+class __$DisplaySpecsModelCopyWithImpl<$Res>
+    implements _$DisplaySpecsModelCopyWith<$Res> {
+  __$DisplaySpecsModelCopyWithImpl(this._self, this._then);
+
+  final _DisplaySpecsModel _self;
+  final $Res Function(_DisplaySpecsModel) _then;
+
+/// Create a copy of DisplaySpecsModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? capacity = freezed,Object? capacityUnit = freezed,Object? headRange = freezed,Object? headUnit = freezed,Object? outletSize = freezed,Object? outletUnit = freezed,}) {
+  return _then(_DisplaySpecsModel(
+capacity: freezed == capacity ? _self.capacity : capacity // ignore: cast_nullable_to_non_nullable
+as String?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
+as String?,headRange: freezed == headRange ? _self.headRange : headRange // ignore: cast_nullable_to_non_nullable
+as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
+as String?,outletSize: freezed == outletSize ? _self.outletSize : outletSize // ignore: cast_nullable_to_non_nullable
+as int?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

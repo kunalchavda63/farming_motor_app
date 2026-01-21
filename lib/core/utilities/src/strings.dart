@@ -27,8 +27,9 @@ class AppStrings {
   static const String reTypePassword = 'Re-type password';
   static const String didNotReceivedTheOTP = 'Didn’t received the OTP?';
   static const String enterTheOtpSentTo = 'Enter the otp sent to';
-  static const String resetPassword = 'Reset Password';
-  static const String confirmPassword = 'Confirm Password';
+  static const String changePassword = 'Change Password';
+  static const String oldPassword = 'Old Password';
+  static const String newPassword = 'New Password';
   static const String submit = 'Submit';
   static const String welcome = 'Welcome';
   static const String signIntoContinue = 'Sign in to continue';
@@ -107,6 +108,16 @@ class AppStrings {
   static const String supplyVoltage = 'Supply Voltage';
   static const String lph = 'LPH';
   static const String location = 'Location';
+  static const String farmingMotorApp = 'Farming motor app';
+  static const String smartPumpControl = 'Smart Pump Control';
+  static const String noUsersFound = 'No Users found';
+  static const String totalUsers = 'Total Users';
+  static const String someThinkWentWrong = 'Something went wrong';
+  static const String userProfile = 'User Profile';
+  static const String logOut = 'Log Out';
+
+
+
 
 
 

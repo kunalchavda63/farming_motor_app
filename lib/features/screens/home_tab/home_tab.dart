@@ -1,9 +1,15 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_switch.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
+import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
+import 'package:farming_motor_app/features/auth/auth.dart';
+import 'package:farming_motor_app/features/screens/provider/customer_provider/customer_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
+
   const HomeTab({super.key});
 
   @override
@@ -12,18 +18,43 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final LocalPreferences _prefs = LocalPreferences();
+  bool? isActive = false;
   @override
   void didChangeDependencies() {
-
     setStatusBarLightStyle();
     super.didChangeDependencies();
-
   }
+
+
+  void _userLogOut() async {
+    await _prefs.setAuth(false);
+    await _prefs.clearUser();
+    await _prefs.clear();
+    getIt<AppRouter>().pushReplacement<void>(
+      const Onboarding(),
+    );
+    showSuccessToast('User Log Out successfully');
+  }
+  void goToResetScreen() {
+    getIt<AppRouter>().push<void>(const ResetPasswordScreen());
+  }
+
+@override
+  void initState() {
+    super.initState();
+    Future.microtask((){
+      context.read<CustomerProvider>().loadPumps();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<CustomerProvider>();
+    final state = provider.pumpListState;
+    return Scaffold(
 
-    return  Scaffold(
       key: _key,
       backgroundColor: AppColors.white,
       drawer: Drawer(
@@ -33,49 +64,54 @@ class _HomeTabState extends State<HomeTab> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(
-                color: AppColors.white50
+              decoration: const BoxDecoration(color: AppColors.white50),
+              curve: Curves.ease,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CustomCircleSvgIcon(
+                    path: AssetIcons.icUser,
+                    iconColor: AppColors.hex2e47,
+                  ),
+                  CustomText(
+                    data: _prefs.getUser()?.name??'' ,
+                    style: BaseStyle.s14w400
+                        .c(AppColors.hex5474)
+                        .w(500)
+                        .family(FontFamily.montserrat),
+                  ),
+                ],
               ),
-                curve: Curves.ease,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CustomCircleSvgIcon(path: AssetIcons.icUser,iconColor: AppColors.hex2e47,),
-                    CustomText(data: 'User Profile',style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),)
-                  ],
-                )),
+            ),
             ListView(
               shrinkWrap: true,
+
               children: [
-                CustomContainer(
-                  onTap: () async{
+                drawerBox(
+                    label: AppStrings.changePassword,
+                    onTap: ()=> goToResetScreen()
+                ).padTop(10),
 
-                    await LocalPreferences().setAuth(false);
+                SizedBox(
+                  height: MediaQuery.of(context).size.height*0.4,
+                ),
+                drawerBox(
+                    onTap: _userLogOut,
+                  textColor: Colors.redAccent,
 
-
-                  },
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10
-                  ),
-                  border: Border.all(color: AppColors.hex5474),
-                  borderRadius: BorderRadius.circular(5),
-                  color: AppColors.black10,
-                  child: CustomText(data: 'Log Out',style: BaseStyle.s14w400.c(AppColors.hex2e47).w(500).family(FontFamily.montserrat),),
-                )
+                ),
               ],
-            ).padH(10)
+            ).padH(10),
           ],
         ),
       ),
       appBar: CustomAppBar(
-
         gradient: RadialGradient(
           radius: 7,
-            colors: [
-              AppColors.hex5474.withOAlpha(0.9),
-              AppColors.hex2e47.withOAlpha(0.20)
-        ],
+          colors: [
+            AppColors.hex5474.withOAlpha(0.9),
+            AppColors.hex2e47.withOAlpha(0.20),
+          ],
         ),
 
         autoImplyLeading: false,
@@ -83,23 +119,220 @@ class _HomeTabState extends State<HomeTab> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: () =>_key.currentState?.openDrawer(),
-                child: const CustomImageView(path: AssetImages.imgLogo,height: 40,width: 50,)),
-            CustomText(data: AppStrings.pumpOperation,style: BaseStyle.s14w500.c(AppColors.white),),
+              onTap: () => _key.currentState?.openDrawer(),
+              child: const CustomImageView(
+                path: AssetImages.imgLogo,
+                height: 40,
+                width: 50,
+              ),
+            ),
+            CustomText(
+              data: AppStrings.pumpOperation,
+              style: BaseStyle.s14w500.c(AppColors.white),
+            ),
           ],
         ),
-
       ),
-      body: const Column(
+        body: state.loading || state.initial
+            ? const Center(child: CircularProgressIndicator(
+          strokeWidth: 1,
+          color: AppColors.hex5474,
 
+        ))
+            : state.error != null
+            ? Center(child: CustomText(data: state.error!))
+            : (state.data?.isEmpty ?? false)
+            ? const Center(child: CustomText(data: 'No pumps found'))
+            : ListView.builder(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 10,
+          ),
+          itemCount: state.data!.length,
+          itemBuilder: (context, index) {
+            final pump = state.data![index];
+
+            return CustomAnimationWrapper(
+              animationType: AnimationTypes.fadeScale,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeIn,
+              child: CustomContainer(
+                borderRadius: BorderRadius.circular(10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+                color: AppColors.black10,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        CustomContainer(
+                          alignment: Alignment.center,
+                          h: 30,
+                          w: 30,
+                          boxShape: BoxShape.circle,
+                          color: AppColors.white,
+                          padding: const EdgeInsets.all(5),
+                          border: Border.all(color: AppColors.hex5474),
+                          child: CustomText(data: '${index+1}'),
+                        ),
+                        CustomText(data: pump.serialNumber ?? '',style: BaseStyle.s14w400.c(AppColors.black).family(FontFamily.montserrat).w(700),).padH(10)
+
+                      ],
+                    ).padBottom(10),
+                    CustomContainer(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 5
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.hex5474),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              CustomText(data: AppStrings.switchOnOff,style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),),
+                              const Spacer(),
+                              CustomSwitch(value:isActive?? false, onChanged:(v){
+                                setState(() {
+                                  isActive = !isActive!;
+                                });
+                              })
+                            ],
+                          )
+                        ],
+                      ),
+                    ).padBottom(10),
+                    timerBox(label: AppStrings.startTime),
+                    timerBox(label: '${AppStrings.endTime}  '),
+
+                  ],
+                ),
+              ),
+);
+          },
+        )
+
+    );
+  }
+
+  Widget timerBox({String? label,DateTime? dateTime,}){
+    return CustomContainer(
+      onTap: () async {
+        await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.now(),
+
+          builder: (context, child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: Colors.orange,
+                colorScheme: const ColorScheme.light(
+                  primary: Colors.orange,
+                  secondary: Colors.green,
+                ),
+                timePickerTheme: TimePickerThemeData(
+                  backgroundColor: Colors.white,
+                  hourMinuteTextColor: WidgetStateColor.resolveWith((states) {
+                    return states.contains(WidgetState.selected)
+                        ? AppColors.hex5474
+                        : Colors.black;
+                  }),
+                  hourMinuteColor: WidgetStateColor.resolveWith((states) {
+                    return states.contains(WidgetState.selected)
+                        ? Colors.orange.withOAlpha(0.2)
+                        : Colors.transparent;
+                  }),
+                  dayPeriodTextColor: WidgetStateColor.resolveWith((states) {
+                    return states.contains(WidgetState.selected)
+                        ? Colors.white
+                        : Colors.black;
+                  }),
+                  dayPeriodColor: WidgetStateColor.resolveWith((states) {
+                    return states.contains(WidgetState.selected)
+                        ? AppColors.hex5474.withOAlpha(0.80)
+                        : AppColors.hexCcd6;
+                  }),
+                  dialBackgroundColor: AppColors.black10,
+                  dialHandColor: AppColors.hex2e47,
+                  dialTextColor: WidgetStateColor.resolveWith((states) {
+                    return states.contains(WidgetState.selected)
+                        ? Colors.white
+                        : Colors.black;
+                  }),
+                  entryModeIconColor: Colors.black,
+                  helpTextStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                  ),
+                  hourMinuteTextStyle: const TextStyle(
+                    fontSize: 32,
+                    color: AppColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                buttonTheme: const ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                  buttonColor: AppColors.hexCcd6
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+      },
+    padding: const EdgeInsets.symmetric(
+    vertical: 5,
+    horizontal: 5
+    ),
+    borderRadius: BorderRadius.circular(5),
+    color: AppColors.transparent,
+    child: Column(
+    children: [
+    Row(
+    children: [
+    CustomText(data: label ?? AppStrings.startTime,style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),).padRight(20),
+    Expanded(
+    child: CustomContainer(
+    borderRadius: BorderRadius.circular(5),
+    padding: const EdgeInsets.symmetric(
+    horizontal: 10,
+    vertical: 10
+    ),
+    color: AppColors.white,
+    child: CustomText(data: formatTime(DateTime.now())),
+    ),
+    )
+
+    ],
+    )
+    ],
+    ),
+    );
+  }
+  Widget drawerBox({Color? textColor,String? label, VoidCallback? onTap}) {
+    return CustomContainer(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      border: Border.all(color: AppColors.hex5474),
+      borderRadius: BorderRadius.circular(5),
+      color: textColor==null?AppColors.black10:null,
+      child: CustomText(
+        textAlign: TextAlign.center,
+        data: label ?? AppStrings.logOut,
+        style: BaseStyle.s14w400
+            .c(textColor ?? AppColors.hex2e47)
+            .w(500)
+            .family(FontFamily.montserrat),
       ),
-
     );
   }
 }
 
-
-String formatTime(DateTime datetime){
+String formatTime(DateTime datetime) {
   return DateFormat('hh:mm:ss').format(datetime);
 }
 

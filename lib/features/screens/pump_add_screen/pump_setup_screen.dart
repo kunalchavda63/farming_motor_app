@@ -1,14 +1,15 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/pop_up_model.dart';
 import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_model.dart';
+import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
-import 'package:farming_motor_app/features/auth/build_text_field.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:farming_motor_app/features/auth/auth.dart';
+import 'package:provider/provider.dart';
 
 class PumpSetupScreen extends StatefulWidget {
-  const PumpSetupScreen({super.key, this.customerId});
-  final String? customerId;
+  const PumpSetupScreen({super.key,required this.customerId});
+  final String customerId;
 
   @override
   State<PumpSetupScreen> createState() => _PumpSetupScreenState();
@@ -52,6 +53,14 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
   final FocusNode _outletSizeFocus = FocusNode();
   final FocusNode _outletUnitFocus = FocusNode();
   final FocusNode _locationControllerFocus = FocusNode();
+
+  late String id;
+  @override
+  void initState() {
+    super.initState();
+    logger.d(widget.customerId);
+    id = widget.customerId;
+  }
 
 
   @override
@@ -100,8 +109,17 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
+              children: [
+                 CustomCircleSvgIcon(
+                  path: AssetIcons.icBack,
+                  bgColor: AppColors.black10,
+                  padding: const EdgeInsets.all(10),
+                   onTap: (){
+                    getIt<AppRouter>().pop<void>();
+                   },
+                   
+                ).padAll(10),
+
 
               ClipRRect(
                 borderRadius: BorderRadius.circular(100.r),
@@ -159,8 +177,8 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                 focusNode: _phaseTypeFocus,
                 isDropdown: true,
                 items: const [
-                  PopUpModel(id: '1', data: 'Single Phase', value: '1'),
-                  PopUpModel(id: '2', data: 'Three Phase', value: '3'),
+                  PopUpModel(id: '1', data: '1', value: '1'),
+                  PopUpModel(id: '2', data: '3', value: '3'),
                 ],
                 anchorKey: _phaseTypeKey,
                 context: context,
@@ -224,8 +242,8 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                       focusNode: _headUnitControllerFocus,
                       isDropdown: true,
                       items: const [
-                        PopUpModel(id: '1', data: 'FEET', value: 'FEEt'),
-                        PopUpModel(id: '2', data: 'METER', value: 'METER'),
+                        PopUpModel(id: '1', data: 'feet', value: 'feet'),
+                        PopUpModel(id: '2', data: 'meter', value: 'meter'),
                       ],
                       anchorKey: _headUnit,
                       context: context,
@@ -287,8 +305,8 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                       focusNode: _outletUnitFocus,
                       isDropdown: true,
                       items: const [
-                        PopUpModel(id: '1', data: 'Inch', value: 'inch'),
-                        PopUpModel(id: '2', data: 'MM', value: 'mm'),
+                        PopUpModel(id: '1', data: 'inch', value: 'inch'),
+                        PopUpModel(id: '2', data: 'mm', value: 'mm'),
                       ],
                       anchorKey: _outletUnitKey,
                       context: context,
@@ -312,36 +330,28 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                     serialNumber: _serialNoController.text.trim(),
                     pumpName: _pumpNameController.text.trim(),
                     customer: widget.customerId,
-                    phaseType: int.tryParse(_phaseTypeController.text.trim()),
-                    capacity: int.tryParse(_capacityController.text.trim()),
+                    phase: int.tryParse(_phaseTypeController.text.trim()),
+                    capacitykW: double.tryParse(_capacityController.text.trim()),
                     capacityUnit: _capacityUnitController.text.trim(),
-                    headRange: int.tryParse(_headRangeController.text.trim()),
+                    headRangeMetres: double.tryParse(_headRangeController.text.trim()),
                     headUnit: _headUnitController.text.trim(),
-                    outletSize: int.tryParse(_outletSizeController.text.trim()),
+                    outletSizeMM: int.tryParse(_outletSizeController.text.trim()),
                     outletUnit: _outletUnitController.text.trim(),
                     supplyVoltage: int.tryParse(_supplyVoltageController.text.trim()),
                     lph: int.tryParse(_lphController.text.trim()),
                     location: _locationController.text.trim()
                   );
 
-
-
-
-
                   if(_key.currentState!.validate()){
                     final provider = context.read<AdminProvider>();
                     logger.d(payload.toJson());
 
 
-                    await provider.addPumps(payload);
+                     await provider.addPumps(payload);
+                     logger.d(provider.addPumpState.data);
 
-                    if(provider.addPumpState.status==true){
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: CustomText(data: 'Pump Add Successfully')));
-                    _key.currentState?.reset();
-                    }
-                    else if (provider.addPumpState.status == false){
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: CustomText(data: 'Failed To add Pump')));
-                    }
+
+
 
 
                   }

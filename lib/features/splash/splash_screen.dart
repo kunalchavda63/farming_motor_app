@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/src/helper_method.dart';
+import 'package:farming_motor_app/core/utilities/src/strings.dart';
 import 'package:farming_motor_app/features/auth/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _timer = Timer(const Duration(seconds: 2), () {
       if(!mounted) return;
-      getIt<AppRouter>().push<void>( Onboarding());
+      getIt<AppRouter>().push<void>( const Onboarding());
 
     });
   }
@@ -80,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const CustomImageView(path: AssetImages.imgOfficeLogo,height: 200,width: 200,),
-                      CustomText(data: 'Smart Pump Control',style: BaseStyle.s19w500.c(AppColors.hex2e47).family(FontFamily.montserrat),)
+                      CustomText(data: AppStrings.smartPumpControl,style: BaseStyle.s19w500.c(AppColors.hex2e47).family(FontFamily.montserrat),)
                     ],
                   ),
                 )
