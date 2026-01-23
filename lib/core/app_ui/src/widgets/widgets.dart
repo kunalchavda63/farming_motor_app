@@ -13,6 +13,7 @@ export 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_container.d
 export 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_floating_button.dart';
 export 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_imageview.dart';
 export 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_material_icon.dart';
+export 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_switch.dart';
 export 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_text.dart';
 export 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_text_field.dart';
 export 'package:flutter/material.dart';

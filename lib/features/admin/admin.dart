@@ -1,9 +1,11 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
+import 'package:farming_motor_app/core/models/src/pop_up_model.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
-import 'package:farming_motor_app/features/screens/pump_add_screen/pump_setup_screen.dart';
+import 'package:farming_motor_app/features/export_screens.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Admin extends StatefulWidget {
@@ -15,280 +17,329 @@ class Admin extends StatefulWidget {
 }
 
 class _AdminState extends State<Admin> {
+  final GlobalKey _filterKey = GlobalKey();
+
+
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() => context.read<AdminProvider>().loadUsers());
   }
 
+  final List<PopUpModel> filterItems = const [
+    PopUpModel(id: 'az', data: 'az', value: 'az'),
+    PopUpModel(id: 'za', data: 'za', value: 'za'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AdminProvider>();
+    final state = provider.userListState;
 
     return Scaffold(
-      floatingActionButton: CustomFloatingButton(
-        child: const Icon(Icons.roundabout_left),
-        onTap: (){
-          context.read<AdminProvider>().loadUsers();
-        },
-      ),
-      backgroundColor: AppColors.white,
-      body: Row(
+      backgroundColor: AppColors.hexCcd6,
+      body: Stack(
         children: [
-
-          /// SIDEBAR
-          _sideBar(),
-          Expanded(
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+          ),
+          const Positioned.fill(
+            child: CustomImageView(
+              path: AssetImages.imgGreenWhite,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: Builder(
               builder: (_) {
-                final state = provider.userListState;
-                if (state.loading == true) {
-                  return const Center(child: CircularProgressIndicator());
+                if (state.loading || state.initial) {
+                  return const Center(
+                    child: CircularProgressIndicator(strokeWidth: 1),
+                  );
                 }
 
                 if (state.error != null) {
-                  return Center(
-                    child: CustomText(data: state.error!),
-                  );
+                  return Center(child: CustomText(data: state.error!));
                 }
 
-                if (state.data?.isEmpty == true) {
-                  return const Center(
-                    child: CustomText(data: 'No users found'),
-                  );
-                }
-                else {
-                  return _userListView(provider.userListState.data,loading: provider.userListState.loading,error: provider.userListState.error);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _header(),
+                    const SizedBox(height: 20),
 
-                }
+                    /// 🔹 STAT CARDS
+                    Row(
+                      children: [
+                        _statCard(
+                          title: AppStrings.totalUsers,
+                          value: '${state.data?.length ?? 0}',
+                          icon: AssetIcons.icUser,
+                        ),
+                      ],
+                    ),
 
-                /// ✅ SUCCESS UI
+                    const SizedBox(height: 30),
+                    CustomContainer(
+                      borderRadius: BorderRadius.circular(10),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+
+                      color: AppColors.black10,
+                      child: Column(
+                        children: [
+                          CustomContainer(
+                            h: 60,
+                            child: Stack(
+                              alignment: AlignmentGeometry.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    _headerText('Sr.No', flex: 1),
+                                    _headerText(AppStrings.name, flex: 3),
+                                    _headerText('Created Date', flex: 2),
+                                    _headerText('Updated Date', flex: 2),
+                                    _headerText('Pump Type', flex: 2),
+                                    _headerText(
+                                      AppStrings.changePassword,
+                                      flex: 2,
+                                    ),
+                                    _headerText(AppStrings.addDevice, flex: 2),
+                                  ],
+                                ),
+                                Positioned(
+                                  right: 20,
+                                  bottom: 10,
+                                  child: Container(
+                                    key: _filterKey, // 🔥 YAHI IMPORTANT HAI
+                                    child: CustomCircleSvgIcon(
+                                      onTap: () async {
+                                        final selectedItem = await context.showCustomPopupMenu(
+                                          color: AppColors.white,
+                                          anchorKey: _filterKey,
+                                          ctx: context,
+                                          items: filterItems,
+                                          itemBuilder: (items) {
+                                            return CustomContainer(
+                                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                              borderRadius: BorderRadius.circular(5),
+                                              border: Border.all(width: 0.1),
+                                              color: AppColors.hex2e47.withOAlpha(0.10),
+                                              w: MediaQuery.of(context).size.width,
+                                              child: CustomText(
+                                                data: items.data,
+                                                style: BaseStyle.s14w500.c(AppColors.hex2e47),
+                                              ),
+                                            );
+                                          },
+                                        );
+
+                                        context.read<AdminProvider>().setSortOrder(selectedItem == 'az' ? SortOrder.az:SortOrder.za);
+                                      },
+                                      iconH: 14,
+                                      iconW: 14,
+                                      fit: BoxFit.cover,
+                                      path: AssetIcons.icHistory,
+                                      iconColor: AppColors.black,
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ),
+
+                          /// 🔹 USER LIST
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.data?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              final user = state.data![index];
+                              return _userTile(user, index);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
               },
             ),
           ),
-
         ],
       ),
     );
   }
 
-  Widget _sideBar() {
-    return CustomContainer(
-      w: 260,
-      color: AppColors.hex2e47.withOAlpha(0.15),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomText(
-            data: 'Admin Panel',
-            style: BaseStyle.s15w700,
-          ),
-          const SizedBox(height: 30),
-
-          _sideItem('Home', AssetIcons.icHome),
-          _sideItem('Users', AssetIcons.icUser),
-          _sideItem('Settings', AssetIcons.icSearch),
-        ],
-      ),
-    );
-  }
-
-  Widget _sideItem(String title, String icon) {
-    return CustomContainer(
-      h: 48,
-      margin: const EdgeInsets.only(bottom: 10),
-      borderRadius: BorderRadius.circular(12),
-      color: AppColors.white,
-      child: Row(
-        children: [
-          CustomCircleSvgIcon(path: icon),
-          const SizedBox(width: 12),
-          CustomText(data: title),
-        ],
-      ),
-    );
-  }
-
+  /// ================= HEADER =================
   Widget _header() {
     return CustomText(
-      data: 'Dashboard',
-      style: BaseStyle.s8w700,
+      data: 'Admin Dashboard',
+      style: BaseStyle.s18w400.c(AppColors.hex2e47).letter(1.2),
     );
   }
 
+  /// ================= 3D CARD BASE =================
+  Widget _threeDCard({required Widget child, VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: CustomContainer(
+        padding: const EdgeInsets.all(16),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: const [
+          BoxShadow(color: AppColors.white, blurRadius: 1),
+          BoxShadow(
+            color: AppColors.black10,
+            offset: Offset(2, 1),
+            blurRadius: 100,
+          ),
+        ],
+        child: child,
+      ),
+    );
+  }
+
+  /// ================= STAT CARD =================
   Widget _statCard({
     required String title,
     required String value,
     required String icon,
   }) {
-    return Expanded(
-      child: CustomContainer(
-        h: 120,
-        borderRadius: BorderRadius.circular(20),
-        color: AppColors.hexCcd6,
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          children: [
-            CustomCircleSvgIcon(path: icon),
-            const SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomText(data: title),
-                const SizedBox(height: 8),
-                CustomText(
-                  data: value,
-                  style: BaseStyle.s20w400,
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-  Widget _actionCard({
-    required String title,
-    required String icon,
-    required VoidCallback onTap,
-  }) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: CustomContainer(
-          h: 120,
-          borderRadius: BorderRadius.circular(20),
-          color: AppColors.hexDAdb,
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              CustomCircleSvgIcon(path: icon),
-              const SizedBox(width: 20),
-              CustomText(
-                data: title,
-                style: BaseStyle.s15w700.copyWith(color: AppColors.white),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _cardOnTap({
-    String? label,
-    VoidCallback? onTap,
-    Color? bgColor,
-}){
-    return CustomContainer(
-      onTap: onTap,
-        padding: const EdgeInsets.symmetric(
-            horizontal: 9,
-            vertical: 3
-        ),
-        borderRadius: BorderRadius.circular(20),
-        color: bgColor ?? AppColors.white,
+    return _threeDCard(
       child: Row(
         children: [
-          const CustomCircleSvgIcon(
-            bgColor: AppColors.black10,
-            path: AssetIcons.icEdit,
-          ).padRight(10),
-          CustomText(data: label ?? AppStrings.changePassword,style: BaseStyle.s14w400.c(AppColors.black).family(FontFamily.montserrat),),
-        ],
-      ),
-      );
-
-  }
-  Widget _userListView(List<User?>? users, {bool loading = false, String? error}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _header(),
-        const SizedBox(height: 20),
-
-        Row(
-          children: [
-            _statCard(
-              title: AppStrings.changePassword,
-              value: '${users?.length ?? 0}',
-              icon: AssetIcons.icUser,
-            ),
-            const SizedBox(width: 20),
-            _actionCard(
-              title: AppStrings.changePassword,
-              icon: AssetIcons.icLock,
-              onTap: () {},
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 30),
-
-        /// ✅ Content Area
-        Expanded(
-          child: Builder(
-            builder: (_) {
-              if (loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (error != null) {
-                return Center(child: CustomText(data: error));
-              }
-              if (users == null || users.isEmpty) {
-                return const Center(child: CustomText(data: AppStrings.noUsersFound));
-              }
-
-              return ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  final user = users[index];
-                  return _userItem(user, index);
-                },
-              );
-            },
+          CustomCircleSvgIcon(
+            path: icon,
+            bgColor: AppColors.hex5474.withOAlpha(0.15),
           ),
-        ),
-      ],
-    ).padH(20);
-  }
-
-
-  Widget _userItem(User? user, int index) {
-    return CustomContainer(
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.only(bottom: 10),
-      borderRadius: BorderRadius.circular(10),
-      color: AppColors.hexDAdb,
-      child: Row(
-        children: [
-          CustomText(data: '${index + 1}'),
-          const SizedBox(width: 15),
+          const SizedBox(width: 14),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(data: '${user?.firstName} ${user?.lastName}'),
-              CustomText(data: user?.mobileNumber ?? ''),
-              CustomText(data: user?.id ?? ''),
+              CustomText(
+                data: title,
+                style: BaseStyle.s14w400.c(AppColors.hex2e47),
+              ),
+              const SizedBox(height: 6),
+              CustomText(
+                data: value,
+                style: BaseStyle.s23w500.c(AppColors.hex5474),
+              ),
             ],
           ),
-          const Spacer(),
-          _cardOnTap(
-            label: 'Add Pump',
-            bgColor: AppColors.hex5474.withOAlpha(0.2),
-            onTap: () {
-              getIt<AppRouter>().push<void>(PumpSetupScreen(customerId: user?.id ??''));
-            },
-          ).padRight(20),
-          _cardOnTap(),
         ],
       ),
     );
   }
 
+  /// ================= USER TILE =================
+  Widget _userTile(User user, int index) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: _threeDCard(
+        child: Row(
+          children: [
+            // Sr.No
+            Expanded(
+              child: CustomText(data: '${index + 1}', style: BaseStyle.s14w400),
+            ),
 
+            // Name
+            Expanded(
+              flex: 3,
+              child: CustomText(
+                data: '${user.firstName} ${user.lastName}',
+                style: BaseStyle.s14w400,
+              ),
+            ),
+
+            // Created Date
+            Expanded(
+              flex: 2,
+              child: CustomText(
+                data: formatDateFromString(user.createdAt),
+                style: BaseStyle.s14w400,
+              ),
+            ),
+
+            // Updated Date
+            Expanded(
+              flex: 2,
+              child: CustomText(
+                data: formatDateFromString(user.updatedAt),
+
+                style: BaseStyle.s14w400,
+              ),
+            ),
+
+            // Pump Type
+            Expanded(
+              flex: 2,
+              child: CustomText(
+                data: user.password ?? '-',
+                style: BaseStyle.s14w400,
+              ),
+            ),
+
+            // Change Password
+            Expanded(
+              flex: 2,
+              child: _actionButton(
+                label: AppStrings.changePassword,
+                onTap: () {
+                  // change password logic
+                },
+              ).padRight(40),
+            ),
+
+            // Add Device
+            Expanded(
+              flex: 2,
+              child: _actionButton(
+                label: AppStrings.addDevice,
+                onTap: () {
+                  getIt<AppRouter>().push<void>(
+                    PumpSetupScreen(customerId: user.id ?? ''),
+                  );
+                },
+              ).padRight(40),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _headerText(String text, {required int flex}) {
+    return Expanded(
+      flex: flex,
+      child: CustomText(
+        data: text,
+        style: BaseStyle.s14w500.c(AppColors.black),
+      ),
+    );
+  }
+
+  /// ================= 3D ACTION BUTTON =================
+  Widget _actionButton({required String label, required VoidCallback onTap}) {
+    return CustomContainer(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      color: AppColors.hexDAdb,
+      borderRadius: BorderRadius.circular(12),
+      child: CustomText(
+        data: label,
+        style: BaseStyle.s14w400.c(AppColors.black),
+      ),
+    );
+  }
 }
 
-
+String formatDateFromString(String? date) {
+  if (date == null || date.isEmpty) return '-';
+  final parsedDate = DateTime.parse(date);
+  return DateFormat('dd-MM-yyyy').format(parsedDate);
+}

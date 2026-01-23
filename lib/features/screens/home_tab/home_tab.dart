@@ -1,5 +1,4 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/app_ui/src/widgets/src/custom_switch.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
@@ -19,7 +18,9 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final LocalPreferences _prefs = LocalPreferences();
-  bool? isActive = false;
+  Map<int, bool> showInfoMap = {};
+  Map<int, bool> isActiveMap = {};
+
   @override
   void didChangeDependencies() {
     setStatusBarLightStyle();
@@ -152,9 +153,10 @@ class _HomeTabState extends State<HomeTab> {
           itemBuilder: (context, index) {
             final pump = state.data![index];
 
+
             return CustomAnimationWrapper(
-              animationType: AnimationTypes.fadeScale,
-              duration: const Duration(milliseconds: 400),
+              animationType: AnimationTypes.slideFromTop,
+              duration: const Duration(milliseconds: 200),
               curve: Curves.easeIn,
               child: CustomContainer(
                 borderRadius: BorderRadius.circular(10),
@@ -177,10 +179,21 @@ class _HomeTabState extends State<HomeTab> {
                           border: Border.all(color: AppColors.hex5474),
                           child: CustomText(data: '${index+1}'),
                         ),
-                        CustomText(data: pump.serialNumber ?? '',style: BaseStyle.s14w400.c(AppColors.black).family(FontFamily.montserrat).w(700),).padH(10)
+                        CustomText(data: pump.serialNumber ?? '',style: BaseStyle.s14w400.c(AppColors.black).family(FontFamily.montserrat).w(700),).padH(10),
+                        const Spacer(),
+                        GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                showInfoMap[index] = !(showInfoMap[index] ?? false);
+
+                              });
+                            },
+                            child: const Icon(Icons.info_outline))
+
 
                       ],
                     ).padBottom(10),
+                    
                     CustomContainer(
                       padding: const EdgeInsets.symmetric(
                           vertical: 5,
@@ -194,10 +207,9 @@ class _HomeTabState extends State<HomeTab> {
                           Row(
                             children: [
                               CustomText(data: AppStrings.switchOnOff,style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),),
-                              const Spacer(),
-                              CustomSwitch(value:isActive?? false, onChanged:(v){
+                            const Spacer(),
+                              CustomSwitch(value:false, onChanged:(v){
                                 setState(() {
-                                  isActive = !isActive!;
                                 });
                               })
                             ],
@@ -207,11 +219,35 @@ class _HomeTabState extends State<HomeTab> {
                     ).padBottom(10),
                     timerBox(label: AppStrings.startTime),
                     timerBox(label: '${AppStrings.endTime}  '),
+                    Visibility(
+                      visible: showInfoMap[index] ?? false,
+                      child: CustomContainer(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(),
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                            children: [
+                              _infoRow('Serial Number',pump.serialNumber.toString()),
+                              _infoRow('Pump Name',pump.pumpName.toString()),
+                              _infoRow('Pump ID',pump.serialNumber.toString()),
+                              _infoRow('Capacity Unit',pump.capacityUnit.toString()),
+                              _infoRow('Head Unit',pump.headUnit.toString()),
+                              _infoRow('Phase Type',pump.phase.toString()),
+                              _infoRow('Supply Voltage',pump.supplyVoltage.toString()),
+                              _infoRow('LPH ',pump.lph.toString()),
+                              _infoRow('Location',pump.location.toString()),
+
+                            ],
+                          ),
+                      ),
+                    )
+
 
                   ],
                 ),
               ),
-);
+).padBottom(20);
           },
         )
 
@@ -329,6 +365,15 @@ class _HomeTabState extends State<HomeTab> {
             .family(FontFamily.montserrat),
       ),
     );
+  }
+  Widget _infoRow(String? title,String? value){
+    return Row(
+      children: [
+        Expanded(child: CustomText(data: '$title :',style: BaseStyle.s14w400.c(AppColors.hex5474).family(FontFamily.montserrat).w(500),)),
+        Expanded(child: CustomText(data: '$value',style: BaseStyle.s16w400.c(AppColors.black),))
+      ],
+    ).padH(14).padV(1);
+
   }
 }
 

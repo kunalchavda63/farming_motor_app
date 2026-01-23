@@ -37,7 +37,7 @@ class AppStrings {
   static const String createAnAccount = 'Create An Account';
   static const String pleaseFillTheBelowInformation = 'Please fill the below informations.';
   static const String doNotWorryItHappens =  'Don’t worry! it happens. please enter the mobile number which is associated your account';
-  static const String setupUFirstPump = 'First Pump Configuration';
+  static const String pumpConfiguration = 'Pump Configuration';
   static const String enterPowerRating = 'Enter Power Rating';
   static const String selectPowerUnit = 'Select Power Unit';
   static const String selectPhaseType = 'Select Phase Type';
@@ -115,6 +115,7 @@ class AppStrings {
   static const String someThinkWentWrong = 'Something went wrong';
   static const String userProfile = 'User Profile';
   static const String logOut = 'Log Out';
+  static const String addDevice = 'Add Device';
 
 
 

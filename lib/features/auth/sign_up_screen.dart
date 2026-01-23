@@ -79,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Positioned.fill(
-                  child: LayoutBuilder(
+                  child:  LayoutBuilder(
                     builder: (context, constraints) {
                       final double maxWidth = constraints.maxWidth;
                       final double maxHeight = constraints.maxHeight;

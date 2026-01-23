@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PumpDetailModel {
 
-@JsonKey(name: '_id') String? get id; String? get serialNumber; String? get pumpID; String? get pumpName; String? get location; int? get phase; double? get capacitykW; int? get lph; double? get headRangeMetres; int? get outletSizeMM; int? get supplyVoltage; String? get capacityUnit; String? get headUnit; String? get outletUnit; String? get currentStatus; String? get customer; bool? get isActive; int? get lastSwitchedOnDuration; int? get totalLifetimeDuration; DateTime? get installationDate; DateTime? get createdAt; DateTime? get updatedAt; List<dynamic>? get schedules; DisplaySpecsModel? get displaySpecs;
+@JsonKey(name: '_id') String? get id; String? get serialNumber; String? get pumpID; String? get pumpName; String? get location; int? get phase; double? get capacitykW; int? get lph; double? get headRangeMetres; int? get outletSizeMM; int? get supplyVoltage; String? get capacityUnit; String? get headUnit; String? get outletUnit; String? get currentStatus; String? get customer; bool? get isActive; int? get lastSwitchedOnDuration; int? get totalLifetimeDuration; DateTime? get installationDate; DateTime? get createdAt; DateTime? get updatedAt; List<dynamic>? get schedules; Map<String, dynamic>? get displaySpecs;
 /// Create a copy of PumpDetailModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,12 +28,12 @@ $PumpDetailModelCopyWith<PumpDetailModel> get copyWith => _$PumpDetailModelCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PumpDetailModel&&(identical(other.id, id) || other.id == id)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpID, pumpID) || other.pumpID == pumpID)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.location, location) || other.location == location)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.capacitykW, capacitykW) || other.capacitykW == capacitykW)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.headRangeMetres, headRangeMetres) || other.headRangeMetres == headRangeMetres)&&(identical(other.outletSizeMM, outletSizeMM) || other.outletSizeMM == outletSizeMM)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.currentStatus, currentStatus) || other.currentStatus == currentStatus)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.lastSwitchedOnDuration, lastSwitchedOnDuration) || other.lastSwitchedOnDuration == lastSwitchedOnDuration)&&(identical(other.totalLifetimeDuration, totalLifetimeDuration) || other.totalLifetimeDuration == totalLifetimeDuration)&&(identical(other.installationDate, installationDate) || other.installationDate == installationDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.schedules, schedules)&&(identical(other.displaySpecs, displaySpecs) || other.displaySpecs == displaySpecs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PumpDetailModel&&(identical(other.id, id) || other.id == id)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpID, pumpID) || other.pumpID == pumpID)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.location, location) || other.location == location)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.capacitykW, capacitykW) || other.capacitykW == capacitykW)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.headRangeMetres, headRangeMetres) || other.headRangeMetres == headRangeMetres)&&(identical(other.outletSizeMM, outletSizeMM) || other.outletSizeMM == outletSizeMM)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.currentStatus, currentStatus) || other.currentStatus == currentStatus)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.lastSwitchedOnDuration, lastSwitchedOnDuration) || other.lastSwitchedOnDuration == lastSwitchedOnDuration)&&(identical(other.totalLifetimeDuration, totalLifetimeDuration) || other.totalLifetimeDuration == totalLifetimeDuration)&&(identical(other.installationDate, installationDate) || other.installationDate == installationDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.schedules, schedules)&&const DeepCollectionEquality().equals(other.displaySpecs, displaySpecs));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,serialNumber,pumpID,pumpName,location,phase,capacitykW,lph,headRangeMetres,outletSizeMM,supplyVoltage,capacityUnit,headUnit,outletUnit,currentStatus,customer,isActive,lastSwitchedOnDuration,totalLifetimeDuration,installationDate,createdAt,updatedAt,const DeepCollectionEquality().hash(schedules),displaySpecs]);
+int get hashCode => Object.hashAll([runtimeType,id,serialNumber,pumpID,pumpName,location,phase,capacitykW,lph,headRangeMetres,outletSizeMM,supplyVoltage,capacityUnit,headUnit,outletUnit,currentStatus,customer,isActive,lastSwitchedOnDuration,totalLifetimeDuration,installationDate,createdAt,updatedAt,const DeepCollectionEquality().hash(schedules),const DeepCollectionEquality().hash(displaySpecs)]);
 
 @override
 String toString() {
@@ -48,11 +48,11 @@ abstract mixin class $PumpDetailModelCopyWith<$Res>  {
   factory $PumpDetailModelCopyWith(PumpDetailModel value, $Res Function(PumpDetailModel) _then) = _$PumpDetailModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, DisplaySpecsModel? displaySpecs
+@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, Map<String, dynamic>? displaySpecs
 });
 
 
-$DisplaySpecsModelCopyWith<$Res>? get displaySpecs;
+
 
 }
 /// @nodoc
@@ -91,22 +91,10 @@ as DateTime?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ig
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,schedules: freezed == schedules ? _self.schedules : schedules // ignore: cast_nullable_to_non_nullable
 as List<dynamic>?,displaySpecs: freezed == displaySpecs ? _self.displaySpecs : displaySpecs // ignore: cast_nullable_to_non_nullable
-as DisplaySpecsModel?,
+as Map<String, dynamic>?,
   ));
 }
-/// Create a copy of PumpDetailModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$DisplaySpecsModelCopyWith<$Res>? get displaySpecs {
-    if (_self.displaySpecs == null) {
-    return null;
-  }
 
-  return $DisplaySpecsModelCopyWith<$Res>(_self.displaySpecs!, (value) {
-    return _then(_self.copyWith(displaySpecs: value));
-  });
-}
 }
 
 
@@ -188,7 +176,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  DisplaySpecsModel? displaySpecs)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PumpDetailModel() when $default != null:
 return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
@@ -209,7 +197,7 @@ return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.lo
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  DisplaySpecsModel? displaySpecs)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)  $default,) {final _that = this;
 switch (_that) {
 case _PumpDetailModel():
 return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
@@ -229,7 +217,7 @@ return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.lo
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  DisplaySpecsModel? displaySpecs)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)?  $default,) {final _that = this;
 switch (_that) {
 case _PumpDetailModel() when $default != null:
 return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
@@ -244,7 +232,7 @@ return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.lo
 @JsonSerializable()
 
 class _PumpDetailModel implements PumpDetailModel {
-  const _PumpDetailModel({@JsonKey(name: '_id') this.id, this.serialNumber, this.pumpID, this.pumpName, this.location, this.phase, this.capacitykW, this.lph, this.headRangeMetres, this.outletSizeMM, this.supplyVoltage, this.capacityUnit, this.headUnit, this.outletUnit, this.currentStatus, this.customer, this.isActive, this.lastSwitchedOnDuration, this.totalLifetimeDuration, this.installationDate, this.createdAt, this.updatedAt, final  List<dynamic>? schedules, this.displaySpecs}): _schedules = schedules;
+  const _PumpDetailModel({@JsonKey(name: '_id') this.id, this.serialNumber, this.pumpID, this.pumpName, this.location, this.phase, this.capacitykW, this.lph, this.headRangeMetres, this.outletSizeMM, this.supplyVoltage, this.capacityUnit, this.headUnit, this.outletUnit, this.currentStatus, this.customer, this.isActive, this.lastSwitchedOnDuration, this.totalLifetimeDuration, this.installationDate, this.createdAt, this.updatedAt, final  List<dynamic>? schedules, final  Map<String, dynamic>? displaySpecs}): _schedules = schedules,_displaySpecs = displaySpecs;
   factory _PumpDetailModel.fromJson(Map<String, dynamic> json) => _$PumpDetailModelFromJson(json);
 
 @override@JsonKey(name: '_id') final  String? id;
@@ -278,7 +266,15 @@ class _PumpDetailModel implements PumpDetailModel {
   return EqualUnmodifiableListView(value);
 }
 
-@override final  DisplaySpecsModel? displaySpecs;
+ final  Map<String, dynamic>? _displaySpecs;
+@override Map<String, dynamic>? get displaySpecs {
+  final value = _displaySpecs;
+  if (value == null) return null;
+  if (_displaySpecs is EqualUnmodifiableMapView) return _displaySpecs;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
 
 /// Create a copy of PumpDetailModel
 /// with the given fields replaced by the non-null parameter values.
@@ -293,12 +289,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PumpDetailModel&&(identical(other.id, id) || other.id == id)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpID, pumpID) || other.pumpID == pumpID)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.location, location) || other.location == location)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.capacitykW, capacitykW) || other.capacitykW == capacitykW)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.headRangeMetres, headRangeMetres) || other.headRangeMetres == headRangeMetres)&&(identical(other.outletSizeMM, outletSizeMM) || other.outletSizeMM == outletSizeMM)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.currentStatus, currentStatus) || other.currentStatus == currentStatus)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.lastSwitchedOnDuration, lastSwitchedOnDuration) || other.lastSwitchedOnDuration == lastSwitchedOnDuration)&&(identical(other.totalLifetimeDuration, totalLifetimeDuration) || other.totalLifetimeDuration == totalLifetimeDuration)&&(identical(other.installationDate, installationDate) || other.installationDate == installationDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other._schedules, _schedules)&&(identical(other.displaySpecs, displaySpecs) || other.displaySpecs == displaySpecs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PumpDetailModel&&(identical(other.id, id) || other.id == id)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.pumpID, pumpID) || other.pumpID == pumpID)&&(identical(other.pumpName, pumpName) || other.pumpName == pumpName)&&(identical(other.location, location) || other.location == location)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.capacitykW, capacitykW) || other.capacitykW == capacitykW)&&(identical(other.lph, lph) || other.lph == lph)&&(identical(other.headRangeMetres, headRangeMetres) || other.headRangeMetres == headRangeMetres)&&(identical(other.outletSizeMM, outletSizeMM) || other.outletSizeMM == outletSizeMM)&&(identical(other.supplyVoltage, supplyVoltage) || other.supplyVoltage == supplyVoltage)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit)&&(identical(other.currentStatus, currentStatus) || other.currentStatus == currentStatus)&&(identical(other.customer, customer) || other.customer == customer)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.lastSwitchedOnDuration, lastSwitchedOnDuration) || other.lastSwitchedOnDuration == lastSwitchedOnDuration)&&(identical(other.totalLifetimeDuration, totalLifetimeDuration) || other.totalLifetimeDuration == totalLifetimeDuration)&&(identical(other.installationDate, installationDate) || other.installationDate == installationDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other._schedules, _schedules)&&const DeepCollectionEquality().equals(other._displaySpecs, _displaySpecs));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,serialNumber,pumpID,pumpName,location,phase,capacitykW,lph,headRangeMetres,outletSizeMM,supplyVoltage,capacityUnit,headUnit,outletUnit,currentStatus,customer,isActive,lastSwitchedOnDuration,totalLifetimeDuration,installationDate,createdAt,updatedAt,const DeepCollectionEquality().hash(_schedules),displaySpecs]);
+int get hashCode => Object.hashAll([runtimeType,id,serialNumber,pumpID,pumpName,location,phase,capacitykW,lph,headRangeMetres,outletSizeMM,supplyVoltage,capacityUnit,headUnit,outletUnit,currentStatus,customer,isActive,lastSwitchedOnDuration,totalLifetimeDuration,installationDate,createdAt,updatedAt,const DeepCollectionEquality().hash(_schedules),const DeepCollectionEquality().hash(_displaySpecs)]);
 
 @override
 String toString() {
@@ -313,11 +309,11 @@ abstract mixin class _$PumpDetailModelCopyWith<$Res> implements $PumpDetailModel
   factory _$PumpDetailModelCopyWith(_PumpDetailModel value, $Res Function(_PumpDetailModel) _then) = __$PumpDetailModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, DisplaySpecsModel? displaySpecs
+@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, Map<String, dynamic>? displaySpecs
 });
 
 
-@override $DisplaySpecsModelCopyWith<$Res>? get displaySpecs;
+
 
 }
 /// @nodoc
@@ -355,298 +351,8 @@ as int?,installationDate: freezed == installationDate ? _self.installationDate :
 as DateTime?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,schedules: freezed == schedules ? _self._schedules : schedules // ignore: cast_nullable_to_non_nullable
-as List<dynamic>?,displaySpecs: freezed == displaySpecs ? _self.displaySpecs : displaySpecs // ignore: cast_nullable_to_non_nullable
-as DisplaySpecsModel?,
-  ));
-}
-
-/// Create a copy of PumpDetailModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$DisplaySpecsModelCopyWith<$Res>? get displaySpecs {
-    if (_self.displaySpecs == null) {
-    return null;
-  }
-
-  return $DisplaySpecsModelCopyWith<$Res>(_self.displaySpecs!, (value) {
-    return _then(_self.copyWith(displaySpecs: value));
-  });
-}
-}
-
-
-/// @nodoc
-mixin _$DisplaySpecsModel {
-
- String? get capacity; String? get capacityUnit; String? get headRange; String? get headUnit; int? get outletSize; String? get outletUnit;
-/// Create a copy of DisplaySpecsModel
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$DisplaySpecsModelCopyWith<DisplaySpecsModel> get copyWith => _$DisplaySpecsModelCopyWithImpl<DisplaySpecsModel>(this as DisplaySpecsModel, _$identity);
-
-  /// Serializes this DisplaySpecsModel to a JSON map.
-  Map<String, dynamic> toJson();
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DisplaySpecsModel&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headRange, headRange) || other.headRange == headRange)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletSize, outletSize) || other.outletSize == outletSize)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,capacity,capacityUnit,headRange,headUnit,outletSize,outletUnit);
-
-@override
-String toString() {
-  return 'DisplaySpecsModel(capacity: $capacity, capacityUnit: $capacityUnit, headRange: $headRange, headUnit: $headUnit, outletSize: $outletSize, outletUnit: $outletUnit)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $DisplaySpecsModelCopyWith<$Res>  {
-  factory $DisplaySpecsModelCopyWith(DisplaySpecsModel value, $Res Function(DisplaySpecsModel) _then) = _$DisplaySpecsModelCopyWithImpl;
-@useResult
-$Res call({
- String? capacity, String? capacityUnit, String? headRange, String? headUnit, int? outletSize, String? outletUnit
-});
-
-
-
-
-}
-/// @nodoc
-class _$DisplaySpecsModelCopyWithImpl<$Res>
-    implements $DisplaySpecsModelCopyWith<$Res> {
-  _$DisplaySpecsModelCopyWithImpl(this._self, this._then);
-
-  final DisplaySpecsModel _self;
-  final $Res Function(DisplaySpecsModel) _then;
-
-/// Create a copy of DisplaySpecsModel
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? capacity = freezed,Object? capacityUnit = freezed,Object? headRange = freezed,Object? headUnit = freezed,Object? outletSize = freezed,Object? outletUnit = freezed,}) {
-  return _then(_self.copyWith(
-capacity: freezed == capacity ? _self.capacity : capacity // ignore: cast_nullable_to_non_nullable
-as String?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
-as String?,headRange: freezed == headRange ? _self.headRange : headRange // ignore: cast_nullable_to_non_nullable
-as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
-as String?,outletSize: freezed == outletSize ? _self.outletSize : outletSize // ignore: cast_nullable_to_non_nullable
-as int?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
-as String?,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [DisplaySpecsModel].
-extension DisplaySpecsModelPatterns on DisplaySpecsModel {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DisplaySpecsModel value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _DisplaySpecsModel() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DisplaySpecsModel value)  $default,){
-final _that = this;
-switch (_that) {
-case _DisplaySpecsModel():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DisplaySpecsModel value)?  $default,){
-final _that = this;
-switch (_that) {
-case _DisplaySpecsModel() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? capacity,  String? capacityUnit,  String? headRange,  String? headUnit,  int? outletSize,  String? outletUnit)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _DisplaySpecsModel() when $default != null:
-return $default(_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? capacity,  String? capacityUnit,  String? headRange,  String? headUnit,  int? outletSize,  String? outletUnit)  $default,) {final _that = this;
-switch (_that) {
-case _DisplaySpecsModel():
-return $default(_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? capacity,  String? capacityUnit,  String? headRange,  String? headUnit,  int? outletSize,  String? outletUnit)?  $default,) {final _that = this;
-switch (_that) {
-case _DisplaySpecsModel() when $default != null:
-return $default(_that.capacity,_that.capacityUnit,_that.headRange,_that.headUnit,_that.outletSize,_that.outletUnit);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _DisplaySpecsModel implements DisplaySpecsModel {
-  const _DisplaySpecsModel({this.capacity, this.capacityUnit, this.headRange, this.headUnit, this.outletSize, this.outletUnit});
-  factory _DisplaySpecsModel.fromJson(Map<String, dynamic> json) => _$DisplaySpecsModelFromJson(json);
-
-@override final  String? capacity;
-@override final  String? capacityUnit;
-@override final  String? headRange;
-@override final  String? headUnit;
-@override final  int? outletSize;
-@override final  String? outletUnit;
-
-/// Create a copy of DisplaySpecsModel
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$DisplaySpecsModelCopyWith<_DisplaySpecsModel> get copyWith => __$DisplaySpecsModelCopyWithImpl<_DisplaySpecsModel>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$DisplaySpecsModelToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DisplaySpecsModel&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.capacityUnit, capacityUnit) || other.capacityUnit == capacityUnit)&&(identical(other.headRange, headRange) || other.headRange == headRange)&&(identical(other.headUnit, headUnit) || other.headUnit == headUnit)&&(identical(other.outletSize, outletSize) || other.outletSize == outletSize)&&(identical(other.outletUnit, outletUnit) || other.outletUnit == outletUnit));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,capacity,capacityUnit,headRange,headUnit,outletSize,outletUnit);
-
-@override
-String toString() {
-  return 'DisplaySpecsModel(capacity: $capacity, capacityUnit: $capacityUnit, headRange: $headRange, headUnit: $headUnit, outletSize: $outletSize, outletUnit: $outletUnit)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$DisplaySpecsModelCopyWith<$Res> implements $DisplaySpecsModelCopyWith<$Res> {
-  factory _$DisplaySpecsModelCopyWith(_DisplaySpecsModel value, $Res Function(_DisplaySpecsModel) _then) = __$DisplaySpecsModelCopyWithImpl;
-@override @useResult
-$Res call({
- String? capacity, String? capacityUnit, String? headRange, String? headUnit, int? outletSize, String? outletUnit
-});
-
-
-
-
-}
-/// @nodoc
-class __$DisplaySpecsModelCopyWithImpl<$Res>
-    implements _$DisplaySpecsModelCopyWith<$Res> {
-  __$DisplaySpecsModelCopyWithImpl(this._self, this._then);
-
-  final _DisplaySpecsModel _self;
-  final $Res Function(_DisplaySpecsModel) _then;
-
-/// Create a copy of DisplaySpecsModel
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? capacity = freezed,Object? capacityUnit = freezed,Object? headRange = freezed,Object? headUnit = freezed,Object? outletSize = freezed,Object? outletUnit = freezed,}) {
-  return _then(_DisplaySpecsModel(
-capacity: freezed == capacity ? _self.capacity : capacity // ignore: cast_nullable_to_non_nullable
-as String?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
-as String?,headRange: freezed == headRange ? _self.headRange : headRange // ignore: cast_nullable_to_non_nullable
-as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
-as String?,outletSize: freezed == outletSize ? _self.outletSize : outletSize // ignore: cast_nullable_to_non_nullable
-as int?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
-as String?,
+as List<dynamic>?,displaySpecs: freezed == displaySpecs ? _self._displaySpecs : displaySpecs // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,
   ));
 }
 

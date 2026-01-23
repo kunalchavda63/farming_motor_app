@@ -37,11 +37,7 @@ _PumpDetailModel _$PumpDetailModelFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       schedules: json['schedules'] as List<dynamic>?,
-      displaySpecs: json['displaySpecs'] == null
-          ? null
-          : DisplaySpecsModel.fromJson(
-              json['displaySpecs'] as Map<String, dynamic>,
-            ),
+      displaySpecs: json['displaySpecs'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$PumpDetailModelToJson(_PumpDetailModel instance) =>
@@ -70,24 +66,4 @@ Map<String, dynamic> _$PumpDetailModelToJson(_PumpDetailModel instance) =>
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'schedules': instance.schedules,
       'displaySpecs': instance.displaySpecs,
-    };
-
-_DisplaySpecsModel _$DisplaySpecsModelFromJson(Map<String, dynamic> json) =>
-    _DisplaySpecsModel(
-      capacity: json['capacity'] as String?,
-      capacityUnit: json['capacityUnit'] as String?,
-      headRange: json['headRange'] as String?,
-      headUnit: json['headUnit'] as String?,
-      outletSize: (json['outletSize'] as num?)?.toInt(),
-      outletUnit: json['outletUnit'] as String?,
-    );
-
-Map<String, dynamic> _$DisplaySpecsModelToJson(_DisplaySpecsModel instance) =>
-    <String, dynamic>{
-      'capacity': instance.capacity,
-      'capacityUnit': instance.capacityUnit,
-      'headRange': instance.headRange,
-      'headUnit': instance.headUnit,
-      'outletSize': instance.outletSize,
-      'outletUnit': instance.outletUnit,
     };

@@ -28,3 +28,8 @@ enum PumpType {
   submersible,
   centrifugal
 }
+
+enum SortOrder {
+  az,  // A -> Z
+  za,  // Z -> A
+}

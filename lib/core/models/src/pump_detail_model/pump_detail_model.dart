@@ -37,7 +37,7 @@ abstract class PumpDetailModel with _$PumpDetailModel {
 
     List<dynamic>? schedules,
 
-    DisplaySpecsModel? displaySpecs,
+    Map<String,dynamic>? displaySpecs,
   }) = _PumpDetailModel;
 
   factory PumpDetailModel.fromJson(Map<String, dynamic> json) =>
@@ -45,17 +45,3 @@ abstract class PumpDetailModel with _$PumpDetailModel {
 }
 
 
-@freezed
-abstract class DisplaySpecsModel with _$DisplaySpecsModel {
-  const factory DisplaySpecsModel({
-    String? capacity,
-    String? capacityUnit,
-    String? headRange,
-    String? headUnit,
-    int? outletSize,
-    String? outletUnit,
-  }) = _DisplaySpecsModel;
-
-  factory DisplaySpecsModel.fromJson(Map<String, dynamic> json) =>
-      _$DisplaySpecsModelFromJson(json);
-}

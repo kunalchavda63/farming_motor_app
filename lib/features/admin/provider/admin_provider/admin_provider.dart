@@ -12,6 +12,9 @@ class AdminProvider extends ChangeNotifier {
   ApiState<List<User>> userListState = ApiState.initial();
   ApiState<Map<String,dynamic>> addPumpState = ApiState.initial();
 
+  SortOrder _sortOrder = SortOrder.az;
+  SortOrder get  sortOrder => _sortOrder;
+
 
   Future<void> loadUsers() async {
     userListState = ApiState.loading();
@@ -23,6 +26,8 @@ class AdminProvider extends ChangeNotifier {
 
       if (response.success && response.data != null) {
         userListState = ApiState.success(response.data!);
+        _applySorting();
+
       } else {
         userListState = ApiState.error(response.message ?? 'Failed to load users');
       }
@@ -32,8 +37,6 @@ class AdminProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-
-
   Future<void> addPumps(PumpDetailModel pumpDetails) async {
     addPumpState = ApiState.loading();
     notifyListeners();
@@ -54,5 +57,26 @@ class AdminProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+  void setSortOrder(SortOrder order){
+    _sortOrder = order;
+    _applySorting();
+  }
+
+  void _applySorting(){
+    final users = userListState.data;
+    if(users == null) return;
+
+    users.sort((a,b) {
+      final nameA = '${a.firstName} ${a.lastName}'.toLowerCase();
+      final nameB = '${b.firstName} ${b.lastName}'.toLowerCase();
+
+      return _sortOrder == SortOrder.az ? nameA.compareTo(nameB):nameB.compareTo(nameA);
+
+    });
+
+    userListState = ApiState.success(List<User>.from(users));
+    notifyListeners();
+  }
+
 }
 

@@ -4,11 +4,11 @@ import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
-import 'package:farming_motor_app/features/auth/auth.dart';
+import 'package:farming_motor_app/features/auth/build_text_field.dart';
 import 'package:provider/provider.dart';
 
 class PumpSetupScreen extends StatefulWidget {
-  const PumpSetupScreen({super.key,required this.customerId});
+  const PumpSetupScreen({super.key, required this.customerId});
   final String customerId;
 
   @override
@@ -16,17 +16,14 @@ class PumpSetupScreen extends StatefulWidget {
 }
 
 class _PumpSetupScreenState extends State<PumpSetupScreen> {
-  late PumpDetailModel pumpDetailModel;
   late MediaQueryData mCtx;
-
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   final GlobalKey _phaseTypeKey = GlobalKey();
-  final GlobalKey _headUnit = GlobalKey();
   final GlobalKey _capacityUnitKey = GlobalKey();
+  final GlobalKey _headUnitKey = GlobalKey();
   final GlobalKey _outletUnitKey = GlobalKey();
 
-  // Controllers
   final TextEditingController _serialNoController = TextEditingController();
   final TextEditingController _pumpNameController = TextEditingController();
   final TextEditingController _phaseTypeController = TextEditingController();
@@ -40,57 +37,17 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
   final TextEditingController _outletUnitController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
-  // FocusNodes
-  final FocusNode _serialNoFocus = FocusNode();
-  final FocusNode _pumpNameFocus = FocusNode();
-  final FocusNode _phaseTypeFocus = FocusNode();
-  final FocusNode _capacityFocus = FocusNode();
-  final FocusNode _capacityUnitFocus = FocusNode();
-  final FocusNode _supplyVoltageFocus = FocusNode();
-  final FocusNode _lphFocus = FocusNode();
-  final FocusNode _headRangeFocus = FocusNode();
+  final FocusNode _serialNoControllerFocus = FocusNode();
+  final FocusNode _pumpNameControllerFocus = FocusNode();
+  final FocusNode _phaseTypeControllerFocus = FocusNode();
+  final FocusNode _capacityUnitControllerFocus = FocusNode();
+  final FocusNode _supplyVoltageControllerFocus = FocusNode();
+  final FocusNode _lphControllerFocus = FocusNode();
+  final FocusNode _headRangeControllerFocus = FocusNode();
   final FocusNode _headUnitControllerFocus = FocusNode();
-  final FocusNode _outletSizeFocus = FocusNode();
-  final FocusNode _outletUnitFocus = FocusNode();
+  final FocusNode _outletSizeControllerFocus = FocusNode();
+  final FocusNode _outletUnitControllerFocus = FocusNode();
   final FocusNode _locationControllerFocus = FocusNode();
-
-  late String id;
-  @override
-  void initState() {
-    super.initState();
-    logger.d(widget.customerId);
-    id = widget.customerId;
-  }
-
-
-  @override
-  void dispose() {
-    _serialNoController.dispose();
-    _pumpNameController.dispose();
-    _phaseTypeController.dispose();
-    _capacityController.dispose();
-    _capacityUnitController.dispose();
-    _supplyVoltageController.dispose();
-    _lphController.dispose();
-    _headRangeController.dispose();
-    _outletSizeController.dispose();
-    _outletUnitController.dispose();
-    _locationController.dispose();
-
-    _serialNoFocus.dispose();
-    _pumpNameFocus.dispose();
-    _phaseTypeFocus.dispose();
-    _capacityFocus.dispose();
-    _capacityUnitFocus.dispose();
-    _supplyVoltageFocus.dispose();
-    _lphFocus.dispose();
-    _headRangeFocus.dispose();
-    _outletSizeFocus.dispose();
-    _outletUnitFocus.dispose();
-    _locationControllerFocus.dispose();
-
-    super.dispose();
-  }
 
   @override
   void didChangeDependencies() {
@@ -100,270 +57,329 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d(widget.customerId);
     return Scaffold(
       backgroundColor: AppColors.white.withOAlpha(0.90),
       body: Form(
         key: _key,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                 CustomCircleSvgIcon(
-                  path: AssetIcons.icBack,
-                  bgColor: AppColors.black10,
-                  padding: const EdgeInsets.all(10),
-                   onTap: (){
-                    getIt<AppRouter>().pop<void>();
-                   },
-                   
-                ).padAll(10),
+        child: Stack(
+          children: [
+            const Positioned.fill(
+              child: CustomImageView(
+                path: AssetImages.imgBgBig,
+                fit: BoxFit.cover,
+              ),
+            ),
 
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 20,
+              bottom: 20,
 
-              ClipRRect(
-                borderRadius: BorderRadius.circular(100.r),
-                child: const CustomImageView(
-                  path: AssetImages.imgLogo,
-                  height: 48,
-                  width: 48,
-                  fit: BoxFit.cover,
+              child: Center(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isTablet = constraints.maxWidth > 600;
+
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: isTablet ? 700 : constraints.maxWidth * 0.99,
+                        maxHeight: constraints.maxHeight * 0.95,
+                      ),
+                      child: CustomContainer(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppColors.black10,
+                          width: isTablet ? 4 : 2,
+                        ),
+                        color: AppColors.white50,
+                        padding: const EdgeInsets.all(10),
+                        child: CustomContainer(
+                          borderRadius: BorderRadius.circular(14),
+                          color: AppColors.white50,
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    CustomCircleSvgIcon(
+                                      path: AssetIcons.icBack,
+                                      bgColor: AppColors.black10,
+                                      onTap: () {
+                                        getIt<AppRouter>().pop<void>();
+                                      },
+                                    ),
+                                    const Spacer(),
+                                    const CustomImageView(
+                                      path: AssetImages.imgLogo,
+                                      height: 40,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 30),
+
+                                CustomText(
+                                  data: AppStrings.pumpConfiguration,
+                                  style: BaseStyle.s24800
+                                      .w(400)
+                                      .family(FontFamily.montserrat),
+                                ),
+                                const SizedBox(height: 6),
+                                CustomText(
+                                  data: AppStrings.pleaseFillTheBelowInformation,
+                                  style: BaseStyle.s14w400,
+                                ),
+                                const SizedBox(height: 30),
+
+                                /// ----------- FORM FIELDS -------------
+                                BuildTextField(
+                                  focusNode: _serialNoControllerFocus,
+                                  label: AppStrings.enterASerialNumber,
+                                  controller: _serialNoController,
+                                  validator: (v) =>
+                                      Validators.validateRequire(v, 'Required'),
+                                ),
+                                const SizedBox(height: 20),
+
+                                BuildTextField(
+                                  focusNode: _pumpNameControllerFocus,
+
+                                  label: AppStrings.pumpName,
+                                  controller: _pumpNameController,
+                                  validator: (v) =>
+                                      Validators.validateRequire(v, 'Required'),
+                                ),
+                                const SizedBox(height: 20),
+
+                                BuildTextField(
+                                  focusNode: _phaseTypeControllerFocus,
+
+                                  label: AppStrings.selectPhaseType,
+                                  controller: _phaseTypeController,
+                                  isDropdown: true,
+                                  items: const [
+                                    PopUpModel(id: '1', data: '1', value: '1'),
+                                    PopUpModel(id: '3', data: '3', value: '3'),
+                                  ],
+                                  anchorKey: _phaseTypeKey,
+                                  context: context,
+                                  validator: (v) =>
+                                      Validators.validateRequire(v, 'Required'),
+                                ),
+                                const SizedBox(height: 20),
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _capacityUnitControllerFocus,
+
+                                        label: AppStrings.capacity,
+                                        controller: _capacityController,
+                                        textInputType: TextInputType.number,
+                                        validator: (v) => Validators.validateNumbers(
+                                            v, 'Required'),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _capacityUnitControllerFocus,
+
+                                        label: AppStrings.capacityUnit,
+                                        controller: _capacityUnitController,
+                                        isDropdown: true,
+                                        items: const [
+                                          PopUpModel(
+                                              id: 'KW', data: 'KW', value: 'KW'),
+                                          PopUpModel(
+                                              id: 'HP', data: 'HP', value: 'HP'),
+                                        ],
+                                        anchorKey: _capacityUnitKey,
+                                        context: context,
+                                        validator: (v) =>
+                                            Validators.validateRequire(v, 'Required'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _supplyVoltageControllerFocus,
+
+                                        label: AppStrings.supplyVoltage,
+                                        controller: _supplyVoltageController,
+                                        textInputType: TextInputType.number,
+                                        validator: (v) =>
+                                            Validators.validateNumbers(v, 'Required'),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _headUnitControllerFocus,
+
+                                        label: AppStrings.headUnit,
+                                        controller: _headUnitController,
+                                        isDropdown: true,
+                                        items: const [
+                                          PopUpModel(
+                                              id: 'feet',
+                                              data: 'feet',
+                                              value: 'feet'),
+                                          PopUpModel(
+                                              id: 'meter',
+                                              data: 'meter',
+                                              value: 'meter'),
+                                        ],
+                                        anchorKey: _headUnitKey,
+                                        context: context,
+                                        validator: (v) =>
+                                            Validators.validateRequire(v, 'Required'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _lphControllerFocus,
+
+                                        label: AppStrings.lph,
+                                        controller: _lphController,
+                                        textInputType: TextInputType.number,
+                                        validator: (v) =>
+                                            Validators.validateNumbers(v, 'Required'),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _headRangeControllerFocus,
+
+                                        label: AppStrings.headRange,
+                                        controller: _headRangeController,
+                                        textInputType: TextInputType.number,
+                                        validator: (v) =>
+                                            Validators.validateNumbers(v, 'Required'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _outletSizeControllerFocus,
+                                        label: AppStrings.outletSize,
+                                        controller: _outletSizeController,
+                                        textInputType: TextInputType.number,
+                                        validator: (v) =>
+                                            Validators.validateNumbers(v, 'Required'),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: BuildTextField(
+                                        focusNode: _outletUnitControllerFocus,
+
+                                        label: AppStrings.outletUnit,
+                                        controller: _outletUnitController,
+                                        isDropdown: true,
+                                        items: const [
+                                          PopUpModel(
+                                              id: 'inch',
+                                              data: 'inch',
+                                              value: 'inch'),
+                                          PopUpModel(
+                                              id: 'mm',
+                                              data: 'mm',
+                                              value: 'mm'),
+                                        ],
+                                        anchorKey: _outletUnitKey,
+                                        context: context,
+                                        validator: (v) =>
+                                            Validators.validateRequire(v, 'Required'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+
+                                BuildTextField(
+                                  focusNode: _locationControllerFocus,
+
+                                  label: AppStrings.location,
+                                  controller: _locationController,
+                                  validator: (v) =>
+                                      Validators.validateRequire(v, 'Required'),
+                                ),
+
+                                const SizedBox(height: 30),
+
+                                CustomButton(
+                                  label: AppStrings.submit,
+                                  color: AppColors.black.withOAlpha(0.18),
+                                  border:
+                                  Border.all(color: AppColors.hex2e47),
+                                  onTap: () async {
+                                    if (!_key.currentState!.validate()) return;
+
+                                    final payload = PumpDetailModel(
+                                      serialNumber:
+                                      _serialNoController.text.trim(),
+                                      pumpName:
+                                      _pumpNameController.text.trim(),
+                                      customer: widget.customerId,
+                                      phase: int.tryParse(
+                                          _phaseTypeController.text.trim()),
+                                      capacitykW: double.tryParse(
+                                          _capacityController.text.trim()),
+                                      capacityUnit:
+                                      _capacityUnitController.text.trim(),
+                                      headRangeMetres: double.tryParse(
+                                          _headRangeController.text.trim()),
+                                      headUnit:
+                                      _headUnitController.text.trim(),
+                                      outletSizeMM: int.tryParse(
+                                          _outletSizeController.text.trim()),
+                                      outletUnit:
+                                      _outletUnitController.text.trim(),
+                                      supplyVoltage: int.tryParse(
+                                          _supplyVoltageController.text.trim()),
+                                      lph: int.tryParse(
+                                          _lphController.text.trim()),
+                                      location:
+                                      _locationController.text.trim(),
+                                    );
+
+                                    await context
+                                        .read<AdminProvider>()
+                                        .addPumps(payload);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
-
-              const SizedBox(height: 40),
-
-              CustomText(
-                data: AppStrings.setupUFirstPump,
-                style: BaseStyle.s24800
-                    .w(400)
-                    .c(AppColors.black)
-                    .family(FontFamily.montserrat),
-              ),
-
-              const SizedBox(height: 7),
-
-              CustomText(
-                data: AppStrings.pleaseFillTheBelowInformation,
-                style: BaseStyle.s14w400.c(AppColors.black),
-              ),
-
-              const SizedBox(height: 30),
-
-              /// Serial Number
-              BuildTextField(
-                validator: (val) => Validators.validateRequire(val,'Serial Name required'),
-                label: AppStrings.enterASerialNumber,
-                controller: _serialNoController,
-                focusNode: _serialNoFocus,
-              ),
-              const SizedBox(height: 20),
-
-              /// Pump Name
-              BuildTextField(
-                validator: (val) => Validators.validateRequire(val,'Pump Name required'),
-
-                label: AppStrings.pumpName,
-                controller: _pumpNameController,
-                focusNode: _pumpNameFocus,
-              ),
-              const SizedBox(height: 20),
-
-              /// Phase Type
-              BuildTextField(
-                validator: (val) => Validators.validateRequire(val,'Select Phase Type'),
-                label: AppStrings.selectPhaseType,
-                controller: _phaseTypeController,
-                focusNode: _phaseTypeFocus,
-                isDropdown: true,
-                items: const [
-                  PopUpModel(id: '1', data: '1', value: '1'),
-                  PopUpModel(id: '2', data: '3', value: '3'),
-                ],
-                anchorKey: _phaseTypeKey,
-                context: context,
-              ),
-              const SizedBox(height: 20),
-
-              /// Capacity + Unit
-              Row(
-                children: [
-                  Expanded(
-                    child: BuildTextField(
-                      validator: (val) => Validators.validateNumbers(val,'Capacity Required'),
-
-                      label: AppStrings.capacity,
-                      controller: _capacityController,
-                      focusNode: _capacityFocus,
-                      textInputType: TextInputType.number,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: BuildTextField(
-                      validator: (val) => Validators.validateRequire(val,'Select Capacity Unit'),
-                      label: AppStrings.capacityUnit,
-                      controller: _capacityUnitController,
-                      focusNode: _capacityUnitFocus,
-                      isDropdown: true,
-                      items: const [
-                        PopUpModel(id: '1', data: 'KW', value: 'KW'),
-                        PopUpModel(id: '2', data: 'HP', value: 'HP'),
-                      ],
-                      anchorKey: _capacityUnitKey,
-                      context: context,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              /// Supply Voltage
-              Row(
-                children: [
-                  Expanded(
-                    child: BuildTextField(
-                      validator: (val) => Validators.validateNumbers(val,'Supply Voltage Requied'),
-                      label: AppStrings.supplyVoltage,
-                      controller: _supplyVoltageController,
-                      focusNode: _supplyVoltageFocus,
-                      textInputType: TextInputType.number,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: BuildTextField(
-                      label: AppStrings.headUnit,
-                      validator: (val) => Validators.validateRequire(val,'Select Head Unit'),
-
-                      controller: _headUnitController,
-                      focusNode: _headUnitControllerFocus,
-                      isDropdown: true,
-                      items: const [
-                        PopUpModel(id: '1', data: 'feet', value: 'feet'),
-                        PopUpModel(id: '2', data: 'meter', value: 'meter'),
-                      ],
-                      anchorKey: _headUnit,
-                      context: context,
-                    ),
-                  ),
-
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              /// LPH + Head Range
-              Row(
-                children: [
-                  Expanded(
-                    child: BuildTextField(
-                      validator: (val) => Validators.validateNumbers(val,'LPH '),
-
-                      label: AppStrings.lph,
-                      controller: _lphController,
-                      focusNode: _lphFocus,
-                      textInputType: TextInputType.number,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: BuildTextField(
-                      validator: (val) => Validators.validateNumbers(val,'Head Range Required'),
-
-                      label: AppStrings.headRange,
-                      controller: _headRangeController,
-                      focusNode: _headRangeFocus,
-                      textInputType: TextInputType.number,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              /// Outlet Size + Unit
-              Row(
-                children: [
-                  Expanded(
-                    child: BuildTextField(
-                      validator: (val) => Validators.validateNumbers(val,'Outlet Size Required'),
-
-                      label: AppStrings.outletSize,
-                      controller: _outletSizeController,
-                      focusNode: _outletSizeFocus,
-                      textInputType: TextInputType.number,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: BuildTextField(
-                      validator: (val) => Validators.validateRequire(val,'Select Outlet Unit'),
-
-                      label: AppStrings.outletUnit,
-                      controller: _outletUnitController,
-                      focusNode: _outletUnitFocus,
-                      isDropdown: true,
-                      items: const [
-                        PopUpModel(id: '1', data: 'inch', value: 'inch'),
-                        PopUpModel(id: '2', data: 'mm', value: 'mm'),
-                      ],
-                      anchorKey: _outletUnitKey,
-                      context: context,
-                    ),
-                  ),
-                ],
-              ),
-              BuildTextField(
-                validator: (val) => Validators.validateRequire(val,'Location Required'),
-                label: AppStrings.location,
-                controller: _locationController,
-                focusNode: _locationControllerFocus,
-                textInputType: TextInputType.number,
-              ),
-
-              const SizedBox(height: 30),
-
-              CustomButton(
-                onTap: () async{
-                  final payload = PumpDetailModel(
-                    serialNumber: _serialNoController.text.trim(),
-                    pumpName: _pumpNameController.text.trim(),
-                    customer: widget.customerId,
-                    phase: int.tryParse(_phaseTypeController.text.trim()),
-                    capacitykW: double.tryParse(_capacityController.text.trim()),
-                    capacityUnit: _capacityUnitController.text.trim(),
-                    headRangeMetres: double.tryParse(_headRangeController.text.trim()),
-                    headUnit: _headUnitController.text.trim(),
-                    outletSizeMM: int.tryParse(_outletSizeController.text.trim()),
-                    outletUnit: _outletUnitController.text.trim(),
-                    supplyVoltage: int.tryParse(_supplyVoltageController.text.trim()),
-                    lph: int.tryParse(_lphController.text.trim()),
-                    location: _locationController.text.trim()
-                  );
-
-                  if(_key.currentState!.validate()){
-                    final provider = context.read<AdminProvider>();
-                    logger.d(payload.toJson());
-
-
-                     await provider.addPumps(payload);
-                     logger.d(provider.addPumpState.data);
-
-
-
-
-
-                  }
-                },
-                label: AppStrings.submit,
-                color: AppColors.black.withOAlpha(0.18),
-                border: Border.all(color: AppColors.hex2e47),
-              ),
-
-              const SizedBox(height: 40),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
