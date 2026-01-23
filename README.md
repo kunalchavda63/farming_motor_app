@@ -1,7 +1,5 @@
 # 🚜 Farming Motor App (IoT Smart Pump Control)
 
-![Banner](https://github.com/your-username/farming_motor_app/blob/main/assets/readme/banner.png)
-
 ## 📱 Project Overview
 **Farming Motor App** is a specialized Flutter-based IoT solution designed to empower farmers with remote access to their irrigation systems. This app eliminates the need for manual operation by providing a secure, real-time interface to control and monitor water pumps from anywhere.
 
@@ -27,11 +25,11 @@
 
 | Welcome & Login | Admin Dashboard | Profile Settings |
 | :---: | :---: | :---: |
-| <img src="assets/screenshots/login.png" width="200" /> | <img src="assets/screenshots/dashboard.png" width="200" /> | <img src="assets/screenshots/profile.png" width="200" /> |
+| <img src="assets/screenshots/login.jpg" width="200" /> | <img src="assets/screenshots/admin_panel" width="200" /> | <img src="assets/screenshots/home_tab" width="200" /> |
 
 | Motor Status | Device Logs | Logout Screen |
 | :---: | :---: | :---: |
-| <img src="assets/screenshots/status.png" width="200" /> | <img src="assets/screenshots/logs.png" width="200" /> | <img src="assets/screenshots/logout.png" width="200" /> |
+| <img src="assets/screenshots/home_tab_list" width="200" /> | <img src="assets/screenshots/home_tab_drawer" width="200" /> | <img src="assets/screenshots/admin_panel" width="200" /> |
 
 ---
 
