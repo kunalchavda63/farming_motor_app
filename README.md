@@ -25,11 +25,11 @@
 
 | Welcome & Login | Admin Dashboard | Profile Settings |
 | :---: | :---: | :---: |
-| <img src="assets/screenshots/login.jpg" width="200" /> | <img src="assets/screenshots/admin_panel" width="200" /> | <img src="assets/screenshots/home_tab" width="200" /> |
+| <img src="assets/screenshots/login.jpg" width="200" /> | <img src="assets/screenshots/admin_panel.png" width="200" /> | <img src="assets/screenshots/home_tab.jpg" width="200" /> |
 
 | Motor Status | Device Logs | Logout Screen |
 | :---: | :---: | :---: |
-| <img src="assets/screenshots/home_tab_list" width="200" /> | <img src="assets/screenshots/home_tab_drawer" width="200" /> | <img src="assets/screenshots/admin_panel" width="200" /> |
+| <img src="assets/screenshots/home_tab_list.jpg" width="200" /> | <img src="assets/screenshots/home_tab_drawer.jpg" width="200" /> | <img src="assets/screenshots/admin_panel.png" width="200" /> |
 
 ---
 
