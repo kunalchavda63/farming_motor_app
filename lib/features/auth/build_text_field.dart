@@ -1,6 +1,5 @@
 // lib/core/widgets/custom_text_field.dart
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/pop_up_model.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';

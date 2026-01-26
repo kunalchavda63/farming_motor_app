@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:farming_motor_app/core/services/network/base/app_dio_manager.dart';
 import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.dart';
 
 class ApiResponse<T> {
@@ -79,7 +80,8 @@ class HttpMethod {
       }
     } on DioException catch (e, s) {
       logger.e(e, stackTrace: s);
-      return ApiResponse.error(e.toString());
+      return ApiResponse.error(DioErrorHandler.getMessage(e));
+
     }
   }
 
@@ -101,7 +103,7 @@ class HttpMethod {
 
       return ApiResponse.success(fromJson(response.data));
     } on DioException catch (e) {
-      return ApiResponse.error(e.toString());
+      return ApiResponse.error(DioErrorHandler.getMessage(e));
     }
   }
 
@@ -121,7 +123,7 @@ class HttpMethod {
 
       return ApiResponse.success(fromJson(response.data));
     }on DioException  catch (e) {
-      return ApiResponse.error(e.toString());
+      return ApiResponse.error(DioErrorHandler.getMessage(e));
     }
   }
 }

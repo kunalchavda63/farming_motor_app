@@ -2,7 +2,6 @@
 // Extension on FontFamily for shorthand styling
 
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/pop_up_model.dart';
 extension FontFamilyExtension on FontFamily {
 
   String get name {

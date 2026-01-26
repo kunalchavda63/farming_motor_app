@@ -1,6 +1,4 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/pop_up_model.dart';
-import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_model.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
@@ -352,7 +350,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                           _headRangeController.text.trim()),
                                       headUnit:
                                       _headUnitController.text.trim(),
-                                      outletSizeMM: int.tryParse(
+                                      outletSizeMM: double.tryParse(
                                           _outletSizeController.text.trim()),
                                       outletUnit:
                                       _outletUnitController.text.trim(),

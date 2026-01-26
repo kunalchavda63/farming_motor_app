@@ -17,7 +17,7 @@ _PumpDetailModel _$PumpDetailModelFromJson(Map<String, dynamic> json) =>
       capacitykW: (json['capacitykW'] as num?)?.toDouble(),
       lph: (json['lph'] as num?)?.toInt(),
       headRangeMetres: (json['headRangeMetres'] as num?)?.toDouble(),
-      outletSizeMM: (json['outletSizeMM'] as num?)?.toInt(),
+      outletSizeMM: (json['outletSizeMM'] as num?)?.toDouble(),
       supplyVoltage: (json['supplyVoltage'] as num?)?.toInt(),
       capacityUnit: json['capacityUnit'] as String?,
       headUnit: json['headUnit'] as String?,

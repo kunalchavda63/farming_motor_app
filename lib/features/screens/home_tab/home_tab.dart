@@ -19,7 +19,6 @@ class _HomeTabState extends State<HomeTab> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final LocalPreferences _prefs = LocalPreferences();
   Map<int, bool> showInfoMap = {};
-  Map<int, bool> isActiveMap = {};
 
   @override
   void didChangeDependencies() {
@@ -57,6 +56,7 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
 
       key: _key,
+
       backgroundColor: AppColors.white,
       drawer: Drawer(
         elevation: 200,
@@ -107,33 +107,28 @@ class _HomeTabState extends State<HomeTab> {
         ),
       ),
       appBar: CustomAppBar(
-        gradient: RadialGradient(
-          radius: 7,
-          colors: [
-            AppColors.hex5474.withOAlpha(0.9),
-            AppColors.hex2e47.withOAlpha(0.20),
-          ],
-        ),
-
         autoImplyLeading: false,
+      isCenterTitle: false,
+        leading:CustomCircleSvgIcon(
+            onTap: (){
+              _key.currentState?.openDrawer();
+            },
+            path: AssetIcons.icUser,bgColor: AppColors.black10,h: 30,w: 30).padLeft(20),
 
-        title: Row(
-          children: [
-            GestureDetector(
-              onTap: () => _key.currentState?.openDrawer(),
-              child: const CustomImageView(
-                path: AssetImages.imgLogo,
-                height: 40,
-                width: 50,
-              ),
-            ),
-            CustomText(
-              data: AppStrings.pumpOperation,
-              style: BaseStyle.s14w500.c(AppColors.white),
-            ),
-          ],
-        ),
+      bgColor: AppColors.hex5474.withOAlpha(0.25),
+      title: Row(
+        children: [
+          CustomText(
+            data: AppStrings.pumpOperation,
+            style: const TextStyle()
+                .s(20)
+                .w(400)
+                .c(AppColors.hex2e47)
+                .family(FontFamily.montserrat),
+          ),
+        ],
       ),
+    ),
         body: state.loading || state.initial
             ? const Center(child: CircularProgressIndicator(
           strokeWidth: 1,
@@ -208,10 +203,25 @@ class _HomeTabState extends State<HomeTab> {
                             children: [
                               CustomText(data: AppStrings.switchOnOff,style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),),
                             const Spacer(),
-                              CustomSwitch(value:false, onChanged:(v){
-                                setState(() {
-                                });
-                              })
+                              CustomSwitch(
+                                isLoading: provider.pumpControlState.loading,
+                                value: _prefs.getPumpState(serial: pump.serialNumber??'', pumpId: pump.pumpID??''),
+                                onChanged: (bool value)  async{
+                                  final serialNumber = pump.serialNumber;
+                                  final pumpId = pump.pumpID;
+                                  final action = value !=true ? 0:1;
+                                  logger.d(value);
+
+                                  await context.read<CustomerProvider>().togglePump(serialNumber: serialNumber??'', pumpId: pumpId??'', action: action);
+                                  await _prefs.setPumpState(serial: serialNumber??'', pumpId: pumpId??'', value: value);
+
+
+
+
+
+
+                                },
+                              )
                             ],
                           )
                         ],

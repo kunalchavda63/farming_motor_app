@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/create_user_model/create_user_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';

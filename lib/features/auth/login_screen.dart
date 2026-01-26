@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
@@ -61,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           logger.d('Customer token stored');
         }
 
-          await prefs.setUser(User.fromJson(user)); // 👈 Map store
+          await prefs.setUser(UserModel.fromJson(user)); // 👈 Map store
           await prefs.setAuth(true);
 
           logger.i('Login Success Role: ${user['role']}');
@@ -69,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if (!mounted) return;
 
           getIt<AppRouter>().pushReplacement<void>(
-            Onboarding(user: User.fromJson(user)), // 👈 pass Map
+            Onboarding(user: UserModel.fromJson(user)), // 👈 pass Map
           );
         }
        else {

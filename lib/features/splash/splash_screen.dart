@@ -29,9 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(seconds: 2), () {
+    _timer = Timer(const Duration(milliseconds: 700), () {
       if(!mounted) return;
-      getIt<AppRouter>().push<void>( const Onboarding());
+      getIt<AppRouter>().pushReplacement<void>( const Onboarding());
 
     });
   }

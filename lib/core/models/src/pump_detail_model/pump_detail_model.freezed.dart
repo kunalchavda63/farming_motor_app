@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PumpDetailModel {
 
-@JsonKey(name: '_id') String? get id; String? get serialNumber; String? get pumpID; String? get pumpName; String? get location; int? get phase; double? get capacitykW; int? get lph; double? get headRangeMetres; int? get outletSizeMM; int? get supplyVoltage; String? get capacityUnit; String? get headUnit; String? get outletUnit; String? get currentStatus; String? get customer; bool? get isActive; int? get lastSwitchedOnDuration; int? get totalLifetimeDuration; DateTime? get installationDate; DateTime? get createdAt; DateTime? get updatedAt; List<dynamic>? get schedules; Map<String, dynamic>? get displaySpecs;
+@JsonKey(name: '_id') String? get id; String? get serialNumber; String? get pumpID; String? get pumpName; String? get location; int? get phase; double? get capacitykW; int? get lph; double? get headRangeMetres; double? get outletSizeMM; int? get supplyVoltage; String? get capacityUnit; String? get headUnit; String? get outletUnit; String? get currentStatus; String? get customer; bool? get isActive; int? get lastSwitchedOnDuration; int? get totalLifetimeDuration; DateTime? get installationDate; DateTime? get createdAt; DateTime? get updatedAt; List<dynamic>? get schedules; Map<String, dynamic>? get displaySpecs;
 /// Create a copy of PumpDetailModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PumpDetailModelCopyWith<$Res>  {
   factory $PumpDetailModelCopyWith(PumpDetailModel value, $Res Function(PumpDetailModel) _then) = _$PumpDetailModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, Map<String, dynamic>? displaySpecs
+@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, double? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, Map<String, dynamic>? displaySpecs
 });
 
 
@@ -77,7 +77,7 @@ as int?,capacitykW: freezed == capacitykW ? _self.capacitykW : capacitykW // ign
 as double?,lph: freezed == lph ? _self.lph : lph // ignore: cast_nullable_to_non_nullable
 as int?,headRangeMetres: freezed == headRangeMetres ? _self.headRangeMetres : headRangeMetres // ignore: cast_nullable_to_non_nullable
 as double?,outletSizeMM: freezed == outletSizeMM ? _self.outletSizeMM : outletSizeMM // ignore: cast_nullable_to_non_nullable
-as int?,supplyVoltage: freezed == supplyVoltage ? _self.supplyVoltage : supplyVoltage // ignore: cast_nullable_to_non_nullable
+as double?,supplyVoltage: freezed == supplyVoltage ? _self.supplyVoltage : supplyVoltage // ignore: cast_nullable_to_non_nullable
 as int?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
 as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
 as String?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable
@@ -176,7 +176,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  double? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PumpDetailModel() when $default != null:
 return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
@@ -197,7 +197,7 @@ return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.lo
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  double? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)  $default,) {final _that = this;
 switch (_that) {
 case _PumpDetailModel():
 return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
@@ -217,7 +217,7 @@ return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.lo
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  int? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: '_id')  String? id,  String? serialNumber,  String? pumpID,  String? pumpName,  String? location,  int? phase,  double? capacitykW,  int? lph,  double? headRangeMetres,  double? outletSizeMM,  int? supplyVoltage,  String? capacityUnit,  String? headUnit,  String? outletUnit,  String? currentStatus,  String? customer,  bool? isActive,  int? lastSwitchedOnDuration,  int? totalLifetimeDuration,  DateTime? installationDate,  DateTime? createdAt,  DateTime? updatedAt,  List<dynamic>? schedules,  Map<String, dynamic>? displaySpecs)?  $default,) {final _that = this;
 switch (_that) {
 case _PumpDetailModel() when $default != null:
 return $default(_that.id,_that.serialNumber,_that.pumpID,_that.pumpName,_that.location,_that.phase,_that.capacitykW,_that.lph,_that.headRangeMetres,_that.outletSizeMM,_that.supplyVoltage,_that.capacityUnit,_that.headUnit,_that.outletUnit,_that.currentStatus,_that.customer,_that.isActive,_that.lastSwitchedOnDuration,_that.totalLifetimeDuration,_that.installationDate,_that.createdAt,_that.updatedAt,_that.schedules,_that.displaySpecs);case _:
@@ -244,7 +244,7 @@ class _PumpDetailModel implements PumpDetailModel {
 @override final  double? capacitykW;
 @override final  int? lph;
 @override final  double? headRangeMetres;
-@override final  int? outletSizeMM;
+@override final  double? outletSizeMM;
 @override final  int? supplyVoltage;
 @override final  String? capacityUnit;
 @override final  String? headUnit;
@@ -309,7 +309,7 @@ abstract mixin class _$PumpDetailModelCopyWith<$Res> implements $PumpDetailModel
   factory _$PumpDetailModelCopyWith(_PumpDetailModel value, $Res Function(_PumpDetailModel) _then) = __$PumpDetailModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, int? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, Map<String, dynamic>? displaySpecs
+@JsonKey(name: '_id') String? id, String? serialNumber, String? pumpID, String? pumpName, String? location, int? phase, double? capacitykW, int? lph, double? headRangeMetres, double? outletSizeMM, int? supplyVoltage, String? capacityUnit, String? headUnit, String? outletUnit, String? currentStatus, String? customer, bool? isActive, int? lastSwitchedOnDuration, int? totalLifetimeDuration, DateTime? installationDate, DateTime? createdAt, DateTime? updatedAt, List<dynamic>? schedules, Map<String, dynamic>? displaySpecs
 });
 
 
@@ -338,7 +338,7 @@ as int?,capacitykW: freezed == capacitykW ? _self.capacitykW : capacitykW // ign
 as double?,lph: freezed == lph ? _self.lph : lph // ignore: cast_nullable_to_non_nullable
 as int?,headRangeMetres: freezed == headRangeMetres ? _self.headRangeMetres : headRangeMetres // ignore: cast_nullable_to_non_nullable
 as double?,outletSizeMM: freezed == outletSizeMM ? _self.outletSizeMM : outletSizeMM // ignore: cast_nullable_to_non_nullable
-as int?,supplyVoltage: freezed == supplyVoltage ? _self.supplyVoltage : supplyVoltage // ignore: cast_nullable_to_non_nullable
+as double?,supplyVoltage: freezed == supplyVoltage ? _self.supplyVoltage : supplyVoltage // ignore: cast_nullable_to_non_nullable
 as int?,capacityUnit: freezed == capacityUnit ? _self.capacityUnit : capacityUnit // ignore: cast_nullable_to_non_nullable
 as String?,headUnit: freezed == headUnit ? _self.headUnit : headUnit // ignore: cast_nullable_to_non_nullable
 as String?,outletUnit: freezed == outletUnit ? _self.outletUnit : outletUnit // ignore: cast_nullable_to_non_nullable

@@ -17,7 +17,7 @@ abstract class PumpDetailModel with _$PumpDetailModel {
     double? capacitykW,
     int? lph,
     double? headRangeMetres,
-    int? outletSizeMM,
+    double? outletSizeMM,
     int? supplyVoltage,
 
     String? capacityUnit,
@@ -35,6 +35,7 @@ abstract class PumpDetailModel with _$PumpDetailModel {
     DateTime? createdAt,
     DateTime? updatedAt,
 
+
     List<dynamic>? schedules,
 
     Map<String,dynamic>? displaySpecs,
@@ -43,5 +44,7 @@ abstract class PumpDetailModel with _$PumpDetailModel {
   factory PumpDetailModel.fromJson(Map<String, dynamic> json) =>
       _$PumpDetailModelFromJson(json);
 }
+
+
 
 

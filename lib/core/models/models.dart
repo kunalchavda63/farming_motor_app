@@ -1,1 +1,9 @@
+export 'bottom_nav_model.dart';
 export 'enum.dart';
+export 'src/create_user_model/create_user_model.dart';
+export 'src/customer_detail_model/customer_detail_model.dart';
+export 'src/login_model/login_model.dart';
+export 'src/notification_model/notification_model.dart';
+export 'src/pop_up_model.dart';
+export 'src/pump_detail_model/pump_detail_model.dart';
+export 'src/user_model/user_model.dart';

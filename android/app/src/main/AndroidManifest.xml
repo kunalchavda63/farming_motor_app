@@ -2,7 +2,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
+    <!-- 🌐 Internet permission -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- (Optional but recommended) -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="farming_motor_app">

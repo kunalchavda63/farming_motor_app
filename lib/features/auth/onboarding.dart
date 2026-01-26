@@ -1,5 +1,4 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/src/app_router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
@@ -7,7 +6,7 @@ import 'package:farming_motor_app/features/export_screens.dart';
 
 class Onboarding extends StatefulWidget {
    const Onboarding({super.key,this.user});
-  final User? user;
+  final UserModel? user;
 
   @override
   State<Onboarding> createState() => _OnboardingState();
@@ -26,7 +25,6 @@ class _OnboardingState extends State<Onboarding> {
     await Future<void>.delayed(const Duration(milliseconds: 400));
 
     final bool isAuth = prefs.isAuth;
-    // final bool isFirstPumpCreated = prefs.isFirstPumpCreated;
     final user = prefs.getUser();
 
     logger.d('Auth: $isAuth');
@@ -35,8 +33,8 @@ class _OnboardingState extends State<Onboarding> {
 
     if (!mounted) return;
 
-    if (isAuth && user!=null) {
-      if(isWindows){
+    if (isAuth && user != null ) {
+      if(isWindows && prefs.isAdminToken!=null){
         getIt<AppRouter>().pushReplacement<void>(Admin(userModel: user));
 
       }
@@ -45,9 +43,8 @@ class _OnboardingState extends State<Onboarding> {
 
       }
 
-
     } else {
-      getIt<AppRouter>().push<void>(const LoginScreen());
+      getIt<AppRouter>().pushReplacement<void>(const LoginScreen());
 
     }
   }

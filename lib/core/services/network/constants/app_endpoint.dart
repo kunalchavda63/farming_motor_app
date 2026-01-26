@@ -11,4 +11,6 @@ class ApiEndPoints {
   static const updateUser =  '$baseUrl/update-user';   //Pending
   static const addDevice =  '$baseUrl/add-device'; // Not -solved
   static const myPumps =  '$baseUrl/my-pumps';
+  static const pumpControl =  '$baseUrl/pump-control';
+  static const pumpLogs =  '$baseUrl/pump-logs';
 }

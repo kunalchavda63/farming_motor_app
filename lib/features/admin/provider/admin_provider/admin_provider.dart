@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/api_state.dart';
-import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
-import 'package:farming_motor_app/core/models/src/pump_detail_model/pump_detail_model.dart';
 import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.dart';
 import 'package:farming_motor_app/features/admin/admin_service/admin_service.dart';
 
 class AdminProvider extends ChangeNotifier {
-  ApiState<List<User>> userListState = ApiState.initial();
+  ApiState<List<UserModel>> userListState = ApiState.initial();
+  ApiState<List<PumpDetailModel>> userListPumpState = ApiState.initial();
   ApiState<Map<String,dynamic>> addPumpState = ApiState.initial();
 
   SortOrder _sortOrder = SortOrder.az;
@@ -74,7 +73,7 @@ class AdminProvider extends ChangeNotifier {
 
     });
 
-    userListState = ApiState.success(List<User>.from(users));
+    userListState = ApiState.success(List<UserModel>.from(users));
     notifyListeners();
   }
 

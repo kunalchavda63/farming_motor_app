@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
+import 'package:farming_motor_app/core/models/src/user_model/user_model.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,23 +42,45 @@ class LocalPreferences {
 
 
   /// ✅ Save logged-in user info
-  Future<void> setUser(User user) async {
+  Future<void> setUser(UserModel user) async {
     final jsonString = jsonEncode((user.toJson()));
     await _prefs?.setString(PreferenceKey.user, jsonString);
 
     logger.i('User stored: $jsonString');
   }
 
-  User? getUser() {
+  UserModel? getUser() {
     final jsonString = _prefs?.getString(PreferenceKey.user);
     if (jsonString == null) return null;
 
     final Map<String, dynamic> json =
     jsonDecode(jsonString) as Map<String, dynamic>;
-    logger.d(User.fromJson(json));
+    logger.d(UserModel.fromJson(json));
 
-    return User.fromJson(json);
+    return UserModel.fromJson(json);
   }
+
+  Future<void> setPumpState({
+    required String serial,
+    required String pumpId,
+    required bool value,
+  }) async {
+    final key = PreferenceKey._pumpControlKey(serial, pumpId);
+    await _prefs?.setBool(key, value);
+    logger.i('Pump state stored [$key] => $value');
+  }
+
+
+  bool getPumpState({
+    required String serial,
+    required String pumpId,
+}) {
+
+    final key = PreferenceKey._pumpControlKey(serial, pumpId);
+    logger.d(_prefs?.getBool(key) ?? false);
+    return _prefs?.getBool(key) ?? false;
+  }
+
   /// ✅ Clear user only
   Future<void> clearUser() async {
     await _prefs?.remove(PreferenceKey.user);
@@ -88,4 +110,7 @@ class PreferenceKey {
   // 🔥 Pump base key
   static const String pump = 'pump';
   static const String pumpLogs = 'pump_logs';
+
+  static String _pumpControlKey (String serial,String pumpId) => 'pump_${serial}_$pumpId';
+
 }

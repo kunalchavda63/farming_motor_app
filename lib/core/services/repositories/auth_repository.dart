@@ -2,9 +2,10 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:farming_motor_app/core/models/src/create_user_model/create_user_model.dart';
+import 'package:farming_motor_app/core/models/models.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/network/base/abstract_dio_manager.dart';
+import 'package:farming_motor_app/core/services/network/base/app_dio_manager.dart';
 import 'package:farming_motor_app/core/services/network/constants/app_endpoint.dart';
 
 
@@ -37,7 +38,7 @@ final Dio _dio = Dio();
     } on DioException catch (e) {
       return ApiResponse<Map<String, dynamic>>(
         success: false,
-        message: e.toString(),
+        message: DioErrorHandler.getMessage(e),
       );
     }
   }

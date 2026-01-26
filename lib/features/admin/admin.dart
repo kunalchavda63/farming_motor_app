@@ -1,6 +1,4 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/login_model/login_model.dart';
-import 'package:farming_motor_app/core/models/src/pop_up_model.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
@@ -10,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class Admin extends StatefulWidget {
   const Admin({super.key, required this.userModel});
-  final User userModel;
+  final UserModel userModel;
 
   @override
   State<Admin> createState() => _AdminState();
@@ -38,6 +36,17 @@ class _AdminState extends State<Admin> {
     final state = provider.userListState;
 
     return Scaffold(
+      // floatingActionButton: CustomFloatingButton(
+      //   backgroundColor: AppColors.hex5474.withOAlpha(0.4),
+      //   toolTip: 'Reset',
+      //   onTap: () async{
+      //     await _prefs.clearUser();
+      //     await _prefs.clear();
+      //
+      //
+      //   },
+      //   child: const CustomCircleSvgIcon(path: AssetIcons.icAdd,iconW: 20,iconH: 20),
+      // ),
       backgroundColor: AppColors.hexCcd6,
       body: Stack(
         children: [
@@ -93,6 +102,7 @@ class _AdminState extends State<Admin> {
                           CustomContainer(
                             h: 60,
                             child: Stack(
+                              clipBehavior: Clip.none,
                               alignment: AlignmentGeometry.center,
                               children: [
                                 Row(
@@ -110,8 +120,8 @@ class _AdminState extends State<Admin> {
                                   ],
                                 ),
                                 Positioned(
-                                  right: 20,
-                                  bottom: 10,
+                                  right: -10,
+                                  top: 14,
                                   child: Container(
                                     key: _filterKey, // 🔥 YAHI IMPORTANT HAI
                                     child: CustomCircleSvgIcon(
@@ -236,7 +246,7 @@ class _AdminState extends State<Admin> {
   }
 
   /// ================= USER TILE =================
-  Widget _userTile(User user, int index) {
+  Widget _userTile(UserModel user, int index) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: _threeDCard(
@@ -279,7 +289,7 @@ class _AdminState extends State<Admin> {
             Expanded(
               flex: 2,
               child: CustomText(
-                data: user.password ?? '-',
+                data: '${user.totalPumps}',
                 style: BaseStyle.s14w400,
               ),
             ),
@@ -288,7 +298,7 @@ class _AdminState extends State<Admin> {
             Expanded(
               flex: 2,
               child: _actionButton(
-                label: AppStrings.changePassword,
+                iconData: Icons.password,
                 onTap: () {
                   // change password logic
                 },
@@ -299,7 +309,7 @@ class _AdminState extends State<Admin> {
             Expanded(
               flex: 2,
               child: _actionButton(
-                label: AppStrings.addDevice,
+                iconData: Icons.add,
                 onTap: () {
                   getIt<AppRouter>().push<void>(
                     PumpSetupScreen(customerId: user.id ?? ''),
@@ -324,16 +334,14 @@ class _AdminState extends State<Admin> {
   }
 
   /// ================= 3D ACTION BUTTON =================
-  Widget _actionButton({required String label, required VoidCallback onTap}) {
-    return CustomContainer(
+  Widget _actionButton({required IconData iconData, required VoidCallback onTap}) {
+    return  CustomCircleIcon(
+      padding: const EdgeInsets.all(8),
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: AppColors.hexDAdb,
-      borderRadius: BorderRadius.circular(12),
-      child: CustomText(
-        data: label,
-        style: BaseStyle.s14w400.c(AppColors.black),
-      ),
+      bgColor: AppColors.hex5474.withOAlpha(0.25),
+      iconData:iconData,
+      iconSize: 19,
+
     );
   }
 }
@@ -343,3 +351,5 @@ String formatDateFromString(String? date) {
   final parsedDate = DateTime.parse(date);
   return DateFormat('dd-MM-yyyy').format(parsedDate);
 }
+
+
