@@ -36,17 +36,29 @@ class _AdminState extends State<Admin> {
     final state = provider.userListState;
 
     return Scaffold(
-      // floatingActionButton: CustomFloatingButton(
-      //   backgroundColor: AppColors.hex5474.withOAlpha(0.4),
-      //   toolTip: 'Reset',
-      //   onTap: () async{
-      //     await _prefs.clearUser();
-      //     await _prefs.clear();
-      //
-      //
-      //   },
-      //   child: const CustomCircleSvgIcon(path: AssetIcons.icAdd,iconW: 20,iconH: 20),
-      // ),
+      floatingActionButton: CustomContainer(
+        h: 60,
+        w: 170,
+        onTap: ()=>getIt<AppRouter>().push<void>(const SignUpScreen())
+        ,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.black10),
+        color: AppColors.black10,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const CustomCircleSvgIcon(
+              path: AssetIcons.icUser,
+              h: 40,
+              w: 40,
+              iconH: 40,
+              iconW: 40,
+            ),
+            CustomText(data: 'Add User',style: BaseStyle.s14w400.c(AppColors.black.withOAlpha(0.80)).family(FontFamily.montserrat).w(600),)
+
+          ],
+        ),
+      ),
       backgroundColor: AppColors.hexCcd6,
       body: Stack(
         children: [

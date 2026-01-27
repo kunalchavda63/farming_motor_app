@@ -40,14 +40,15 @@ Future<ApiResponse<List<PumpLogModel>>> fetchPumpLogs(String serialNumber,String
 Future<ApiResponse<Map<String,dynamic>>> pumpControl({
   required String serialNumber,
   required String pumpId,
-  required int action
+  required int action,
+  int? time = 3
 }) {
   final body =
     {
       'serialNumber': serialNumber,
       'pumpID': pumpId,
       'action': action,
-      'time': 0
+      'time': time
   };
   return api.post<Map<String,dynamic>>(
     ApiEndPoints.pumpControl,

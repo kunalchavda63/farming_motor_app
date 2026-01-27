@@ -4,6 +4,7 @@ import 'package:farming_motor_app/core/services/local_storage/sharedpreference_s
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/auth.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -284,6 +285,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         BuildTextField(
             validator: Validators.validateMobile,
             textInputType: TextInputType.phone,
+          inputFormatter: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10)
+          ],
             label: '${AppStrings.mobileNumber}*',
             controller: _mobileNumberController,
             focusNode:_mobileNumberControllerFocus,
@@ -318,7 +323,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ],
         ),
-      ],
-    ).padH(12);
+      ]);
   }
 }

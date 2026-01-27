@@ -85,7 +85,7 @@ class _HistoryTabState extends State<HistoryTab> {
                 if (logState?.data != null)
                   Column(
                     children: List.generate(logState!.data!.length, (index) {
-                      final log = logState!.data![index];
+                      final log = logState.data![index];
                       final isStart = log.action.toString().toLowerCase().contains('start');
 
                       return CustomContainer(

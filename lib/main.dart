@@ -1,5 +1,7 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
+import 'package:farming_motor_app/core/services/timer_service.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_provider.dart';
 import 'package:farming_motor_app/features/export_screens.dart';
@@ -8,11 +10,17 @@ import 'package:farming_motor_app/features/screens/provider/customer_provider/cu
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:workmanager/workmanager.dart';
+
 
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+  if(isAndroid) await Workmanager().initialize(callbackDispatcher,isInDebugMode: true);
+
+
   if(isWindows)await windowManager.ensureInitialized();
   const WindowOptions windowOptions = WindowOptions(
     size: Size(1920,1080),

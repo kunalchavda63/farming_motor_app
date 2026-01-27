@@ -32,6 +32,76 @@ class LocalPreferences {
     await _prefs?.setString(PreferenceKey.isCustomerAuthToken, value);
     logger.i('Token stored: ${_prefs?.getString(PreferenceKey.isCustomerAuthToken)}');
   }
+  Future<void> savePumpTimer({
+    required String serial,
+    required String pumpId,
+    required int minutes,
+  }) async {
+    final key = '_timer_${serial}_$pumpId';
+    final startTime = DateTime.now();
+
+    await _prefs?.setString('${key}_start', startTime.toIso8601String());
+    await _prefs?.setInt('${key}_minutes', minutes);
+    await _prefs?.setBool('${key}_active', true);
+
+    logger.i('Timer saved for pump $serial-$pumpId: $minutes minutes');
+  }
+
+  Future<void> clearPumpTimer({
+    required String serial,
+    required String pumpId,
+  }) async {
+    final key = '_timer_${serial}_$pumpId';
+
+    await _prefs?.remove('${key}_start');
+    await _prefs?.remove('${key}_minutes');
+    await _prefs?.remove('${key}_active');
+
+    logger.i('Timer cleared for pump $serial-$pumpId');
+  }
+
+  Map<String, dynamic>? getPumpTimer({
+    required String serial,
+    required String pumpId,
+  }) {
+    final key = '_timer_${serial}_$pumpId';
+
+    final startStr = _prefs?.getString('${key}_start');
+    final minutes = _prefs?.getInt('${key}_minutes');
+    final active = _prefs?.getBool('${key}_active') ?? false;
+
+    if (startStr == null || minutes == null) return null;
+
+    return {
+      'startTime': DateTime.parse(startStr),
+      'minutes': minutes,
+      'active': active,
+      'remainingMinutes': _calculateRemainingMinutes(
+        DateTime.parse(startStr),
+        minutes,
+      ),
+    };
+  }
+  int _calculateRemainingMinutes(DateTime startTime, int totalMinutes) {
+    final now = DateTime.now();
+    final elapsed = now.difference(startTime).inMinutes;
+    final remaining = totalMinutes - elapsed;
+    return remaining > 0 ? remaining : 0;
+  }
+
+  bool isPumpTimerActive({
+    required String serial,
+    required String pumpId,
+  }) {
+    final key = '_timer_${serial}_$pumpId';
+    return _prefs?.getBool('${key}_active') ?? false;
+  }
+
+  bool get isPumpRunning =>
+      _prefs?.getBool(PreferenceKey.pumpRunning) ?? false;
+
+
+
 
   bool get isAuth => _prefs?.getBool(PreferenceKey.isAuth) ?? false;
   String? get isAdminToken => _prefs?.getString(PreferenceKey.isAdminToken);
@@ -110,6 +180,13 @@ class PreferenceKey {
   // 🔥 Pump base key
   static const String pump = 'pump';
   static const String pumpLogs = 'pump_logs';
+
+  // Timer Keys
+  static const pumpStartTime = 'pump_start_time';
+  static const pumpTotalMinutes = 'pump_total_minutes';
+  static const pumpRunning = 'pump_running';
+  static const elapsedSeconds = 'elapsed_seconds';
+
 
   static String _pumpControlKey (String serial,String pumpId) => 'pump_${serial}_$pumpId';
 

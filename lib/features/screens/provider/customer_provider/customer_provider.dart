@@ -64,6 +64,7 @@ class CustomerProvider extends ChangeNotifier{
     required String serialNumber,
     required String pumpId,
     required int action,
+    required int time
   }) async {
 
     pumpControlState = ApiState.loading();
@@ -74,6 +75,7 @@ class CustomerProvider extends ChangeNotifier{
         serialNumber: serialNumber,
         pumpId: pumpId,
         action: action,
+        time: time
       );
 
       logger.d(response.message);
