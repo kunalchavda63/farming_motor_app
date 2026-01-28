@@ -41,6 +41,7 @@ Future<ApiResponse<Map<String,dynamic>>> pumpControl({
   required String serialNumber,
   required String pumpId,
   required int action,
+  String? token,
   int? time = 3
 }) {
   final body =
@@ -53,7 +54,7 @@ Future<ApiResponse<Map<String,dynamic>>> pumpControl({
   return api.post<Map<String,dynamic>>(
     ApiEndPoints.pumpControl,
     body,
-    token: prefs.isCustomerToken,
+    token: token??prefs.isCustomerToken,
     fromJson: (json)=> json as Map<String,dynamic>,
   );
 }
