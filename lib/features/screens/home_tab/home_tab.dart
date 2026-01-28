@@ -1,13 +1,15 @@
 
+import 'dart:async';
+
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
+import 'package:farming_motor_app/core/services/timer_service.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/auth.dart';
 import 'package:farming_motor_app/features/screens/provider/customer_provider/customer_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -17,10 +19,12 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final LocalPreferences _prefs = LocalPreferences();
   Map<int, bool> showInfoMap = {};
   final Map<int, TextEditingController> _minuteControllers = {};
+  Timer? _refreshTimer;
 
 
   @override
@@ -48,11 +52,21 @@ class _HomeTabState extends State<HomeTab> {
     super.initState();
     Future.microtask(() async {
       context.read<CustomerProvider>().loadPumps();
+      _refreshTimer = Timer.periodic(const Duration(seconds: 1), (_) async {
+        if(mounted) {
+          await _prefs.reload();
+          context.read<CustomerProvider>().refreshSwitchState();
+        }
+      });
     });
   }
 
+
+
   @override
   void dispose() {
+    _refreshTimer?.cancel();
+
     for (final controller in _minuteControllers.values) {
       controller.dispose();
     }
@@ -164,7 +178,17 @@ class _HomeTabState extends State<HomeTab> {
               index, () => TextEditingController(text: '10'));
 
           final pump = state.data![index];
+          final timerData = _prefs.getPumpTimer(serial: pump.serialNumber ?? '', pumpId: pump.pumpID ?? '');
+          String startTimeText = '--:--:--';
+          String endTimeText = '--:--:--';
+          if (timerData != null && timerData['active'] == true) {
+            final DateTime startDt = timerData['startTime'] as DateTime;
+            final int mins = timerData['minutes'] as int;
 
+            startTimeText = formatTime(startDt);
+            // End Time ગણતરી: Start Time + Minutes
+            endTimeText = formatTime(startDt.add(Duration(minutes: mins)));
+          }
 
           return CustomAnimationWrapper(
             animationType: AnimationTypes.slideFromTop,
@@ -201,6 +225,8 @@ class _HomeTabState extends State<HomeTab> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
+                          logger.e("Pump:${_prefs.getPumpState(serial: pump.serialNumber??'', pumpId: pump.pumpID??'')}");
+
                           setState(() {
                             showInfoMap[index] = !(showInfoMap[index] ?? false);
                           });
@@ -250,20 +276,24 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                             CustomSwitch(
                               isLoading: provider.pumpControlState.loading,
-                              value: _prefs.getPumpState(
-                                serial: pump.serialNumber ?? '',
-                                pumpId: pump.pumpID ?? '',
-
-                              ),
+                              value: _prefs.getPumpState(serial: pump.serialNumber??'', pumpId: pump.pumpID??''),
                               onChanged: (bool value) async {
                                 final serialNumber = pump.serialNumber ?? '';
                                 final pumpId = pump.pumpID ?? '';
+                                logger.d('Pump:${_prefs.getPumpState(serial: serialNumber, pumpId: pumpId)}');
 
                                 final minutes =
                                     int.tryParse(_minuteControllers[index]?.text ?? '') ?? 0;
+                                if(value && minutes <= 0){
+                                  showErrorToast('Enter valid minutes');
+                                  return;
+                                }
+
+
 
                                 final action = value ? 1 : 0;
 
+                                // Api Call
                                 await context.read<CustomerProvider>().togglePump(
                                   serialNumber: serialNumber,
                                   pumpId: pumpId,
@@ -271,31 +301,14 @@ class _HomeTabState extends State<HomeTab> {
                                   time: minutes,
                                 );
 
-                                await _prefs.setPumpState(
-                                  serial: serialNumber,
-                                  pumpId: pumpId,
-                                  value: value,
-                                );
+                                if(value) {
+                                  await startPumpTimer(serial: serialNumber, pumpId: pumpId, minutes: minutes);
 
-                                if (value) {
-                                  if (minutes <= 0) {
-                                    showErrorToast('Enter valid minutes');
-                                    return;
-                                  }
+                                } else{
+                                  await stopPumpTimer(serial: serialNumber, pumpId: pumpId);
 
-                                  await Workmanager().registerOneOffTask(
-                                    'pump_auto_off_$pumpId',
-                                    'pumpAutoOff',
-                                    initialDelay: const Duration(minutes: 1),
-                                    inputData: {
-                                      'serial': serialNumber,
-                                      'pumpId': pumpId,
-                                    },
-                                  );
-                                } else {
-                                  await Workmanager()
-                                      .cancelByUniqueName('pump_auto_off_$pumpId');
                                 }
+
                               }
                               ,
                             )
@@ -305,8 +318,8 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ).padBottom(10),
                   // Replace the timerBox calls with timerBoxWithInput
-                  timerBox(label: AppStrings.startTime),
-                  timerBox(label: '${AppStrings.endTime}  '),
+                  timerBox(label: AppStrings.startTime,dateTime: startTimeText),
+                  timerBox(label: '${AppStrings.endTime}  ',dateTime: endTimeText),
                   Visibility(
                     visible: showInfoMap[index] ?? false,
                     child: CustomContainer(
@@ -363,7 +376,7 @@ class _HomeTabState extends State<HomeTab> {
     ).padH(14).padV(1);
 
   }
-  Widget timerBox({String? label,DateTime? dateTime,}){
+  Widget timerBox({String? label,String? dateTime,}){
     return CustomContainer(
       onTap: () async {
         await showTimePicker(
@@ -448,8 +461,7 @@ class _HomeTabState extends State<HomeTab> {
                       vertical: 10
                   ),
                   color: AppColors.white,
-                  child: CustomText(data: formatTime(DateTime.now())),
-                ),
+                  child: CustomText(data: dateTime ?? '')),
               )
 
             ],

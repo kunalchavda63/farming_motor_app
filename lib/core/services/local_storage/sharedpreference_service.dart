@@ -59,6 +59,10 @@ class LocalPreferences {
 
     logger.i('Timer cleared for pump $serial-$pumpId');
   }
+  // LocalPreferences ક્લાસની અંદર ઉમેરો
+  Future<void> reload() async {
+    await _prefs?.reload();
+  }
 
   Map<String, dynamic>? getPumpTimer({
     required String serial,

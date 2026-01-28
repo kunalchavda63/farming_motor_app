@@ -1,5 +1,4 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/services/local_storage/sharedpreference_service.dart';
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/services/timer_service.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
