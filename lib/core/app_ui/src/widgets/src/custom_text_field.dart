@@ -104,7 +104,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
       textAlign: widget.textAlign ?? TextAlign.start,
 
       decoration: InputDecoration(
-
         floatingLabelAlignment: widget.floatingLabelAlignment,
         floatingLabelBehavior: widget.floatingLabelBehavior,
         focusColor: widget.focusColor,

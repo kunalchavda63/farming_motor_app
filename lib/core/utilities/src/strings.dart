@@ -22,7 +22,8 @@ class AppStrings {
   static const String inDot = 'In.';
   static const String sec = 'sec';
   static const String signUp = 'Sign Up';
-  static const String pleaseSignUpToGetStarted = 'Please sign up to get started';
+  static const String pleaseSignUpToGetStarted =
+      'Please sign up to get started';
   static const String name = 'Name';
   static const String reTypePassword = 'Re-type password';
   static const String didNotReceivedTheOTP = 'Didn’t received the OTP?';
@@ -35,8 +36,10 @@ class AppStrings {
   static const String signIntoContinue = 'Sign in to continue';
   static const String createAccount = 'Create Account';
   static const String createAnAccount = 'Create An Account';
-  static const String pleaseFillTheBelowInformation = 'Please fill the below informations.';
-  static const String doNotWorryItHappens =  'Don’t worry! it happens. please enter the mobile number which is associated your account';
+  static const String pleaseFillTheBelowInformation =
+      'Please fill the below informations.';
+  static const String doNotWorryItHappens =
+      'Don’t worry! it happens. please enter the mobile number which is associated your account';
   static const String pumpConfiguration = 'Pump Configuration';
   static const String enterPowerRating = 'Enter Power Rating';
   static const String selectPowerUnit = 'Select Power Unit';
@@ -60,7 +63,8 @@ class AppStrings {
   static const String cancel = 'Cancel';
   static const String successPumpSaved = 'Pump details saved successfully!';
   static const String errorInvalidInput = 'Please enter valid values';
-  static const String warningMismatchVoltage = 'Voltage does not match motor rating';
+  static const String warningMismatchVoltage =
+      'Voltage does not match motor rating';
   static const String infoTipPowerRating = 'Enter the motor power in kW';
   static const String infoTipMaxHead = 'Maximum vertical lift of the pump';
   static const String infoTipMaxDischarge = 'Maximum flow the pump can handle';
@@ -89,20 +93,21 @@ class AppStrings {
   static const String off = 'Off';
   static const String startTime = 'Start Time';
   static const String endTime = 'End time';
-  static const String logs  = 'Logs';
-  static const String welcomeToFarmingMotorApp  = 'Welcome to Farming Motor App';
-  static const String controlAndMonitorYouFarmMotorsAnyTime  = 'Control and monitor your farm motors anytime, anywhere. \n Easy, fast, and reliable.';
-  static const String firstName  = 'First Name';
-  static const String lastName  = 'Last Name';
-  static const String address  = 'Address';
-  static const String enterASerialNumber  = 'Enter a Serial Number';
-  static const String pumpName  = 'Pump Name';
-  static const String customer  = 'Customer';
-  static const String capacity  = 'Capacity';
-  static const String capacityUnit  = 'Capacity Unit';
-  static const String headRange  = 'Head Range';
-  static const String headUnit  = 'Head Unit';
-  static const String outletSize  = 'Outlet Size';
+  static const String logs = 'Logs';
+  static const String welcomeToFarmingMotorApp = 'Welcome to Farming Motor App';
+  static const String controlAndMonitorYouFarmMotorsAnyTime =
+      'Control and monitor your farm motors anytime, anywhere. \n Easy, fast, and reliable.';
+  static const String firstName = 'First Name';
+  static const String lastName = 'Last Name';
+  static const String address = 'Address';
+  static const String enterASerialNumber = 'Enter a Serial Number';
+  static const String pumpName = 'Pump Name';
+  static const String customer = 'Customer';
+  static const String capacity = 'Capacity';
+  static const String capacityUnit = 'Capacity Unit';
+  static const String headRange = 'Head Range';
+  static const String headUnit = 'Head Unit';
+  static const String outletSize = 'Outlet Size';
   static const String outletUnit = 'Outlet Unit';
   static const String phase = 'Phase';
   static const String supplyVoltage = 'Supply Voltage';
@@ -116,12 +121,12 @@ class AppStrings {
   static const String userProfile = 'User Profile';
   static const String logOut = 'Log Out';
   static const String addDevice = 'Add Device';
-
-
-
-
-
-
-
-
+  static const String required = 'Required';
+  static const String pleaseFillTheForm = 'Please fill the form';
+  static const String addUser = 'Add User';
+  static const String totalPumps = 'Total Pumps';
+  static const String srNo = 'SR. No';
+  static const String createdDate = 'Created Date';
+  static const String updatedDate = 'Updated Date';
+  static const String adminDashboard = 'Admin Dashboard';
 }

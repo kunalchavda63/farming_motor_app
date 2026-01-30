@@ -3,6 +3,7 @@ import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/services/navigation/src/app_router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/auth.dart';
+import 'package:farming_motor_app/l10n/app_localizations.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -21,6 +22,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final FocusNode _newPasswordControllerFocus = FocusNode();
   final AuthRepository _repo = AuthRepository();
+  late AppLocalizations loc;
+
 
   bool? _isLoading = false;
   void _changePassword(String oldPassword,String newPassword) async {
@@ -39,13 +42,13 @@ logger.d(response.message);
         getIt<AppRouter>().pop<void>();
         logger.i('User Changed Password Successfully!');
 
-        showSuccessToast('User Changed Password Succesfully');
+        showSuccessToast('User Changed Password Succesfully',context);
 
       }
     }
     on DioException  catch (e) {
       logger.e(e);
-      showErrorToast(e.toString());
+      showErrorToast(e.toString(),context);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -64,8 +67,9 @@ logger.d(response.message);
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
     mCtx = MediaQuery.of(context);
+    loc = AppLocalizations.of(context)!;
+    super.didChangeDependencies();
   }
 
   @override
@@ -111,7 +115,7 @@ logger.d(response.message);
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CustomText(data: AppStrings.changePassword,style: BaseStyle.s20w400.c(AppColors.black).s(30),textAlign: TextAlign.start,).padBottom(20).padH(10),
+          CustomText(data: loc.changePassword,style: BaseStyle.s20w400.c(AppColors.black).s(30),textAlign: TextAlign.start,).padBottom(20).padH(10),
           
           _buildBoth(),
 
@@ -119,7 +123,7 @@ logger.d(response.message);
             h: 45,
             isLoading: _isLoading,
             color: AppColors.black10,
-            label: AppStrings.submit,
+            label: loc.submit,
             onTap: () => _changePassword(_oldPasswordController.text.trim(),_newPasswordController.text.trim())
           ).padH(10).padV(10)
         ],
@@ -138,14 +142,14 @@ logger.d(response.message);
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         BuildTextField(
-          validator: (v) => Validators.validateRequire(v,'Old Password Required'),
+          validator: (v) => Validators.validateRequire(v,'${loc.oldPassword} ${loc.required}'),
           label: AppStrings.oldPassword,
           controller: _oldPasswordController,
           focusNode: _oldPasswordControllerFocus,
           textInputType: TextInputType.visiblePassword,
         ).padBottom(30),
         BuildTextField(
-          validator: (v) => Validators.validateRequire(v,'New Password Required'),
+          validator: (v) => Validators.validateRequire(v,'${loc.newPassword} ${loc.required}'),
           label: AppStrings.password,
           controller: _newPasswordController,
           focusNode: _newPasswordControllerFocus,

@@ -8,6 +8,7 @@ import 'package:farming_motor_app/core/services/timer_service.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/auth.dart';
 import 'package:farming_motor_app/features/screens/provider/customer_provider/customer_provider.dart';
+import 'package:farming_motor_app/l10n/loc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -25,11 +26,13 @@ class _HomeTabState extends State<HomeTab> {
   Map<int, bool> showInfoMap = {};
   final Map<int, TextEditingController> _minuteControllers = {};
   Timer? _refreshTimer;
+  late AppLocalizations loc;
 
 
   @override
   void didChangeDependencies() {
     setStatusBarLightStyle();
+    loc = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 
@@ -40,7 +43,7 @@ class _HomeTabState extends State<HomeTab> {
     getIt<AppRouter>().pushReplacement<void>(
       const Onboarding(),
     );
-    showSuccessToast('User Log Out successfully');
+    showSuccessToast(loc.userLogOutSuccessfully,context);
   }
 
   void goToResetScreen() {
@@ -85,11 +88,12 @@ class _HomeTabState extends State<HomeTab> {
       backgroundColor: AppColors.white,
       drawer: Drawer(
         elevation: 200,
-        backgroundColor: AppColors.white,
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DrawerHeader(
+
               decoration: const BoxDecoration(color: AppColors.white50),
               curve: Curves.ease,
               child: Column(
@@ -113,13 +117,14 @@ class _HomeTabState extends State<HomeTab> {
               shrinkWrap: true,
               children: [
                 drawerBox(
-                  label: AppStrings.changePassword,
+                  label: loc.changePassword,
                   onTap: () => goToResetScreen(),
                 ).padTop(10),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
                 ),
                 drawerBox(
+                  label: loc.logOut,
                   onTap: _userLogOut,
                   textColor: Colors.redAccent,
                 ),
@@ -144,7 +149,7 @@ class _HomeTabState extends State<HomeTab> {
         title: Row(
           children: [
             CustomText(
-              data: AppStrings.pumpOperation,
+              data: loc.pumpOperation,
               style: const TextStyle()
                   .s(20)
                   .w(400)
@@ -164,7 +169,7 @@ class _HomeTabState extends State<HomeTab> {
           : state.error != null
           ? Center(child: CustomText(data: state.error!))
           : (state.data?.isEmpty ?? false)
-          ? const Center(child: CustomText(data: 'No pumps found'))
+          ? Center(child: CustomText(data: loc.noPumpsFound))
           : ListView.builder(
 
         padding: const EdgeInsets.symmetric(
@@ -190,162 +195,167 @@ class _HomeTabState extends State<HomeTab> {
             endTimeText = formatTime(startDt.add(Duration(minutes: mins)));
           }
 
-          return CustomAnimationWrapper(
-            animationType: AnimationTypes.slideFromTop,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeIn,
-            child: CustomContainer(
-              borderRadius: BorderRadius.circular(10),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 10,
-              ),
-              color: AppColors.black10,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      CustomContainer(
-                        alignment: Alignment.center,
-                        h: 30,
-                        w: 30,
-                        boxShape: BoxShape.circle,
-                        color: AppColors.white,
-                        padding: const EdgeInsets.all(5),
-                        border: Border.all(color: AppColors.hex5474),
-                        child: CustomText(data: '${index + 1}'),
-                      ),
-                      CustomText(
-                        data: pump.serialNumber ?? '',
-                        style: BaseStyle.s14w400
-                            .c(AppColors.black)
-                            .family(FontFamily.montserrat)
-                            .w(700),
-                      ).padH(10),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          logger.e("Pump:${_prefs.getPumpState(serial: pump.serialNumber??'', pumpId: pump.pumpID??'')}");
+          return CustomContainer(
+            borderRadius: BorderRadius.circular(10),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 10,
+            ),
+            color: AppColors.black10,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CustomContainer(
+                      alignment: Alignment.center,
+                      h: 30,
+                      w: 30,
+                      boxShape: BoxShape.circle,
+                      color: AppColors.white,
+                      padding: const EdgeInsets.all(5),
+                      border: Border.all(color: AppColors.hex5474),
+                      child: CustomText(data: '${index + 1}'),
+                    ),
+                    CustomText(
+                      data: pump.serialNumber ?? '',
+                      style: BaseStyle.s14w400
+                          .c(AppColors.black)
+                          .family(FontFamily.montserrat)
+                          .w(700),
+                    ).padH(10),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        logger.e("Pump:${_prefs.getPumpState(serial: pump.serialNumber??'', pumpId: pump.pumpID??'')}");
 
-                          setState(() {
-                            showInfoMap[index] = !(showInfoMap[index] ?? false);
-                          });
-                        },
-                        child: const Icon(Icons.info_outline),
+                        setState(() {
+                          showInfoMap[index] = !(showInfoMap[index] ?? false);
+                        });
+                      },
+                      child: const Icon(Icons.info_outline),
+                    )
+                  ],
+                ).padBottom(10),
+                CustomContainer(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 5,
+                  ),
+                  borderRadius: BorderRadius.circular(5),
+                  color: AppColors.white,
+                  border: Border.all(color: AppColors.hex5474),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          CustomText(
+                            data: loc.switchOnOff,
+                            style: BaseStyle.s14w400
+                                .c(AppColors.hex5474)
+                                .w(500)
+                                .family(FontFamily.montserrat),
+                          ),
+                  const Spacer(),
+                  SizedBox(
+                    width: 70,
+                    height: 30,
+                    child: CustomTextField(
+                      controller: controller,
+                      hintText: 'Minute',
+                      textInputType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      hintStyle: BaseStyle.s14w400.c(AppColors.hex5474).family(FontFamily.montserrat),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8
+                      ),
+                      textAlign: TextAlign.center,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: AppColors.hex5474),
+                      ),
+                    ),
+                  ),
+                          ValueListenableBuilder<bool>(
+                            valueListenable: _prefs.getPumpState(serial: pump.serialNumber??'', pumpId: pump.pumpID??''),
+                            builder: (context,isOn,_) {
+                              return CustomSwitch(
+                                isLoading: provider.pumpControlState.loading,
+                                value: isOn,
+                                onChanged: (bool value) async {
+                                  final serialNumber = pump.serialNumber ?? '';
+                                  final pumpId = pump.pumpID ?? '';
+                                  logger.d('Pump:${_prefs.getPumpState(
+                                      serial: serialNumber, pumpId: pumpId)}');
+
+                                  final minutes =
+                                      int.tryParse(
+                                          _minuteControllers[index]?.text ??
+                                              '') ?? 0;
+                                  if (value && minutes <= 0) {
+                                    showErrorToast(
+                                        'Enter valid minutes', context);
+                                    return;
+                                  }
+
+
+                                  final action = value ? 1 : 0;
+
+                                  // Api Call
+                                  await context
+                                      .read<CustomerProvider>()
+                                      .togglePump(
+                                    serialNumber: serialNumber,
+                                    pumpId: pumpId,
+                                    action: action,
+                                    time: minutes,
+                                  );
+
+                                  if (value) {
+                                    await startPumpTimer(serial: serialNumber,
+                                        pumpId: pumpId,
+                                        minutes: minutes);
+                                  } else {
+                                    await stopPumpTimer(
+                                        serial: serialNumber, pumpId: pumpId);
+                                  }
+                                }
+                                ,
+                              );
+                            }
+                          )
+                        ],
                       )
                     ],
-                  ).padBottom(10),
-                  CustomContainer(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: 5,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ).padBottom(10),
+                // Replace the timerBox calls with timerBoxWithInput
+                timerBox(label: loc.startTime,dateTime: startTimeText),
+                timerBox(label: '${loc.endTime}  ',dateTime: endTimeText),
+                Visibility(
+                  visible: showInfoMap[index] ?? false,
+                  child: CustomContainer(
                     color: AppColors.white,
-                    border: Border.all(color: AppColors.hex5474),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(),
+                    padding: const EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            CustomText(
-                              data: AppStrings.switchOnOff,
-                              style: BaseStyle.s14w400
-                                  .c(AppColors.hex5474)
-                                  .w(500)
-                                  .family(FontFamily.montserrat),
-                            ),
-                    const Spacer(),
-                    SizedBox(
-                      width: 70,
-                      height: 30,
-                      child: CustomTextField(
-                        controller: controller,
-                        hintText: 'Minute',
-                        textInputType: TextInputType.number,
-                        textInputAction: TextInputAction.done,
-                        hintStyle: BaseStyle.s14w400.c(AppColors.hex5474).family(FontFamily.montserrat),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8
-                        ),
-                        textAlign: TextAlign.center,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: AppColors.hex5474),
-                        ),
-                      ),
-                    ),
-                            CustomSwitch(
-                              isLoading: provider.pumpControlState.loading,
-                              value: _prefs.getPumpState(serial: pump.serialNumber??'', pumpId: pump.pumpID??''),
-                              onChanged: (bool value) async {
-                                final serialNumber = pump.serialNumber ?? '';
-                                final pumpId = pump.pumpID ?? '';
-                                logger.d('Pump:${_prefs.getPumpState(serial: serialNumber, pumpId: pumpId)}');
-
-                                final minutes =
-                                    int.tryParse(_minuteControllers[index]?.text ?? '') ?? 0;
-                                if(value && minutes <= 0){
-                                  showErrorToast('Enter valid minutes');
-                                  return;
-                                }
-
-
-
-                                final action = value ? 1 : 0;
-
-                                // Api Call
-                                await context.read<CustomerProvider>().togglePump(
-                                  serialNumber: serialNumber,
-                                  pumpId: pumpId,
-                                  action: action,
-                                  time: minutes,
-                                );
-
-                                if(value) {
-                                  await startPumpTimer(serial: serialNumber, pumpId: pumpId, minutes: minutes);
-
-                                } else{
-                                  await stopPumpTimer(serial: serialNumber, pumpId: pumpId);
-
-                                }
-
-                              }
-                              ,
-                            )
-                          ],
-                        )
+                        _infoRow('Serial Number', pump.serialNumber.toString()),
+                        _infoRow(loc.pumpName, pump.pumpName.toString()),
+                        _infoRow('${loc.pump} ID', pump.serialNumber.toString()),
+                        _infoRow(loc.capacityUnit, pump.capacityUnit.toString()),
+                        _infoRow(loc.headUnit, pump.headUnit.toString()),
+                        _infoRow('Phase Type', pump.phase.toString()),
+                        _infoRow(loc.supplyVoltage, pump.supplyVoltage.toString()),
+                        _infoRow(loc.lph, pump.lph.toString()),
+                        _infoRow(loc.location, pump.location.toString()),
                       ],
                     ),
-                  ).padBottom(10),
-                  // Replace the timerBox calls with timerBoxWithInput
-                  timerBox(label: AppStrings.startTime,dateTime: startTimeText),
-                  timerBox(label: '${AppStrings.endTime}  ',dateTime: endTimeText),
-                  Visibility(
-                    visible: showInfoMap[index] ?? false,
-                    child: CustomContainer(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(),
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          _infoRow('Serial Number', pump.serialNumber.toString()),
-                          _infoRow('Pump Name', pump.pumpName.toString()),
-                          _infoRow('Pump ID', pump.serialNumber.toString()),
-                          _infoRow('Capacity Unit', pump.capacityUnit.toString()),
-                          _infoRow('Head Unit', pump.headUnit.toString()),
-                          _infoRow('Phase Type', pump.phase.toString()),
-                          _infoRow('Supply Voltage', pump.supplyVoltage.toString()),
-                          _infoRow('LPH ', pump.lph.toString()),
-                          _infoRow('Location', pump.location.toString()),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ).padBottom(20),
-          );
+                  ),
+                )
+              ],
+            ),
+          ).padBottom(20);
         },
       ),
     );
@@ -452,7 +462,7 @@ class _HomeTabState extends State<HomeTab> {
         children: [
           Row(
             children: [
-              CustomText(data: label ?? AppStrings.startTime,style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),).padRight(20),
+              CustomText(data: label ?? loc.startTime,style: BaseStyle.s14w400.c(AppColors.hex5474).w(500).family(FontFamily.montserrat),).padRight(20),
               Expanded(
                 child: CustomContainer(
                   borderRadius: BorderRadius.circular(5),

@@ -8,15 +8,15 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:windows_toast/windows_toast.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key, this.isLoggerIn = false});
-  final bool? isLoggerIn;
+class EditUserScreen extends StatefulWidget {
+  const EditUserScreen({super.key, this.userID});
+  final String? userID;
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<EditUserScreen> createState() => _EditUserScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _EditUserScreenState extends State<EditUserScreen> {
   late MediaQueryData mCtx;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final TextEditingController _firstNameController = TextEditingController();
@@ -163,7 +163,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (widget.isLoggerIn == true)
                                     Align(
                                       alignment: AlignmentGeometry.topLeft,
 
@@ -216,19 +215,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       bottomNavigationBar: (isWindows)
           ? null
           : CustomButton(
-                  label: AppStrings.createAccount,
-                  onTap: () async {
-                    if (_key.currentState!.validate()) {
-                      // await prefs.setAuth(true);
-                      logger.d('User Is Authenticated');
-                      getIt<AppRouter>().push<void>(const Onboarding());
-                    }
-                  },
-                  color: AppColors.black.withOAlpha(0.18),
-                  border: Border.all(color: AppColors.hex2e47),
-                )
-                .padH(12.r)
-                .padBottom(MediaQuery.of(context).viewPadding.bottom + 40.r),
+        label: AppStrings.createAccount,
+        onTap: () async {
+          if (_key.currentState!.validate()) {
+            // await prefs.setAuth(true);
+            logger.d('User Is Authenticated');
+            getIt<AppRouter>().push<void>(const Onboarding());
+          }
+        },
+        color: AppColors.black.withOAlpha(0.18),
+        border: Border.all(color: AppColors.hex2e47),
+      )
+          .padH(12.r)
+          .padBottom(MediaQuery.of(context).viewPadding.bottom + 40.r),
     );
   }
 
@@ -305,7 +304,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           focusNode: _addressControllerFocus,
         ).padBottom(24),
 
-        if (widget.isLoggerIn == false)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

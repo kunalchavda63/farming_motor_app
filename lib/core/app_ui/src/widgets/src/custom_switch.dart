@@ -1,5 +1,5 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/utilities/src/strings.dart';
+import 'package:farming_motor_app/l10n/loc.dart';
 
 class CustomSwitch extends StatelessWidget {
   const CustomSwitch({
@@ -14,6 +14,7 @@ class CustomSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations loc = AppLocalizations.of(context)!;
     return Transform.scale(
       scale: 0.8,
       child: GestureDetector(
@@ -35,7 +36,7 @@ class CustomSwitch extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    value ? AppStrings.on : AppStrings.off,
+                    value ? loc.on: loc.off,
                     style: BaseStyle.s14w400
                         .c(value ? AppColors.white : AppColors.black)
                         .w(800)

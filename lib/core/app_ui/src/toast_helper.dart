@@ -1,29 +1,24 @@
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/utilities/src/extensions/extensions.dart';
-import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:windows_toast/windows_toast.dart';
 
-void showSuccessToast(String message) {
-  Fluttertoast.showToast(
-
-    msg: message,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.green,
-    textColor: Colors.white,
-    fontSize: 16.0,
+void showSuccessToast(String message,BuildContext context) {
+  WindowsToast.show(
+    message,
+    context,
+    20,
+    textStyle:BaseStyle.s14w500.c(AppColors.white),
+    toastColor: Colors.green,
   );
 }
 
-void showErrorToast(String message) {
-  if (!isWindows) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
-  } else {
-    logger.w('Toast not supported on Windows: $message');
-  }
+void showErrorToast(String message,BuildContext context) {
+  WindowsToast.show(
+    message,
+    context,
+    20,
+    textStyle:BaseStyle.s14w500.c(AppColors.white),
+    toastColor: Colors.red,
+  );
+
 }
 

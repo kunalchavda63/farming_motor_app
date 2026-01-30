@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/user_model/user_model.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,7 @@ class LocalPreferences {
   }
 
   LocalPreferences._internal();
+  final Map<String,ValueNotifier<bool>> _pumpStateNotifiers  = {};
   static final LocalPreferences _instance = LocalPreferences._internal();
 
   SharedPreferences? _prefs;
@@ -45,6 +47,10 @@ class LocalPreferences {
     await _prefs?.setBool('${key}_active', true);
 
     logger.i('Timer saved for pump $serial-$pumpId: $minutes minutes');
+  }
+  Future<void> setLanguage(String code) async{
+    await _prefs?.setString(PreferenceKey.language,code);
+    logger.d('Language Saved : $code');
   }
 
   Future<void> clearPumpTimer({
@@ -92,6 +98,7 @@ class LocalPreferences {
     final remaining = totalMinutes - elapsed;
     return remaining > 0 ? remaining : 0;
   }
+  
 
   bool isPumpTimerActive({
     required String serial,
@@ -104,12 +111,12 @@ class LocalPreferences {
   bool get isPumpRunning =>
       _prefs?.getBool(PreferenceKey.pumpRunning) ?? false;
 
-
-
+  
 
   bool get isAuth => _prefs?.getBool(PreferenceKey.isAuth) ?? false;
   String? get isAdminToken => _prefs?.getString(PreferenceKey.isAdminToken);
   String? get isCustomerToken => _prefs?.getString(PreferenceKey.isCustomerAuthToken);
+  String? get getLanguage => _prefs?.getString(PreferenceKey.language);
 
   // ---------------- SETUP ----------------
 
@@ -141,18 +148,24 @@ class LocalPreferences {
   }) async {
     final key = PreferenceKey._pumpControlKey(serial, pumpId);
     await _prefs?.setBool(key, value);
+    if(_pumpStateNotifiers.containsKey(key)){
+    _pumpStateNotifiers[key]!.value = value;
+    }
     logger.i('Pump state stored [$key] => $value');
   }
 
 
-  bool getPumpState({
+  ValueNotifier<bool> getPumpState({
     required String serial,
     required String pumpId,
 }) {
 
     final key = PreferenceKey._pumpControlKey(serial, pumpId);
     logger.d(_prefs?.getBool(key) ?? false);
-    return _prefs?.getBool(key) ?? false;
+
+    _pumpStateNotifiers[key] = ValueNotifier<bool>(_prefs?.getBool(key) ?? false);
+
+    return _pumpStateNotifiers[key]!;
   }
 
   /// ✅ Clear user only
@@ -192,6 +205,12 @@ class PreferenceKey {
   static const elapsedSeconds = 'elapsed_seconds';
 
 
+  // Pump control
   static String _pumpControlKey (String serial,String pumpId) => 'pump_${serial}_$pumpId';
+
+
+  // Language
+
+  static const String language = 'Language';
 
 }

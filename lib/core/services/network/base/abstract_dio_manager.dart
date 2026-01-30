@@ -18,6 +18,11 @@ class ApiResponse<T> {
   factory ApiResponse.error(String message) {
     return ApiResponse<T>(message: message, success: false);
   }
+
+  @override
+  String toString() {
+    return 'ApiResponse(success: $success, statuscode:$statusCode, message: $message, data:$data)';
+  }
   final T? data;
   final String? message;
   final bool success;
@@ -126,5 +131,26 @@ class HttpMethod {
       return ApiResponse.error(DioErrorHandler.getMessage(e));
     }
   }
+
+  Future<ApiResponse<T>> patch<T>(
+      String endpoint,
+      dynamic body, {
+        String? token,
+        required T Function(dynamic json) fromJson,
+      }) async {
+    try {
+      final response = await _dio.patch<T>(
+        endpoint,
+        data: body,
+        options: _options(token),
+      );
+      logger.d(response);
+
+      return ApiResponse.success(fromJson(response.data));
+    } on DioException catch (e) {
+      return ApiResponse.error(DioErrorHandler.getMessage(e));
+    }
+  }
+
 }
 

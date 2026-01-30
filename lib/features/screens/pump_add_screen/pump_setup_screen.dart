@@ -46,12 +46,60 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
   final FocusNode _outletSizeControllerFocus = FocusNode();
   final FocusNode _outletUnitControllerFocus = FocusNode();
   final FocusNode _locationControllerFocus = FocusNode();
+  bool _isLoading = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     mCtx = MediaQuery.of(context);
   }
+
+  void _addPump() async {
+  if (!_key.currentState!.validate()){
+    showErrorToast(AppStrings.pleaseFillTheForm, context);
+    return;
+  }
+
+
+  final payload = PumpDetailModel(
+  serialNumber:
+  _serialNoController.text.trim(),
+  pumpName:
+  _pumpNameController.text.trim(),
+  customer: widget.customerId,
+  phase: int.tryParse(
+  _phaseTypeController.text.trim()),
+  capacitykW: double.tryParse(
+  _capacityController.text.trim()),
+  capacityUnit:
+  _capacityUnitController.text.trim(),
+  headRangeMetres: double.tryParse(
+  _headRangeController.text.trim()),
+  headUnit:
+  _headUnitController.text.trim(),
+  outletSizeMM: double.tryParse(
+  _outletSizeController.text.trim()),
+  outletUnit:
+  _outletUnitController.text.trim(),
+  supplyVoltage: int.tryParse(
+  _supplyVoltageController.text.trim()),
+  lph: int.tryParse(
+  _lphController.text.trim()),
+  location:
+  _locationController.text.trim(),
+  );
+  setState(() => _isLoading = true);
+
+
+  await context
+      .read<AdminProvider>()
+      .addPumps(payload,context);
+
+  setState(() => _isLoading = false);
+
+  getIt<AppRouter>().pop<void>();
+
+}
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +185,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                   label: AppStrings.enterASerialNumber,
                                   controller: _serialNoController,
                                   validator: (v) =>
-                                      Validators.validateRequire(v, 'Required'),
+                                      Validators.validateRequire(v, AppStrings.required),
                                 ),
                                 const SizedBox(height: 20),
 
@@ -147,7 +195,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                   label: AppStrings.pumpName,
                                   controller: _pumpNameController,
                                   validator: (v) =>
-                                      Validators.validateRequire(v, 'Required'),
+                                      Validators.validateRequire(v, AppStrings.required),
                                 ),
                                 const SizedBox(height: 20),
 
@@ -164,7 +212,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                   anchorKey: _phaseTypeKey,
                                   context: context,
                                   validator: (v) =>
-                                      Validators.validateRequire(v, 'Required'),
+                                      Validators.validateRequire(v, AppStrings.required),
                                 ),
                                 const SizedBox(height: 20),
 
@@ -178,7 +226,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                         controller: _capacityController,
                                         textInputType: TextInputType.number,
                                         validator: (v) => Validators.validateNumbers(
-                                            v, 'Required'),
+                                            v, AppStrings.required),
                                       ),
                                     ),
                                     const SizedBox(width: 16),
@@ -191,14 +239,12 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                         isDropdown: true,
                                         items: const [
                                           PopUpModel(
-                                              id: 'KW', data: 'KW', value: 'KW'),
-                                          PopUpModel(
                                               id: 'HP', data: 'HP', value: 'HP'),
                                         ],
                                         anchorKey: _capacityUnitKey,
                                         context: context,
                                         validator: (v) =>
-                                            Validators.validateRequire(v, 'Required'),
+                                            Validators.validateRequire(v, AppStrings.required),
                                       ),
                                     ),
                                   ],
@@ -215,7 +261,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                         controller: _supplyVoltageController,
                                         textInputType: TextInputType.number,
                                         validator: (v) =>
-                                            Validators.validateNumbers(v, 'Required'),
+                                            Validators.validateNumbers(v, AppStrings.required),
                                       ),
                                     ),
                                     const SizedBox(width: 16),
@@ -231,15 +277,11 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                               id: 'feet',
                                               data: 'feet',
                                               value: 'feet'),
-                                          PopUpModel(
-                                              id: 'meter',
-                                              data: 'meter',
-                                              value: 'meter'),
                                         ],
                                         anchorKey: _headUnitKey,
                                         context: context,
                                         validator: (v) =>
-                                            Validators.validateRequire(v, 'Required'),
+                                            Validators.validateRequire(v, AppStrings.required),
                                       ),
                                     ),
                                   ],
@@ -256,7 +298,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                         controller: _lphController,
                                         textInputType: TextInputType.number,
                                         validator: (v) =>
-                                            Validators.validateNumbers(v, 'Required'),
+                                            Validators.validateNumbers(v, AppStrings.required),
                                       ),
                                     ),
                                     const SizedBox(width: 16),
@@ -268,7 +310,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                         controller: _headRangeController,
                                         textInputType: TextInputType.number,
                                         validator: (v) =>
-                                            Validators.validateNumbers(v, 'Required'),
+                                            Validators.validateNumbers(v, AppStrings.required),
                                       ),
                                     ),
                                   ],
@@ -284,7 +326,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                         controller: _outletSizeController,
                                         textInputType: TextInputType.number,
                                         validator: (v) =>
-                                            Validators.validateNumbers(v, 'Required'),
+                                            Validators.validateNumbers(v, AppStrings.required),
                                       ),
                                     ),
                                     const SizedBox(width: 16),
@@ -308,7 +350,7 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                         anchorKey: _outletUnitKey,
                                         context: context,
                                         validator: (v) =>
-                                            Validators.validateRequire(v, 'Required'),
+                                            Validators.validateRequire(v, AppStrings.required),
                                       ),
                                     ),
                                   ],
@@ -321,51 +363,18 @@ class _PumpSetupScreenState extends State<PumpSetupScreen> {
                                   label: AppStrings.location,
                                   controller: _locationController,
                                   validator: (v) =>
-                                      Validators.validateRequire(v, 'Required'),
+                                      Validators.validateRequire(v, AppStrings.required),
                                 ),
 
                                 const SizedBox(height: 30),
 
                                 CustomButton(
+                                  isLoading : _isLoading,
                                   label: AppStrings.submit,
                                   color: AppColors.black.withOAlpha(0.18),
                                   border:
                                   Border.all(color: AppColors.hex2e47),
-                                  onTap: () async {
-                                    if (!_key.currentState!.validate()) return;
-
-                                    final payload = PumpDetailModel(
-                                      serialNumber:
-                                      _serialNoController.text.trim(),
-                                      pumpName:
-                                      _pumpNameController.text.trim(),
-                                      customer: widget.customerId,
-                                      phase: int.tryParse(
-                                          _phaseTypeController.text.trim()),
-                                      capacitykW: double.tryParse(
-                                          _capacityController.text.trim()),
-                                      capacityUnit:
-                                      _capacityUnitController.text.trim(),
-                                      headRangeMetres: double.tryParse(
-                                          _headRangeController.text.trim()),
-                                      headUnit:
-                                      _headUnitController.text.trim(),
-                                      outletSizeMM: double.tryParse(
-                                          _outletSizeController.text.trim()),
-                                      outletUnit:
-                                      _outletUnitController.text.trim(),
-                                      supplyVoltage: int.tryParse(
-                                          _supplyVoltageController.text.trim()),
-                                      lph: int.tryParse(
-                                          _lphController.text.trim()),
-                                      location:
-                                      _locationController.text.trim(),
-                                    );
-
-                                    await context
-                                        .read<AdminProvider>()
-                                        .addPumps(payload);
-                                  },
+                                  onTap:_addPump,
                                 ),
                               ],
                             ),

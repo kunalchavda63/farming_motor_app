@@ -2,6 +2,7 @@ import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/utilities/src/extensions/extensions.dart';
 import 'package:farming_motor_app/features/export_screens.dart';
 import 'package:farming_motor_app/features/screens/provider/customer_provider/customer_provider.dart';
+import 'package:farming_motor_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class HistoryTab extends StatefulWidget {
@@ -12,6 +13,7 @@ class HistoryTab extends StatefulWidget {
 }
 
 class _HistoryTabState extends State<HistoryTab> {
+  late AppLocalizations loc;
 
   @override
   void initState() {
@@ -28,6 +30,13 @@ class _HistoryTabState extends State<HistoryTab> {
         );
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    loc  = AppLocalizations.of(context)!;
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -51,7 +60,7 @@ class _HistoryTabState extends State<HistoryTab> {
         ),
       ),
       body: pumps.isEmpty
-          ? const Center(child: CustomText(data: 'No pumps found'))
+          ?  Center(child: CustomText(data: loc.noPumpsFound))
           : ListView.builder(
         itemCount: pumps.length,
         itemBuilder: (context, index) {
@@ -72,6 +81,7 @@ class _HistoryTabState extends State<HistoryTab> {
                   style: BaseStyle.s14w400,
                 ),
                 const SizedBox(height: 30),
+
 
                 if (logState == null || logState.loading)
                   const Center(child: CircularProgressIndicator()),
@@ -118,7 +128,7 @@ class _HistoryTabState extends State<HistoryTab> {
                             /// ACTION TEXT
                             Expanded(
                               child: CustomText(
-                                data: isStart ? 'Pump Started' : 'Pump Stopped',
+                                data: isStart ? loc.pumpStarted : loc.pumpStopped,
                                 style: BaseStyle.s14w500,
                               ),
                             ),

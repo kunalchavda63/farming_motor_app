@@ -6,45 +6,41 @@ import 'package:farming_motor_app/features/admin/provider/admin_provider/admin_p
 import 'package:farming_motor_app/features/export_screens.dart';
 import 'package:farming_motor_app/features/screens/provider/bottom_nav_provider.dart';
 import 'package:farming_motor_app/features/screens/provider/customer_provider/customer_provider.dart';
+import 'package:farming_motor_app/features/screens/provider/language_provider/language_provider.dart';
+import 'package:farming_motor_app/l10n/loc.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:workmanager/workmanager.dart';
 
-
-
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if(isAndroid) await Workmanager().initialize(callbackDispatcher,isInDebugMode: true);
+  if (isAndroid) await Workmanager().initialize(callbackDispatcher);
 
-
-  if(isWindows)await windowManager.ensureInitialized();
+  if (isWindows) await windowManager.ensureInitialized();
   const WindowOptions windowOptions = WindowOptions(
-    size: Size(1920,1080),
-    minimumSize: Size(900,400),
-    maximumSize: Size(1920,1080),
-
+    size: Size(1920, 1080),
+    minimumSize: Size(900, 400),
+    maximumSize: Size(1920, 1080),
     center: true,
-    title: AppStrings.farmingMotorApp
+    title: AppStrings.farmingMotorApp,
   );
-  if(isWindows) {
-    windowManager.waitUntilReadyToShow(windowOptions,() async{
-    await windowManager.show();
-    await windowManager.focus();
-  });
+
+  if (isWindows) {
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
   }
-
   await setupServiceLocator();
-  await SystemChrome.setPreferredOrientations(
-    [
-      DeviceOrientation.portraitUp
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
-    ]
-  );
-
-  runApp(const MyApp());
+  runApp(
+      const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -52,26 +48,39 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      builder: (context,child) {
-
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => BottomNavProvider()),
-            ChangeNotifierProvider(create: (_) => AdminProvider(),),
-            ChangeNotifierProvider(create: (_) => CustomerProvider(),),
-
-          ],
-          child: MaterialApp(
-            home: const SplashScreen(),
-            navigatorKey: getIt<AppRouter>().navigatorKey,
-
-            debugShowCheckedModeBanner: false,
-          ),
-        );
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => BottomNavProvider()),
+        ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()..loadLanguage()),
+      ],
+      child: Builder(
+        builder: (context) {
+          return ScreenUtilInit(
+            designSize: const Size(375, 812),
+            builder: (context, child) {
+              return MaterialApp(
+                locale: context.watch<LanguageProvider>().locale,
+                supportedLocales: const [
+                  Locale('en'),
+                  Locale('hi'),
+                  Locale('gu'),
+                ],
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                home: const SplashScreen(),
+                navigatorKey: getIt<AppRouter>().navigatorKey,
+                debugShowCheckedModeBanner: false,
+              );
+            },
+          );
+        },
+      ),
     );
-
   }
 }

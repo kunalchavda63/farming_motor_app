@@ -27,27 +27,41 @@ class _OnboardingState extends State<Onboarding> {
     final bool isAuth = prefs.isAuth;
     final user = prefs.getUser();
 
-    logger.d('Auth: $isAuth');
-    logger.d('Admin Token ${prefs.isAdminToken}');
-    logger.d('Customer Token ${prefs.isCustomerToken}');
-
     if (!mounted) return;
 
-    if (isAuth && user != null ) {
-      if(isWindows && prefs.isAdminToken!=null){
-        getIt<AppRouter>().pushReplacement<void>(Admin(userModel: user));
+    if (isAuth && user != null) {
+      final role = user.role.toLowerCase(); // 👈 assuming role field
 
+      // 🔐 ADMIN + WINDOWS
+      if (role == 'admin' && isWindows && prefs.isAdminToken!.isNotEmpty) {
+        getIt<AppRouter>().pushReplacement<void>(
+          Admin(userModel: user),
+        );
       }
-      else{
-        getIt<AppRouter>().pushReplacement<void>( Screens(userModel: user));
 
+      // 🔐 CUSTOMER + ANDROID
+      else if (role == 'customer' && isAndroid && prefs.isCustomerToken != null) {
+        getIt<AppRouter>().pushReplacement<void>(
+          Screens(userModel: user),
+        );
+      }
+
+      // ❌ INVALID COMBINATION
+      else {
+        showErrorToast('Sorry, this ID has no access on this device', context);
+        await prefs.clear();
+        getIt<AppRouter>().pushReplacement<void>(
+          const LoginScreen(),
+        );
       }
 
     } else {
-      getIt<AppRouter>().pushReplacement<void>(const LoginScreen());
-
+      getIt<AppRouter>().pushReplacement<void>(
+        const LoginScreen(),
+      );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

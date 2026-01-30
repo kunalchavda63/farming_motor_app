@@ -4,7 +4,10 @@ import 'package:farming_motor_app/core/services/local_storage/sharedpreference_s
 import 'package:farming_motor_app/core/services/navigation/router.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/auth.dart';
+import 'package:farming_motor_app/features/screens/provider/language_provider/language_provider.dart';
+import 'package:farming_motor_app/l10n/loc.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,9 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _mobileControllerFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final GlobalKey _languageKey = GlobalKey();
   LocalPreferences prefs = LocalPreferences();
   late MediaQueryData mCtx;
   bool _isLoading = false;
+  late AppLocalizations loc;
 
   @override
   void dispose() {
@@ -53,40 +58,59 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
         if(role.toLowerCase() == 'admin') {
-          await prefs.setAdminToken(token.toString());
-          logger.d('Admin Token Stored');
         } else{
-          await prefs.setCustomerToken(token.toString());
-          logger.d('Customer token stored');
+
         }
 
           await prefs.setUser(UserModel.fromJson(user)); // 👈 Map store
           await prefs.setAuth(true);
 
           logger.i('Login Success Role: ${user['role']}');
+          showSuccessToast('Login Success', context);
+          
 
           if (!mounted) return;
 
+        final roleLower = role.toLowerCase();
+
+        if (roleLower == 'admin' && isWindows) {
+          await prefs.setAdminToken(token.toString());
+          logger.d('Admin Token Stored');
+
           getIt<AppRouter>().pushReplacement<void>(
-            Onboarding(user: UserModel.fromJson(user)), // 👈 pass Map
+            Onboarding(user: UserModel.fromJson(user)),
           );
+
+        } else if (roleLower == 'customer' && isAndroid) {
+          await prefs.setCustomerToken(token.toString());
+          logger.d('Customer token stored');
+          // ✅ Customer + Android
+          getIt<AppRouter>().pushReplacement<void>(
+            Onboarding(user: UserModel.fromJson(user)),
+          );
+
+        } else {
+          showErrorToast('Access not allowed for this device',context);
+        }
         }
        else {
-        showErrorToast(response.message ?? 'Login failed');
+        showErrorToast(response.message ?? 'Login failed',context);
       }
     } on DioException  catch (e) {
       logger.e(e);
-      showErrorToast(AppStrings.someThinkWentWrong);
+      showErrorToast(AppStrings.someThinkWentWrong,context);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
 
+
   @override
   void didChangeDependencies() {
     mCtx = MediaQuery.of(context);
     setStatusBarLightStyle();
+    loc = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 
@@ -143,21 +167,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           bottom: mCtx.viewPadding.bottom + 35,
                           right: 20,
                           left: 20,
-                          child: CustomButton(
-                            isLoading: _isLoading,
-                            border: Border.all(),
-                            onTap: _isLoading ? null : _login,
+                          child: Column(
+                            children: [
+                              CustomButton(
+                                isLoading: _isLoading,
+                                border: Border.all(),
+                                onTap: _isLoading ? null : _login,
 
-                            color: AppColors.black.withOAlpha(0.20),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: const Offset(2, 2),
-                                blurRadius: 20,
-                                color: AppColors.white.withOAlpha(0.1),
-                              ),
+                                color: AppColors.black.withOAlpha(0.20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(2, 2),
+                                    blurRadius: 20,
+                                    color: AppColors.white.withOAlpha(0.1),
+                                  ),
+                                ],
+                                label: loc.logIn,
+                                textColor: AppColors.white,
+                              ).padBottom(4),
+                              Center(
+                                child: CustomText(data: 'Powered by build care solutions',style: BaseStyle.s8w700.c(AppColors.hex5474.withOAlpha(0.70)).family(FontFamily.poppins).letter(3),),
+                              )
                             ],
-                            label: AppStrings.logIn,
-                            textColor: AppColors.white,
                           ),
                         ),
                       ],
@@ -236,6 +267,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                         label: AppStrings.logIn,
                                       ).padH(isTablet ? 48 : 24),
+                                       Center(
+                                        child: CustomText(data: 'Powered by buildcare solutions',style: BaseStyle.s11w700.c(AppColors.black.withOAlpha(0.40)).family(FontFamily.montserrat),),
+                                      ).padTop(20)
                                     ],
                                   ),
                                 ),
@@ -261,15 +295,40 @@ class _LoginScreenState extends State<LoginScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Row(
+          children: [
+            CustomText(
+              data: loc.welcome,
+              style: BaseStyle.s24800
+                  .w(400)
+                  .c(AppColors.black)
+                  .family(FontFamily.montserrat),
+            ).padBottom(7),
+            const Expanded(child: SizedBox()),
+            CustomCircleSvgIcon(
+              key: _languageKey,
+              bgColor: AppColors.white50,
+              border: Border.all(color: AppColors.black10),
+              onTap: () async{
+              final selected =   await context.showCustomPopupMenu(
+                    anchorKey: _languageKey,
+                    ctx: context,
+                    items: [
+                      const PopUpModel(id: 'en', data: 'en', value: 'en'),
+                      const PopUpModel(id: 'hi', data: 'hi', value: 'hi'),
+                      const PopUpModel(id: 'gu', data: 'gu', value: 'gu'),
+                    ]);
+
+              if(selected!=null){
+                context.read<LanguageProvider>().setLanguage(selected);
+              }
+              },
+              path: AssetIcons.icEdit,
+            )
+          ],
+        ),
         CustomText(
-          data: AppStrings.welcome,
-          style: BaseStyle.s24800
-              .w(400)
-              .c(AppColors.black)
-              .family(FontFamily.montserrat),
-        ).padBottom(7),
-        CustomText(
-          data: AppStrings.signIntoContinue,
+          data: loc.signIntoContinue,
           style: BaseStyle.s14w400.c(AppColors.black),
         ).padBottom(30.r),
         BuildTextField(
@@ -278,55 +337,22 @@ class _LoginScreenState extends State<LoginScreen> {
             LengthLimitingTextInputFormatter(10)
           ],
           validator: Validators.validateMobile,
-          label: AppStrings.mobileNumber,
+          label: loc.mobileNumber,
           controller: _mobileController,
           focusNode: _mobileControllerFocus,
           textInputType: TextInputType.number,
         ).padBottom(30),
         BuildTextField(
           validator: Validators.validatePassword,
-          label: AppStrings.password,
+          label: loc.password,
           controller: _passwordController,
           focusNode: _passwordFocus,
           textInputAction: TextInputAction.done,
           textInputType: TextInputType.visiblePassword,
           isPassword: true,
         ).padBottom(30.r),
-        if (isWindows)
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                getIt<AppRouter>().push<void>(const ForgotScreen());
-              },
-              child: CustomText(
-                data: '${AppStrings.forgotPassword} ?',
-                style: BaseStyle.s14w400.c(AppColors.black),
-              ).padBottom(30.r),
-            ),
-          ),
-        if (isWindows || isMacOs)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomText(
-                data: AppStrings.doNotHaveAnAccount,
-                style: BaseStyle.s14w400
-                    .c(AppColors.black)
-                    .family(FontFamily.montserrat),
-              ).padBottom(30.r).padRight(7.r),
-              GestureDetector(
-                onTap: () {
-                  logger.d('SignUp Screen : Moving');
-                  getIt<AppRouter>().push<void>(const SignUpScreen());
-                },
-                child: CustomText(
-                  data: AppStrings.signUp,
-                  style: BaseStyle.s14w400.c(AppColors.hex2e47),
-                  softWrap: true,
-                ).padBottom(30.r),
-              ),
-            ],
-          ),
+        
+
       ],
     ).padH(12);
   }

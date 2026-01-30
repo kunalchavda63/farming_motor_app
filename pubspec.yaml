@@ -55,6 +55,10 @@ dependencies:
   flutter_switch: ^0.3.2
   flutter_local_notifications: ^20.0.0
   awesome_notifications: ^0.10.1
+  windows_toast: ^0.0.3
+  flutter_localizations:
+    sdk: flutter
+  flutter_gen: ^5.12.0
 
 dev_dependencies:
   flutter_test:

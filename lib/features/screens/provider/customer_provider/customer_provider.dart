@@ -103,10 +103,5 @@ class CustomerProvider extends ChangeNotifier{
   void refreshSwitchState() {
     notifyListeners();
   }
-
-
-
-
-
-
 }
+

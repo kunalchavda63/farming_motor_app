@@ -3,17 +3,41 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
 import 'package:farming_motor_app/core/models/src/api_state.dart';
-import 'package:farming_motor_app/core/utilities/src/extensions/logger/logger.dart';
+import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/admin/admin_service/admin_service.dart';
 
 class AdminProvider extends ChangeNotifier {
   ApiState<List<UserModel>> userListState = ApiState.initial();
   ApiState<List<PumpDetailModel>> userListPumpState = ApiState.initial();
   ApiState<Map<String,dynamic>> addPumpState = ApiState.initial();
+  Timer? _debounce;
+
+
+  List<UserModel> _allUsers = [];
+
+  String _searchQuery = '';
+
 
   SortOrder _sortOrder = SortOrder.az;
   SortOrder get  sortOrder => _sortOrder;
 
+
+  void searchUsers(String query) {
+    _searchQuery = query.toLowerCase();
+
+    if(_debounce?.isActive ?? false){
+      _debounce!.cancel();
+    }
+    _debounce = Timer(const Duration(milliseconds: 300),(){_applyFilters();
+    });
+
+    _applyFilters();
+  }
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   Future<void> loadUsers() async {
     userListState = ApiState.loading();
@@ -24,11 +48,11 @@ class AdminProvider extends ChangeNotifier {
       await Future<void>.delayed(const Duration(milliseconds: 800));
 
       if (response.success && response.data != null) {
-        userListState = ApiState.success(response.data!);
-        _applySorting();
-
+        _allUsers = response.data!;
+        _applyFilters(); // 🔥 IMPORTANT
       } else {
-        userListState = ApiState.error(response.message ?? 'Failed to load users');
+        userListState =
+            ApiState.error(response.message ?? 'Failed to load users');
       }
     } on DioException catch (e) {
       userListState = ApiState.error(e.toString());
@@ -36,15 +60,26 @@ class AdminProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-  Future<void> addPumps(PumpDetailModel pumpDetails) async {
+
+
+  Future<void> addPumps(
+      PumpDetailModel pumpDetails,
+      BuildContext context,
+      ) async {
     addPumpState = ApiState.loading();
     notifyListeners();
 
     try {
       final response = await addPump(pumpDetails);
-      logger.e(response);
+
+      logger.d('API response data: ${response.data}');
 
       if (response.success && response.data != null) {
+        final status = response.data!['status'];
+        final pumpId = response.data!['pumpID'];
+
+        showSuccessToast('$status : $pumpId', context);
+
         addPumpState = ApiState.success(response.data!);
       } else {
         addPumpState =
@@ -56,26 +91,38 @@ class AdminProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
   void setSortOrder(SortOrder order){
     _sortOrder = order;
-    _applySorting();
+    _applyFilters();
   }
 
-  void _applySorting(){
-    final users = userListState.data;
-    if(users == null) return;
+  void _applyFilters() {
+    List<UserModel> list = List.from(_allUsers);
 
-    users.sort((a,b) {
+    // 🔍 SEARCH
+    if (_searchQuery.isNotEmpty) {
+      list = list.where((user) {
+        final name =
+        '${user.firstName} ${user.lastName}'.toLowerCase();
+        return name.contains(_searchQuery);
+      }).toList();
+    }
+
+    // 🔃 SORT
+    list.sort((a, b) {
       final nameA = '${a.firstName} ${a.lastName}'.toLowerCase();
       final nameB = '${b.firstName} ${b.lastName}'.toLowerCase();
 
-      return _sortOrder == SortOrder.az ? nameA.compareTo(nameB):nameB.compareTo(nameA);
-
+      return _sortOrder == SortOrder.az
+          ? nameA.compareTo(nameB)
+          : nameB.compareTo(nameA);
     });
 
-    userListState = ApiState.success(List<UserModel>.from(users));
+    userListState = ApiState.success(list);
     notifyListeners();
   }
+
 
 }
 
