@@ -10,4 +10,6 @@ class AppColors{
   static const Color hexDAdb = Color(0XFFDADBB1);
   static const Color hexCcd6 = Color(0XFFCCD6DF);
   static const Color hex5474 = Color(0XFF54742C);
+  static const Color hexE6e6 = Color(0XFFE6E6E6);
+  static const Color hex0Ab4 = Color(0XFF0AB44A);
 }

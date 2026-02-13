@@ -139,5 +139,8 @@
   "somethingWentWrong": "Something went wrong",
   "userIsAuthenticated": "User is authenticated",
   "sorry": "Sorry",
-  "thisDeviceHasNoAccess": "This device has no access"
+  "thisDeviceHasNoAccess": "This device has no access",
+  "confirm": "Confirm",
+  "areYouSureLogout": "Are you sure you want to logout?",
+  "logout": "Logout"
 }

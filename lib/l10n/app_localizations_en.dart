@@ -427,4 +427,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thisDeviceHasNoAccess => 'This device has no access';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get areYouSureLogout => 'Are you sure you want to logout?';
+
+  @override
+  String get logout => 'Logout';
 }

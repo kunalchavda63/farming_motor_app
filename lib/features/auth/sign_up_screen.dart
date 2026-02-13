@@ -218,7 +218,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           : CustomButton(
                   label: AppStrings.createAccount,
                   onTap: () async {
-                    if (_key.currentState!.validate()) {
+                      if (_key.currentState!.validate()) {
                       // await prefs.setAuth(true);
                       logger.d('User Is Authenticated');
                       getIt<AppRouter>().push<void>(const Onboarding());

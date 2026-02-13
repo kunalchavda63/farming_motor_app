@@ -122,7 +122,7 @@ class _OtpVerificationState extends State<OtpVerification> {
             const Spacer(),
             CustomButton(
               onTap: (){
-                getIt<AppRouter>().push<void>(const ResetPasswordScreen());
+                getIt<AppRouter>().push<void>(const ChangePasswordScreen());
 
               },
               label: AppStrings.verify,

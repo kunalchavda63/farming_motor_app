@@ -5,14 +5,14 @@ import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:farming_motor_app/features/auth/auth.dart';
 import 'package:farming_motor_app/l10n/app_localizations.dart';
 
-class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
 
   @override
-  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   late MediaQueryData mCtx;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -102,8 +102,11 @@ logger.d(response.message);
         Positioned(
             top: 50,
             left: 20,
-
             child: CustomContainer(
+              onTap: (){
+
+                getIt<AppRouter>().pop<void>();
+              },
                 h: 50,
                 w: 50,
                 color: AppColors.black.withOAlpha(0.40),

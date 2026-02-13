@@ -31,14 +31,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    logger.d('Exit');
     _mobileController.dispose();
     _mobileControllerFocus.dispose();
     _passwordController.dispose();
     _passwordFocus.dispose();
     super.dispose();
   }
+  @override
+  void initState() {
+    super.initState();
+    logger.d('Appplication Reach out on login Screen');
+  }
   
   void _login() async {
+    logger.d('OnTapped');
     if (!_key.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
@@ -119,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: AppColors.transparent,
-        statusBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
         systemNavigationBarColor: AppColors.transparent,
       ),
@@ -305,25 +312,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   .family(FontFamily.montserrat),
             ).padBottom(7),
             const Expanded(child: SizedBox()),
-            CustomCircleSvgIcon(
-              key: _languageKey,
-              bgColor: AppColors.white50,
-              border: Border.all(color: AppColors.black10),
-              onTap: () async{
-              final selected =   await context.showCustomPopupMenu(
+            CustomContainer(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 10
+              ),
+              borderRadius: BorderRadius.circular(20),
+              color: AppColors.white,
+              child: InkWell(
+                onTap: () async{
+                  final selected = await context.showCustomPopupMenu(
                     anchorKey: _languageKey,
                     ctx: context,
-                    items: [
-                      const PopUpModel(id: 'en', data: 'en', value: 'en'),
-                      const PopUpModel(id: 'hi', data: 'hi', value: 'hi'),
-                      const PopUpModel(id: 'gu', data: 'gu', value: 'gu'),
-                    ]);
+                    items: const [
+                      PopUpModel(id: 'en', data: 'English', value: 'en'),
+                      PopUpModel(id: 'hi', data: 'हिंदी', value: 'hi'),
+                      PopUpModel(id: 'gu', data: 'ગુજરાતી', value: 'gu'),
+                    ],
+                  );
+                  if(selected != null){
+                    context.read<LanguageProvider>().setLanguage(selected);
+                  }
 
-              if(selected!=null){
-                context.read<LanguageProvider>().setLanguage(selected);
-              }
-              },
-              path: AssetIcons.icEdit,
+                },
+                key: _languageKey,
+                child:CustomText(data: _getLanguageName(context.watch<LanguageProvider>().locale.toString())) ,
+              ),
             )
           ],
         ),
@@ -356,4 +370,17 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     ).padH(12);
   }
-}
+  String _getLanguageName(String code) {
+    switch (code) {
+      case 'en':
+        return 'English';
+      case 'hi':
+        return 'हिंदी';
+      case 'gu':
+        return 'ગુજરાતી';
+      default:
+        return 'English';
+    }
+  }
+
+  }

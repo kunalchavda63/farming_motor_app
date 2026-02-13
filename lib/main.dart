@@ -8,6 +8,7 @@ import 'package:farming_motor_app/features/screens/provider/bottom_nav_provider.
 import 'package:farming_motor_app/features/screens/provider/customer_provider/customer_provider.dart';
 import 'package:farming_motor_app/features/screens/provider/language_provider/language_provider.dart';
 import 'package:farming_motor_app/l10n/loc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ import 'package:workmanager/workmanager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (isAndroid) await Workmanager().initialize(callbackDispatcher);
+  if (!kIsWeb && isAndroid) await Workmanager().initialize(callbackDispatcher);
 
   if (isWindows) await windowManager.ensureInitialized();
   const WindowOptions windowOptions = WindowOptions(
@@ -35,9 +36,11 @@ void main() async {
     });
   }
   await setupServiceLocator();
-  await SystemChrome.setPreferredOrientations([
+  if(isAndroid || isIos) {
+    await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  }
 
   runApp(
       const MyApp());

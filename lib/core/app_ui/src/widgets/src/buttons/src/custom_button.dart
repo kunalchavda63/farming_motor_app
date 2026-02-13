@@ -25,7 +25,7 @@ class CustomButton extends StatelessWidget {
       boxShadow: boxShadow,
       onTap: onTap,
       h: h ?? 43.r,
-      w: (isSmall==true)?170:size.width,
+      w: (isSmall==true)?100:size.width,
       color: color ?? AppColors.black,
       // border: Border.all(color: AppColors.white),
       alignment: Alignment.center,

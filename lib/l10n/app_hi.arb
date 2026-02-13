@@ -139,5 +139,8 @@
   "somethingWentWrong": "कुछ गलत हो गया",
   "userIsAuthenticated": "उपयोगकर्ता प्रमाणित है",
   "sorry": "क्षमा करें",
-  "thisDeviceHasNoAccess": "इस डिवाइस की पहुंच नहीं है"
+  "thisDeviceHasNoAccess": "इस डिवाइस की पहुंच नहीं है",
+  "confirm": "पुष्टि",
+  "areYouSureLogout": "क्या आप लॉगआउट करना चाहते हैं?",
+  "logout": "लॉगआउट"
 }

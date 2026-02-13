@@ -427,4 +427,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get thisDeviceHasNoAccess => 'इस डिवाइस की पहुंच नहीं है';
+
+  @override
+  String get confirm => 'पुष्टि';
+
+  @override
+  String get areYouSureLogout => 'क्या आप लॉगआउट करना चाहते हैं?';
+
+  @override
+  String get logout => 'लॉगआउट';
 }

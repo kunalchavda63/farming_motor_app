@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
-import 'package:farming_motor_app/core/models/src/user_model/user_model.dart';
 import 'package:farming_motor_app/core/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -163,7 +162,10 @@ class LocalPreferences {
     final key = PreferenceKey._pumpControlKey(serial, pumpId);
     logger.d(_prefs?.getBool(key) ?? false);
 
-    _pumpStateNotifiers[key] = ValueNotifier<bool>(_prefs?.getBool(key) ?? false);
+    if (!_pumpStateNotifiers.containsKey(key)) {
+      _pumpStateNotifiers[key] =
+          ValueNotifier<bool>(_prefs?.getBool(key) ?? false);
+    }
 
     return _pumpStateNotifiers[key]!;
   }

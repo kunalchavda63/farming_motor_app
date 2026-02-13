@@ -2,6 +2,7 @@
 // Extension on FontFamily for shorthand styling
 
 import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:farming_motor_app/core/services/navigation/src/app_router.dart';
 extension FontFamilyExtension on FontFamily {
 
   String get name {
@@ -132,6 +133,82 @@ extension CustomPopUpMenu on BuildContext {
               : Text(item.data),
         );
       }).toList(),
+    );
+  }
+}
+extension CustomCommonDialog on BuildContext {
+  Future<T?> showCustomDialog<T>({
+    required String title,
+    required String message,
+
+    String? primaryButtonText,
+    VoidCallback? onPrimaryTap,
+
+    String? secondaryButtonText,
+    VoidCallback? onSecondaryTap,
+
+    Color? titleColor,
+    Color? primaryTextColor,
+    Color? primaryButtonColor,
+    Color? secondaryButtonColor,
+
+    bool barrierDismissible = false,
+  }) {
+    return showDialog<T>(
+      context: this,
+      barrierDismissible: barrierDismissible,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.white,
+          alignment: Alignment.center,
+
+
+          titlePadding: const EdgeInsets.all(20),
+          title: CustomText(
+            data: title,
+            style: BaseStyle.s20w400.c(titleColor ?? AppColors.black),
+            textAlign: TextAlign.start,
+          ),
+
+          contentPadding: const EdgeInsets.all(22),
+          content: CustomText(
+            data: message,
+            style: BaseStyle.s14w500
+                .c(AppColors.black)
+                .family(FontFamily.montserrat),
+            textAlign: TextAlign.center,
+          ),
+
+          actionsPadding: const EdgeInsets.all(20),
+          actionsAlignment: MainAxisAlignment.end,
+          actions: [
+            if (secondaryButtonText != null)
+              CustomButton(
+                isSmall: true,
+                h: 30,
+                label: secondaryButtonText,
+                color: secondaryButtonColor ?? AppColors.black10,
+                onTap: () {
+                  getIt<AppRouter>().pop<void>();
+                  onSecondaryTap?.call();
+                },
+              ),
+
+            if (primaryButtonText != null)
+              CustomButton(
+                isSmall: true,
+                h: 30,
+                label: primaryButtonText,
+                textColor: primaryTextColor ?? Colors.red,
+                color: primaryButtonColor ?? AppColors.transparent,
+                onTap: () {
+                  getIt<AppRouter>().pop<void>();
+                  onPrimaryTap?.call();
+                },
+              ),
+          ],
+        );
+      },
     );
   }
 }

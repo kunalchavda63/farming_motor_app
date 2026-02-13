@@ -40,14 +40,14 @@ class _HomeTabState extends State<HomeTab> {
     await _prefs.setAuth(false);
     await _prefs.clearUser();
     await _prefs.clear();
-    getIt<AppRouter>().pushReplacement<void>(
+    getIt<AppRouter>().pushAndRemoveUntil<void>(
       const Onboarding(),
     );
     showSuccessToast(loc.userLogOutSuccessfully,context);
   }
 
   void goToResetScreen() {
-    getIt<AppRouter>().push<void>(const ResetPasswordScreen());
+    getIt<AppRouter>().push<void>(const ChangePasswordScreen());
   }
 
   @override
@@ -118,15 +118,39 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 drawerBox(
                   label: loc.changePassword,
-                  onTap: () => goToResetScreen(),
+                    onTap: () async {
+                      getIt<AppRouter>().pop<void>();
+                      await context.showCustomDialog<void>(
+                          title: loc.changePassword,
+                          message: 'Are you sure want to change Password?',
+                          titleColor: AppColors.black,
+                          secondaryButtonText: loc.cancel,
+                          primaryButtonText: loc.confirm,
+                          onPrimaryTap: () async {
+                            getIt<AppRouter>().push<void>(const ChangePasswordScreen());
+                          }
+
+                      );
+                    }
+
                 ).padTop(10),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
                 ),
                 drawerBox(
                   label: loc.logOut,
-                  onTap: _userLogOut,
-                  textColor: Colors.redAccent,
+                  onTap: () async {
+                    getIt<AppRouter>().pop<void>();
+                    await context.showCustomDialog<void>(
+                        title: loc.logOut,
+                        message: loc.areYouSureLogout,
+                        titleColor: Colors.red,
+                      secondaryButtonText: loc.cancel,
+                      primaryButtonText: loc.confirm,
+                      onPrimaryTap: _userLogOut
+
+                    );
+                  }
                 ),
               ],
             ).padH(10),

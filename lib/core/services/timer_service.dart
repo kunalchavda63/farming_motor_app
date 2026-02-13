@@ -95,7 +95,6 @@ Future<void> stopPumpTimer({
       .cancelByUniqueName('pump_auto_off_${serial}_$pumpId');
 
   await prefs.clearPumpTimer(serial: serial, pumpId: pumpId);
-
   await pumpControl(serialNumber: serial, pumpId: pumpId, action: 0);
   await prefs.setPumpState(
     serial: serial,

@@ -1,19 +1,20 @@
-import 'dart:io';
-import 'dart:ui' show Color;
+import 'package:farming_motor_app/core/app_ui/app_ui.dart';
+import 'package:flutter/foundation.dart';
 
 enum PlatformType { android, ios, windows, linux, macos, fuchsia }
 
-bool get isAndroid => Platform.isAndroid;
+bool get isAndroid => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
-bool get isIos => Platform.isIOS;
+bool get isIos => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
-bool get isWindows => Platform.isWindows;
+bool get isWindows => !kIsWeb && defaultTargetPlatform == TargetPlatform.windows;
 
-bool get isLinux => Platform.isLinux;
+bool get isLinux => !kIsWeb && defaultTargetPlatform == TargetPlatform.linux;
 
-bool get isMacOs => Platform.isMacOS;
+bool get isMacOs => !kIsWeb && defaultTargetPlatform == TargetPlatform.macOS;
 
-bool get isFuchsia => Platform.isFuchsia;
+bool get isFuchsia => !kIsWeb && defaultTargetPlatform == TargetPlatform.fuchsia;
+
 extension ColorOpacityExt on Color {
   Color withOAlpha(double opacity) {
     // opacity must be 0.0 to 1.0
